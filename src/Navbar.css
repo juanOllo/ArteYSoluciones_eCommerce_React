@@ -1,0 +1,16 @@
+#navbar-div {
+    width: 100svw;
+    height: 3rem;
+    background-color: blue;
+
+    display: flex;
+    justify-content: space-evenly;
+
+    position: fixed;
+    top: 0;
+}
+
+.navbar-btn {
+    background-color: red;
+    border: none;
+}
