@@ -1,5 +1,4 @@
-import React from 'react';
-import {Link} from "react-router-dom";
+import React from "react";
 
 let listaDeArticulos = [
     {
@@ -35,28 +34,64 @@ let listaDeArticulos = [
     
 ]
 
-class Mostrador extends React.Component {
-    constructor(props) {
+class CarroDeCompra extends React.Component{
+    constructor(props){
         super(props);
-        // this.state = {
-        //     itemId : 0
+        // this.state={
+        //     cartList : []
         // }
+        
+        this.loadCartList = this.loadCartList.bind(this);
+        this.loadCartList();
     }
 
+    loadCartList(){
+        const data = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [];
+
+        const finalList = listaDeArticulos.filter(elem => {
+            for (let item of data){
+                if (item.id == elem.id) {
+                    elem.precioFinal = item.precio;
+                    return true;
+                }
+            }
+            return false;
+        })
+
+        console.log("final list: ", finalList);
+
+        this.state = {
+            cartList : finalList
+        }
+    }
+
+    // componentWillMount() {
+    //     this.loadCartList();
+    // }
+
     render(){
+        // this.loadCartList();
+
+        console.log("cartList: ", this.state.cartList);
+
+        const list = this.state.cartList.map(elem => {
+            return (
+                <li className="carrito-articulo">
+                    <img className="carrito-articulo-img" src={elem.imagen} alt="imagen del producto"/>
+                    <h4 className="carrito-articulo-h4">{elem.nombre}</h4>
+                    <h4 className="carrito-articulo-h4">{elem.precios[elem.precioFinal][0]} ${elem.precios[elem.precioFinal][1]}</h4>
+                </li>
+            )
+        })
 
         return(
-            <div id="mostrador">
-                {listaDeArticulos.map(elem => {
-
-                    return <Link key={elem.id} to="/producto" state = {{itemId : elem.id}} className="inicio-article">
-                                <img src={elem.imagen} alt="imagen del producto" />
-                                <h3>{elem.nombre}</h3>
-                            </Link>
-                })}
+            <div>
+                <ul>
+                    {list}
+                </ul>
             </div>
         )
     }
 }
 
-export default Mostrador;
+export default CarroDeCompra;

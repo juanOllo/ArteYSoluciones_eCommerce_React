@@ -50,34 +50,56 @@ const Producto = () =>{
     )
 }
 
+
+
 class ProductoRender extends React.Component {
 
     constructor(props){
         super(props);
         this.state={
             item : props.itemToRender,
-            selectedPrice : null
+            selectedPrice : -1 //hay q corregir esto y su intervencion en el if de addToCart()
         }
         this.selectPrice = this.selectPrice.bind(this);
         this.addToCart = this.addToCart.bind(this);
     }
 
     selectPrice(e){
+        console.log("nuevo precio seleccionado :", e.target.value);
+
         this.setState({
             selectedPrice : e.target.value
         })
     }
 
+    // Este metodo agrega el id y el precio seleccionado del producto a una lista en el localStorage
     addToCart(){
-        if (this.state.selectedPrice) {
-            
+        if(this.state.selectedPrice >= 0){
+
+            const newItemToCart = {
+                id : this.state.item.id, 
+                precio : this.state.selectedPrice};
+
+            const data = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [];
+
+            // console.log("encontrado?: ", data.find(elem => elem.id === this.state.item.id))
+
+            // este if no permite agregar el mismo item con el mismo precio al carrito
+            if (!data.find(elem => elem.id === this.state.item.id)) {
+                data.unshift(newItemToCart);
+                localStorage.setItem("cart", JSON.stringify(data));
+            }
+
+            // const data2 = JSON.parse(localStorage.getItem("cart"));
+            // console.log("data guardada: ", data2);
+            // localStorage.clear();
+        } else {
+            console.log("precio no seleccionado");
         }
     }
 
     render(){
-
-
-        console.log("new selectedPrice: ", this.state.selectedPrice);
+        // console.log("new selectedPrice: ", this.state.selectedPrice);
 
         const precios = this.state.item.precios.map((elem, index) => {
             return <li onClick={this.selectPrice} value={index} className="precio">{elem[0]} = ${elem[1]}</li>
@@ -96,7 +118,7 @@ class ProductoRender extends React.Component {
                     {precios}
                 </ul>
                 <div className="encargar-btns-div">
-                    <button className="encargar-btn btn">AGREGAR AL CARRO</button>
+                    <button onClick={this.addToCart} className="encargar-btn btn">AGREGAR AL CARRO</button>
                 </div>
             </div>
         )
