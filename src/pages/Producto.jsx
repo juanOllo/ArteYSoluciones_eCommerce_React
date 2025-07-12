@@ -1,6 +1,7 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import './Producto.css'
+import Navbar from '../Navbar';
 
 let listaDeArticulos = [
     {
@@ -85,8 +86,23 @@ class ProductoRender extends React.Component {
     }
 
     // Este metodo agrega el id y el precio seleccionado del producto a una lista en el localStorage
-    addToCart(){
+    addToCart(e){
         if(this.state.selectedPrice >= 0){
+
+
+
+            const btn = e.target.classList.contains("btn") ? e.target : e.target.parentElement;
+
+            // btn.style.backgroundColor = "transparent";
+            btn.style.animation = "none";
+
+            btn.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
+            setTimeout(() => {
+                btn.style.animation = "none";
+            }, 100);
+
+
+
 
             const newItemToCart = {
                 id : this.state.item.id, 
@@ -94,17 +110,21 @@ class ProductoRender extends React.Component {
 
             const data = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [];
 
-            // console.log("encontrado?: ", data.find(elem => elem.id === this.state.item.id))
-
             // este if no permite agregar el mismo item con el mismo precio al carrito
-            if (!data.find(elem => elem.id === this.state.item.id)) {
+            if (data.find(elem => (elem.precio === newItemToCart.precio && elem.id === newItemToCart.id))) {
+                console.log("este elemento ya esta en el carro de compra");
+            } else {
                 data.unshift(newItemToCart);
                 localStorage.setItem("cart", JSON.stringify(data));
+
+                // anim punto rojo en el boton del carrito
+                document.getElementById("navbar-div").childNodes[2].childNodes[0].style.animation = "ponit-car-img-anim 0.3s ease-in-out forwards";
+                setTimeout(() => {
+                    document.getElementById("navbar-div").childNodes[2].childNodes[0].style.backgroundColor = "red";
+                    document.getElementById("navbar-div").childNodes[2].childNodes[0].style.animation = "none";
+                }, 400);
             }
 
-            // const data2 = JSON.parse(localStorage.getItem("cart"));
-            // console.log("data guardada: ", data2);
-            // localStorage.clear();
         } else {
             console.log("precio no seleccionado");
         }

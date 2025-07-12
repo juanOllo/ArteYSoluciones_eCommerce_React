@@ -109,14 +109,14 @@
 }
 
 .precios {
+    background-color: var(--azul);
     background-color: var(--amarillo);
     border: none;
     /* height: 2rem; */
 
-    background-color: var(--amarillo);
     border: 2px solid black;
     padding: 1rem;
-    border-radius: 2rem;
+    /* border-radius: 2rem; */
     width: fit-content;
     box-shadow: 0.2rem 0.2rem black;
     font-family: var(--ffamily01);
@@ -126,6 +126,7 @@
 
 .precios:hover {
     cursor: pointer;
+    /* background-color:lightskyblue; */
     background-color: white;
 }
 
@@ -176,6 +177,19 @@
     z-index: 5;
 }
 
+.img-producto:hover {
+    /* scale: 1.3; */
+    animation: img-producto-hover-anim 0.1s ease-in-out forwards;
+}
+
+@keyframes img-producto-hover-anim {
+    100%{
+        scale: 1.05;
+        /* border: 0.35rem solid black; */
+        /* border-color: transparent; */
+    }
+}
+
 .encargar-btns-div{
     /* background-color: red; */
     width: calc(100% - 1rem);
@@ -210,11 +224,21 @@
     box-shadow: 0.3rem 0.3rem black;
 }
 
-.encargar-btn-ready:hover {
-    background-color: antiquewhite;
-    animation: catalogo-completo-btn-click-anim 0.1s forwards;
+@keyframes encargar-btn-ready-click-anim {
+    0%{
+        box-shadow: 0 0 transparent;
+        transform: translate(0.3rem, 0.3rem);
+        /* border-color: white; */
+    }
+    60%{
+        transform: translate(0.3rem, 0.3rem);
+        box-shadow: 0 0 transparent;
+
+    }
 }
 
-.encargar-btn:hover {
+.encargar-btn-ready:hover {
+    background-color: antiquewhite;
+    /* animation: catalogo-completo-btn-click-anim 0.2s forwards; */
     cursor: pointer;
 }

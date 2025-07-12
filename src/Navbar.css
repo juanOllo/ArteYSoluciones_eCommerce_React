@@ -24,7 +24,7 @@
 
     display: flex;
     justify-content: space-evenly;
-    z-index: 1;
+    z-index: 10;
 }
 
 #minilogo {
@@ -84,13 +84,55 @@
     height: 2.8rem;
     box-shadow: 0.2rem 0.2rem black;
     /* font-family: var(--ffamily01); */
+
+    /* animation: shopping-car-btn-anim 0.5s ease; */
+}
+
+@keyframes shopping-car-btn-click-anim {
+    /* 50%{
+        box-shadow: 0 0 transparent;
+        transform: translate(0.2rem, 0.2rem);
+    } */
+    0%{
+        box-shadow: 0 0 transparent;
+        transform: translate(0.2rem, 0.2rem);
+        /* border-color: white; */
+    }
+    60%{
+        transform: translate(0.2rem, 0.2rem);
+        box-shadow: 0 0 transparent;
+
+    }
 }
 
 .shopping-car-btn:hover {
-    animation: catalogo-completo-btn-click-anim 0.1s forwards;
+    /* animation: catalogo-completo-btn-click-anim 0.2s forwards; */
+    background-color:rgb(205, 182, 253);
 }
 
 .shopping-car-img{
     height: 1.5rem;
     transform: translate(0.6rem, 0.6rem);
+}
+
+.shopping-car-point{
+    background-color: transparent;
+    width: 0.9rem;
+    height: 0.9rem;
+    /* border: 3px solid red; */
+    border-radius: 50%;
+
+    position: absolute;
+    right: 0;
+    z-index: 3;
+}
+
+@keyframes ponit-car-img-anim {
+    40%{
+        transform: translate(-0.4rem, -0.8rem);
+        scale: 1.5;
+    }
+    100%{
+        background-color: red;
+    }
 }

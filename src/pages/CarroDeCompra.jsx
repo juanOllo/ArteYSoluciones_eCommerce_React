@@ -1,4 +1,5 @@
 import React from "react";
+import './CarroDeCompra.css'
 
 let listaDeArticulos = [
     {
@@ -40,6 +41,8 @@ class CarroDeCompra extends React.Component{
         // this.state={
         //     cartList : []
         // }
+
+        // oculta el punto rojo en el boton del carrito
         
         this.loadCartList = this.loadCartList.bind(this);
         this.clearCartList = this.clearCartList.bind(this);
@@ -50,17 +53,29 @@ class CarroDeCompra extends React.Component{
     loadCartList(){
         const data = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [];
 
-        const finalList = listaDeArticulos.filter(elem => {
-            for (let item of data){
-                if (item.id == elem.id) {
-                    elem.precioFinal = item.precio;
-                    return true;
+        // console.log("data: ", data);
+
+        const finalList = [];
+        if (data) {
+            // const finalList = listaDeArticulos.filter(elem => {
+            //     for (let item of data){
+            //         if (item.id == elem.id) {
+            //             elem.precioFinal = item.precio;
+            //             return true;
+            //         }
+            //     }
+            //     return false;
+            // })
+
+            for (const d of data) {
+                const articulo = listaDeArticulos.find(a => a.id === d.id);
+                if (articulo) {
+                    finalList.unshift({ ...articulo, precioFinal: d.precio });
                 }
             }
-            return false;
-        })
+        }
 
-        console.log("final list: ", finalList);
+        // console.log("final list: ", finalList);
 
         this.state = {
             cartList : finalList
@@ -78,12 +93,12 @@ class CarroDeCompra extends React.Component{
     render(){
         // this.loadCartList();
 
-        console.log("cartList: ", this.state.cartList);
+        // console.log("cartList: ", this.state.cartList);
 
         const list = this.state.cartList.map(elem => {
             return (
                 <li className="carrito-articulo">
-                    <img className="carrito-articulo-img" src={elem.imagen} alt="imagen del producto"/>
+                    <img style={{height: "3rem"}} className="carrito-articulo-img" src={elem.imagen} alt="imagen del producto"/>
                     <h4 className="carrito-articulo-h4">{elem.nombre}</h4>
                     <h4 className="carrito-articulo-h4">{elem.precios[elem.precioFinal][0]} ${elem.precios[elem.precioFinal][1]}</h4>
                 </li>
@@ -91,7 +106,7 @@ class CarroDeCompra extends React.Component{
         })
 
         return(
-            <div>
+            <div id="carro-de-compra">
                 <ul>
                     {list}
                 </ul>

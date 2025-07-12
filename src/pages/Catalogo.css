@@ -90,6 +90,7 @@
     /* margin: 0.7rem auto; */
     /* margin-top: 1rem; */
     border-radius: 1rem;
+    /* box-shadow: 0.4rem 0.4rem black; */
     box-shadow: 0.4rem 0.4rem black;
     border: 2px solid black;
 
@@ -111,8 +112,18 @@
 }
 
 .catalogo-article:hover{
-    animation: inicio-article-click-anim 0.1s forwards;
+    animation: catalogo-article-click-anim 0.1s forwards;
     background-color: antiquewhite;
+}
+
+@keyframes catalogo-article-click-anim {
+    100%{
+        box-shadow: 0 0 transparent;
+        transform: translate(0.4rem, 0.4rem);
+
+        /* box-shadow: 0.4rem 0.4rem black;
+        transform: translate(-0.5rem, -0.5rem); */
+    }
 }
 
 /* @keyframes inicio-article-click-anim {
