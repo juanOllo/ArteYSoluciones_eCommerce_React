@@ -42,6 +42,8 @@ class CarroDeCompra extends React.Component{
         // }
         
         this.loadCartList = this.loadCartList.bind(this);
+        this.clearCartList = this.clearCartList.bind(this);
+
         this.loadCartList();
     }
 
@@ -65,9 +67,13 @@ class CarroDeCompra extends React.Component{
         }
     }
 
-    // componentWillMount() {
-    //     this.loadCartList();
-    // }
+    clearCartList(){
+        localStorage.clear("cart");
+
+        this.setState({
+            cartList: []
+        })
+    }
 
     render(){
         // this.loadCartList();
@@ -89,6 +95,7 @@ class CarroDeCompra extends React.Component{
                 <ul>
                     {list}
                 </ul>
+                <button onClick={this.clearCartList}>VACIAR CARRO</button>
             </div>
         )
     }

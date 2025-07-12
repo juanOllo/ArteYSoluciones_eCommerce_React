@@ -65,11 +65,23 @@ class ProductoRender extends React.Component {
     }
 
     selectPrice(e){
-        console.log("nuevo precio seleccionado :", e.target.value);
+
+        const encargarBtn = e.target.parentElement.parentElement.childNodes[4].children[0];
+        // encargarBtn.style.backgroundColor = "var(--amarillo)";
+        encargarBtn.classList.add("encargar-btn-ready");
+
+        for(let p of e.target.parentElement.childNodes){
+            if(p.classList.contains("precios-selected")){
+                p.classList.remove("precios-selected");
+            }
+        }
+
+        e.target.classList.add("precios-selected");
 
         this.setState({
             selectedPrice : e.target.value
         })
+
     }
 
     // Este metodo agrega el id y el precio seleccionado del producto a una lista en el localStorage
@@ -102,24 +114,26 @@ class ProductoRender extends React.Component {
         // console.log("new selectedPrice: ", this.state.selectedPrice);
 
         const precios = this.state.item.precios.map((elem, index) => {
-            return <li onClick={this.selectPrice} value={index} className="precio">{elem[0]} = ${elem[1]}</li>
+            return <button onClick={this.selectPrice} value={index} className="precios">{elem[0]} = ${elem[1]}</button>
         })
 
         // console.log(precios);
 
         return(
-            <div>
-                <h1>{this.state.item.nombre}</h1>
+            <div id='producto'>
                 <img className="img-producto" src={this.state.item.imagen} alt="imagen del producto"/>
-                <p>{this.state.item.descripcion}</p>
-                <h1>Seleccione un precio por tamaño:</h1>
-                {/* <span className="span-precios">${preciosHTML}</span> */}
-                <ul>
-                    {precios}
-                </ul>
-                <div className="encargar-btns-div">
-                    <button onClick={this.addToCart} className="encargar-btn btn">AGREGAR AL CARRO</button>
-                </div>
+                <span className='producto-span'>
+                    <h1>{this.state.item.nombre}</h1>
+                    <p>{this.state.item.descripcion}</p>
+                    <h2>Seleccione un precio por tamaño:</h2>
+                    {/* <span className="span-precios">${preciosHTML}</span> */}
+                    <div className='span-precios'>
+                        {precios}
+                    </div>
+                    <div className="encargar-btns-div">
+                        <button onClick={this.addToCart} className="encargar-btn btn">AGREGAR AL CARRO</button>
+                    </div>
+                </span>
             </div>
         )
     }
