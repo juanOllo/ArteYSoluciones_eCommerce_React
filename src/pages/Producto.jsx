@@ -106,7 +106,9 @@ class ProductoRender extends React.Component {
 
             const newItemToCart = {
                 id : this.state.item.id, 
-                precio : this.state.selectedPrice};
+                precio : this.state.selectedPrice,
+                cant : 1
+            };
 
             const data = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [];
 
@@ -118,7 +120,7 @@ class ProductoRender extends React.Component {
                 localStorage.setItem("cart", JSON.stringify(data));
 
                 // anim punto rojo en el boton del carrito
-                document.getElementById("navbar-div").childNodes[2].childNodes[0].style.animation = "ponit-car-img-anim 0.3s ease-in-out forwards";
+                document.getElementById("navbar-div").childNodes[2].childNodes[0].style.animation = "ponit-car-img-anim 0.25s ease-in-out forwards";
                 setTimeout(() => {
                     document.getElementById("navbar-div").childNodes[2].childNodes[0].style.backgroundColor = "red";
                     document.getElementById("navbar-div").childNodes[2].childNodes[0].style.animation = "none";
@@ -146,7 +148,6 @@ class ProductoRender extends React.Component {
                     <h1>{this.state.item.nombre}</h1>
                     <p>{this.state.item.descripcion}</p>
                     <h2>Seleccione un precio por tamaño:</h2>
-                    {/* <span className="span-precios">${preciosHTML}</span> */}
                     <div className='span-precios'>
                         {precios}
                     </div>

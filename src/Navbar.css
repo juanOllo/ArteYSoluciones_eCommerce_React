@@ -45,13 +45,16 @@
     text-decoration: none;
 }
 
+.navbar-btn:hover{
+    scale: 1.2;
+}
+
 .navbar-btn p{
     position: relative;
     top: -2.5rem;
 }
 
 .estrella {
-    background-color: var(--amarillo);
     background-color: rgba(0, 0, 0, 0.15);
     width: 3rem;
     height: 3rem;

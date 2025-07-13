@@ -1,5 +1,6 @@
 import React from "react";
 import './CarroDeCompra.css'
+import { Link } from "react-router-dom";
 
 let listaDeArticulos = [
     {
@@ -46,6 +47,8 @@ class CarroDeCompra extends React.Component{
         
         this.loadCartList = this.loadCartList.bind(this);
         this.clearCartList = this.clearCartList.bind(this);
+        this.removeArticle = this.removeArticle.bind(this);
+        this.changeCant = this.changeCant.bind(this);
 
         this.loadCartList();
     }
@@ -70,47 +73,100 @@ class CarroDeCompra extends React.Component{
             for (const d of data) {
                 const articulo = listaDeArticulos.find(a => a.id === d.id);
                 if (articulo) {
-                    finalList.unshift({ ...articulo, precioFinal: d.precio });
+                    finalList.push({ ...articulo, precioFinal: d.precio, cant: d.cant });
                 }
             }
         }
 
-        // console.log("final list: ", finalList);
+        console.log("final list: ", finalList);
 
         this.state = {
             cartList : finalList
         }
     }
 
-    clearCartList(){
+    clearCartList(e){
         localStorage.clear("cart");
+
+        e.target.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
+        setTimeout(() => {
+            e.target.style.animation = "none";
+        }, 100);
 
         this.setState({
             cartList: []
         })
     }
 
+    removeArticle(e){
+        const indexToRemove = e.target.value;
+
+        // btn.value es el index del articulo a borrar
+        this.state.cartList.splice(indexToRemove, 1);
+        this.setState({
+            cartList : this.state.cartList 
+        })
+
+        // tamb borro el articulo en el localStorage
+        const data = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [];
+        data.splice(indexToRemove, 1);
+        localStorage.setItem("cart", JSON.stringify(data));
+
+    }
+
+    changeCant(e){
+        const indexToEdit = e.target.value;
+
+        switch (e.target.innerText) {
+            case '+':
+                this.state.cartList[indexToEdit].cant++;
+                break;
+
+            case '-':
+                if (this.state.cartList[indexToEdit].cant > 1) {
+                    this.state.cartList[indexToEdit].cant--;
+                }
+                break;
+        
+            default:
+                break;
+        }
+
+        this.setState({
+            cartList: this.state.cartList
+        })
+    }
+
     render(){
-        // this.loadCartList();
 
-        // console.log("cartList: ", this.state.cartList);
-
-        const list = this.state.cartList.map(elem => {
+        const list = this.state.cartList.map((elem, index) => {
             return (
-                <li className="carrito-articulo">
-                    <img style={{height: "3rem"}} className="carrito-articulo-img" src={elem.imagen} alt="imagen del producto"/>
-                    <h4 className="carrito-articulo-h4">{elem.nombre}</h4>
-                    <h4 className="carrito-articulo-h4">{elem.precios[elem.precioFinal][0]} ${elem.precios[elem.precioFinal][1]}</h4>
-                </li>
+                <article className="carrito-articulo">
+                    <img className="carrito-articulo-img" src={elem.imagen} alt="imagen del producto"/>
+                    <Link to="/producto" state={{itemId : elem.id}} style={{color: "black"}}>{elem.nombre}</Link>
+                    {/* <span style={{display: "flex", flexDirection: "column",  marginLeft: "auto"}}>
+                        <span className="carrito-span" style={{display: "flex"}}>
+                            <div>x</div>
+                            <div>{elem.cant}</div>
+                        </span>
+                            <button style={{cursor: "pointer", width: "2.5rem", height: "2rem"}} value={index} onClick={this.changeCant}>-</button>
+                            <button style={{cursor: "pointer", width: "2.5rem", height: "2rem"}} value={index} onClick={this.changeCant}>+</button>
+                    </span> */}
+                    <h4 style={{marginLeft: "auto"}} className="carrito-articulo-precio">{elem.precios[elem.precioFinal][0]} <br/>${parseInt(elem.precios[elem.precioFinal][1]) * elem.cant}</h4>   
+                    <button value={index} onClick={this.removeArticle} className="remove-article-btn">X</button>
+                </article>
             )
         })
 
         return(
             <div id="carro-de-compra">
-                <ul>
-                    {list}
-                </ul>
-                <button onClick={this.clearCartList}>VACIAR CARRO</button>
+                <div className="car-list-tile car-tile">
+                    <div className="list-div">
+                        {list}
+                    </div>
+                    <button className="clear-car-btn encargar-btn encargar-btn-ready" onClick={this.clearCartList}>VACIAR CARRO</button>
+                </div>
+                <div className="car-info-tile car-tile"></div>
             </div>
         )
     }
