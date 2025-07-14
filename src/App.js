@@ -1,17 +1,18 @@
 import logo from './logo.svg';
 import './App.css';
-import Navbar from './Navbar';
+// import Navbar from './Navbar';
 import Inicio from './pages/Inicio';
 import Catalogo from './pages/Catalogo';
 import Producto from './pages/Producto';
 import CarroDeCompra from './pages/CarroDeCompra';
 
 import {Routes, Route} from 'react-router-dom';
+import NavbarConLocation from './NavbarConLocation';
 
 function App() {
   return (
     <div id="App">
-        <Navbar />
+        <NavbarConLocation />
 
         <Routes>
           <Route path="/" element={<Inicio />}/>

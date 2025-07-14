@@ -1,13 +1,14 @@
 // import ReactDOM from 'react-dom';
 import React from 'react';
 import './Navbar.css'
-import { Link } from 'react-router-dom'
+import { Link, useLocation } from 'react-router-dom'
 
 class Navbar extends React.Component{
     constructor(props){
         super(props);
 
         this.handleClick = this.handleClick.bind(this);
+
     }
 
     handleClick(e){
@@ -28,11 +29,13 @@ class Navbar extends React.Component{
 
                 {/* <Link className="navbar-btn" >CONTACTO</Link> */}
                 <Link to="/" className="navbar-btn">
-                    <div className="estrella estrella-inicio"></div>
+                    {/* <div className="estrella estrella-focus"></div> */}
+                    {this.props.location.pathname === "/" ? <div className="estrella estrella-focus"></div> : <div className="estrella"></div>}
                     <p>INICIO</p>
                 </Link>
                 <Link to="/catalogo" className="navbar-btn">
-                    <div className="estrella"></div>
+                    {/* <div className="estrella"></div> */}
+                    {this.props.location.pathname === "/catalogo" ? <div className="estrella estrella-focus"></div> : <div className="estrella"></div>}
                     <p>CATALOGO</p>
                 </Link>
 

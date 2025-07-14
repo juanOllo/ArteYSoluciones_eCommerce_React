@@ -139,34 +139,42 @@ class CarroDeCompra extends React.Component{
 
     render(){
 
-        const list = this.state.cartList.map((elem, index) => {
-            return (
-                <article className="carrito-articulo">
-                    <img className="carrito-articulo-img" src={elem.imagen} alt="imagen del producto"/>
-                    <Link to="/producto" state={{itemId : elem.id}} style={{color: "black"}}>{elem.nombre}</Link>
-                    {/* <span style={{display: "flex", flexDirection: "column",  marginLeft: "auto"}}>
-                        <span className="carrito-span" style={{display: "flex"}}>
-                            <div>x</div>
-                            <div>{elem.cant}</div>
-                        </span>
-                            <button style={{cursor: "pointer", width: "2.5rem", height: "2rem"}} value={index} onClick={this.changeCant}>-</button>
-                            <button style={{cursor: "pointer", width: "2.5rem", height: "2rem"}} value={index} onClick={this.changeCant}>+</button>
-                    </span> */}
-                    <h4 style={{marginLeft: "auto"}} className="carrito-articulo-precio">{elem.precios[elem.precioFinal][0]} <br/>${parseInt(elem.precios[elem.precioFinal][1]) * elem.cant}</h4>   
-                    <button value={index} onClick={this.removeArticle} className="remove-article-btn">X</button>
-                </article>
-            )
-        })
+        // console.log("cart-list: ", this.state.cartList)
 
-        return(
+        return( this.state.cartList.length ?
             <div id="carro-de-compra">
                 <div className="car-list-tile car-tile">
                     <div className="list-div">
-                        {list}
+                        {
+                            this.state.cartList.map((elem, index) => {
+                                return (
+                                    <article className="carrito-articulo">
+                                        <button value={index} onClick={this.removeArticle} className="remove-article-btn">X</button>
+                                        <img className="carrito-articulo-img" src={elem.imagen} alt="imagen del producto"/>
+                                        <Link to="/producto" state={{itemId : elem.id}} style={{color: "black"}}>{elem.nombre}</Link>
+                                        <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.precios[elem.precioFinal][0]} <br/>${parseInt(elem.precios[elem.precioFinal][1]) * elem.cant}</h4>   
+                                        <span style={{fontWeight: "900", display: "flex", flexDirection: "column", position: "relative", right: "-0.5rem"}}>
+                                                <button style={{fontSize: "1.5rem", fontFamily: "var(--ffamily01)", backgroundColor: "var(--amarillo)", cursor: "pointer", width: "2.5rem", height: "2.3rem", border: "none", borderRadius: "0.3rem"}} value={index} onClick={this.changeCant}>+</button>
+                                                <span style={{display: "flex", justifyContent: "center", margin: "0.6rem 0"}}>
+                                                    <div>x</div>
+                                                    <div>{elem.cant}</div>
+                                                </span>
+                                                <button style={{fontSize: "1.5rem", fontFamily: "var(--ffamily01)", backgroundColor: "var(--amarillo)", cursor: "pointer", width: "2.5rem", height: "2.3rem", border: "none", borderRadius: "0.3rem"}} value={index} onClick={this.changeCant}>-</button>
+                                        </span>
+                                    </article>
+                                )
+                            })
+                        }
                     </div>
                     <button className="clear-car-btn encargar-btn encargar-btn-ready" onClick={this.clearCartList}>VACIAR CARRO</button>
                 </div>
-                <div className="car-info-tile car-tile"></div>
+                <div className="car-info-tile car-tile">
+                    <h1>Precio Final: ${this.state.cartList.reduce((acc, cur) => acc + parseInt(cur.precios[cur.precioFinal][1]) * parseInt(cur.cant), 0)}</h1>
+                </div>
+            </div>
+            :
+            <div id="carro-de-compra">
+                <h1 style={{marginTop: "45svh", fontFamily: "var(--ffamily01)"}}>Carro de compra vacio :(</h1>
             </div>
         )
     }

@@ -12,6 +12,12 @@ let listaDeArticulos = [
         ],
         'descripcion': '🌕Con luces LED que cambian de color o se pueden personalizar con el control, crea la atmósfera perfecta para cualquier ocasión. 🌙¡Esperamos tu pedido!✨',
         'imagen': 'https://media.discordapp.net/attachments/1393296986161152141/1393297903199584417/luna_02.png?ex=6872a94a&is=687157ca&hm=2507ee4ede3e1d1c47fea25f93385766b24f5918fba88c7fa43c896124b022fa&=&format=webp&quality=lossless&width=756&height=810',
+        'images': [
+            'https://media.discordapp.net/attachments/1393296986161152141/1393297903199584417/luna_02.png?ex=6872a94a&is=687157ca&hm=2507ee4ede3e1d1c47fea25f93385766b24f5918fba88c7fa43c896124b022fa&=&format=webp&quality=lossless&width=756&height=810',
+            'https://media.discordapp.net/attachments/1393296986161152141/1393297903526871050/soporte_notebook_01.png?ex=6872a94a&is=687157ca&hm=82f72219e153214a4fe81bc3ad933ad258c490f41d26b14e6b54e92429f83950&=&format=webp&quality=lossless&width=756&height=810',
+            'https://media.discordapp.net/attachments/1393296986161152141/1393297903199584417/luna_02.png?ex=6872a94a&is=687157ca&hm=2507ee4ede3e1d1c47fea25f93385766b24f5918fba88c7fa43c896124b022fa&=&format=webp&quality=lossless&width=756&height=810',
+            'https://media.discordapp.net/attachments/1393296986161152141/1393297903199584417/luna_02.png?ex=6872a94a&is=687157ca&hm=2507ee4ede3e1d1c47fea25f93385766b24f5918fba88c7fa43c896124b022fa&=&format=webp&quality=lossless&width=756&height=810',
+        ]
     },
     {
         'id': '2',
@@ -23,6 +29,10 @@ let listaDeArticulos = [
         ],
         'descripcion': ' 💻🙌🏼3 tamaños distintos según la medida X (ver imagen 4)',
         'imagen': 'https://media.discordapp.net/attachments/1393296986161152141/1393297903526871050/soporte_notebook_01.png?ex=6872a94a&is=687157ca&hm=82f72219e153214a4fe81bc3ad933ad258c490f41d26b14e6b54e92429f83950&=&format=webp&quality=lossless&width=756&height=810',
+        'images': [
+            'https://media.discordapp.net/attachments/1393296986161152141/1393297903526871050/soporte_notebook_01.png?ex=6872a94a&is=687157ca&hm=82f72219e153214a4fe81bc3ad933ad258c490f41d26b14e6b54e92429f83950&=&format=webp&quality=lossless&width=756&height=810',
+            
+        ]
     },
     {
         'id': '3',
@@ -33,6 +43,10 @@ let listaDeArticulos = [
         ],
         'descripcion': ' 💻🙌🏼3 tamaños distintos según la medida X (ver imagen 4)',
         'imagen': 'https://media.discordapp.net/attachments/1393296986161152141/1393297903526871050/soporte_notebook_01.png?ex=6872a94a&is=687157ca&hm=82f72219e153214a4fe81bc3ad933ad258c490f41d26b14e6b54e92429f83950&=&format=webp&quality=lossless&width=756&height=810',
+        'images': [
+            'https://media.discordapp.net/attachments/1393296986161152141/1393297903526871050/soporte_notebook_01.png?ex=6872a94a&is=687157ca&hm=82f72219e153214a4fe81bc3ad933ad258c490f41d26b14e6b54e92429f83950&=&format=webp&quality=lossless&width=756&height=810',
+            
+        ]
     }
     
 ]
@@ -59,10 +73,12 @@ class ProductoRender extends React.Component {
         super(props);
         this.state={
             item : props.itemToRender,
-            selectedPrice : -1 //hay q corregir esto y su intervencion en el if de addToCart()
+            selectedPrice : -1, //hay q corregir esto y su intervencion en el if de addToCart()
+            imageIndex: 0
         }
         this.selectPrice = this.selectPrice.bind(this);
         this.addToCart = this.addToCart.bind(this);
+        this.changeImageFocusIndex = this.changeImageFocusIndex.bind(this);
     }
 
     selectPrice(e){
@@ -88,9 +104,7 @@ class ProductoRender extends React.Component {
     // Este metodo agrega el id y el precio seleccionado del producto a una lista en el localStorage
     addToCart(e){
         if(this.state.selectedPrice >= 0){
-
-
-
+            
             const btn = e.target.classList.contains("btn") ? e.target : e.target.parentElement;
 
             // btn.style.backgroundColor = "transparent";
@@ -132,6 +146,12 @@ class ProductoRender extends React.Component {
         }
     }
 
+    changeImageFocusIndex(e){
+        this.setState({
+            imageIndex: e.target.id
+        })
+    }
+
     render(){
         // console.log("new selectedPrice: ", this.state.selectedPrice);
 
@@ -143,7 +163,12 @@ class ProductoRender extends React.Component {
 
         return(
             <div id='producto'>
-                <img className="img-producto" src={this.state.item.imagen} alt="imagen del producto"/>
+                <div className='images-tile'>
+                    <img className="img-producto-focus" src={this.state.item.images[this.state.imageIndex]} alt="imagen del producto"/>
+                    {this.state.item.images.map((elem, index) => {
+                        return index != this.state.imageIndex ? <img onClick={this.changeImageFocusIndex} id={index} className='img-producto' src={elem}/> : <img className="img-producto" src="" alt="" />;
+                    })}
+                </div>
                 <span className='producto-span'>
                     <h1>{this.state.item.nombre}</h1>
                     <p>{this.state.item.descripcion}</p>
