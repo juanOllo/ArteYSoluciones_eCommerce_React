@@ -1,0 +1,77 @@
+.administracion-body {
+    box-sizing: border-box;
+    /* margin-top: -1.35rem;  */
+
+    background-color: var(--verde);
+
+    width: 100%;
+    height: 100svh;
+    text-align: center;
+}
+
+/* table, th, td {
+  border: 1px solid black;
+  border-collapse: collapse;
+} */
+
+.administracion-body table{
+    /* padding-top: 5rem; */
+    /* border-top: 3.5rem solid var(--verde); */
+    width: 100%; 
+    background-color: var(--amarillo);
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
+.administracion-body table th{
+    background-color: rgba(255, 255, 255, 0.7);
+/* border: 1px solid black;
+    border-collapse: collapse; */
+}
+
+.administracion-body table td{
+    margin: 0 auto;
+    border: 1px solid black;
+    border-bottom: none;
+    border-left: none;
+    border-collapse: collapse;
+    /* height: 2rem;
+    min-height: 2rem; */
+    /* width: 20svw; */
+}
+
+.administracion-body table td input{
+    border: none;
+    background-color: transparent;
+    width: 95%;
+    /* height: 99%; */
+    /* height: fit-content; */
+    padding: 0.5rem;
+    /* height: ; */
+}
+
+.administracion-body table td textarea{
+    border: none;
+    background-color: transparent;
+    width: 90%;
+    /* height: 99%; */
+    /* height: fit-content; */
+    min-height: 5rem;
+    min-width: 5rem;
+    padding: 0.3rem;
+    scrollbar-width: none;
+}
+
+.administracion-body table td textarea:focus{
+    background-color: white;
+    border: none;
+}
+
+.administracion-body table td input:focus{
+    background-color: white;
+    border: none;
+}
+
+::placeholder {
+  color: black;
+}

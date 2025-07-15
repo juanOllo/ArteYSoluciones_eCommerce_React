@@ -56,7 +56,7 @@ const Producto = () =>{
     const id = location.state?.itemId;
     // console.log(id);
 
-    const itemToRender = listaDeArticulos.find(elem => elem.id === id);
+    const itemToRender = location.state.originalList.find(elem => elem.id === id);
 
     return(
         <div className='producto-body'>

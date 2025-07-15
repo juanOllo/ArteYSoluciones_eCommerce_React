@@ -165,6 +165,7 @@
 
 .images-tile{
     /* background-color: red; */
+    min-height: 31rem;
     max-height: calc(90% - 8rem);
     max-width: 25rem;
     margin: 8rem auto auto;
@@ -175,7 +176,7 @@
     /* flex-direction: column; */
     /* justify-content: space-evenly; */
     justify-content: center;
-    gap: 1rem;
+    /* gap: 1rem; */
     flex-wrap: wrap;
 }
 
@@ -183,6 +184,7 @@
     background-color: rgba(0, 0, 0, 0.1);
     width: 5rem;
     cursor: pointer;
+    margin: auto auto 0;
 }
 
 .img-producto-focus {
@@ -191,6 +193,7 @@
 
     width: 25rem;
     max-width: 90%;
+    margin-bottom: auto;
 }
 
 /* .img-producto:hover {

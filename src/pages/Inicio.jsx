@@ -19,7 +19,7 @@ class Inicio extends React.Component{
                     <Link to="/catalogo" className="catalogo-completo-btn btn">
                         <h4>CATALOGO COMPLETO</h4>
                     </Link>
-                    <Mostrador />
+                    <Mostrador originalList={this.props.originalList}/>
                 </div>
 
             </div>

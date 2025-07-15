@@ -28,6 +28,11 @@ class Navbar extends React.Component{
             <div id="navbar-div">
 
                 {/* <Link className="navbar-btn" >CONTACTO</Link> */}
+                <Link to="/administracion" className="navbar-btn">
+                    {/* <div className="estrella estrella-focus"></div> */}
+                    {this.props.location.pathname === "/administracion" ? <div className="estrella estrella-focus"></div> : <div className="estrella"></div>}
+                    <p>ADMIN</p>
+                </Link>
                 <Link to="/" className="navbar-btn">
                     {/* <div className="estrella estrella-focus"></div> */}
                     {this.props.location.pathname === "/" ? <div className="estrella estrella-focus"></div> : <div className="estrella"></div>}
