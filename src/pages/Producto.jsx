@@ -134,10 +134,10 @@ class ProductoRender extends React.Component {
                 localStorage.setItem("cart", JSON.stringify(data));
 
                 // anim punto rojo en el boton del carrito
-                document.getElementById("navbar-div").childNodes[2].childNodes[0].style.animation = "ponit-car-img-anim 0.25s ease-in-out forwards";
+                document.getElementById("navbar-div").childNodes[3].childNodes[0].style.animation = "ponit-car-img-anim 0.25s ease-in-out forwards";
                 setTimeout(() => {
-                    document.getElementById("navbar-div").childNodes[2].childNodes[0].style.backgroundColor = "red";
-                    document.getElementById("navbar-div").childNodes[2].childNodes[0].style.animation = "none";
+                    document.getElementById("navbar-div").childNodes[3].childNodes[0].style.backgroundColor = "red";
+                    document.getElementById("navbar-div").childNodes[3].childNodes[0].style.animation = "none";
                 }, 400);
             }
 

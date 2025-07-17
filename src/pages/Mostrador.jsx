@@ -10,13 +10,12 @@ class Mostrador extends React.Component {
     }
 
     render(){
-
         return(
             <div id="mostrador">
-                {this.props.originalList.map(elem => {
+                {this.props.originalList.slice(0, 3).map(elem => {
 
                     return <Link key={elem.id} to="/producto" state = {{itemId : elem.id, originalList: this.props.originalList}} className="inicio-article">
-                                <img src={elem.imagen} alt="imagen del producto" />
+                                <img src={elem.images[0]} alt="imagen del producto" />
                                 <h3>{elem.nombre}</h3>
                             </Link>
                 })}

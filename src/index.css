@@ -3,8 +3,11 @@
     --amarillo: #FFE0B8;
     --violeta: #B27CFC;
     --azul: #78B1DE;
+    --rojo: #EB0917;
+    --azul2: #3245D1;
 
     --ffamily01: "Roboto Condensed", sans-serif;
+    --ffamily02: "Bowlby One", sans-serif;
 }
 
 body {

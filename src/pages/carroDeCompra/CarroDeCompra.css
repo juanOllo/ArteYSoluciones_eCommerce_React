@@ -94,6 +94,7 @@
 .remove-article-btn:hover {
     cursor: pointer;
     background-color:rgb(238, 103, 103);
+    background-color:rgb(248, 101, 101);
 }
 
 .clear-car-btn {
@@ -104,3 +105,34 @@
     position: relative;
     right: -7rem;
 } */
+
+/* .car-info-tile{
+    background-color: red;
+} */
+
+.car-form{
+    /* background-color: green; */
+    width: 80%;
+    margin: 2rem auto 0;
+    padding: 2rem;
+    border-radius: 0.5rem;
+    border: 0.1rem solid black;
+    /* box-shadow: 0.3rem 0.3rem black; */
+
+    display: flex;
+    flex-direction: column;
+    justify-content: start;
+    align-items: start;
+
+    /* background-color: var(--amarillo); */
+}
+
+.car-form input{
+    background-color: var(--amarillo);
+    background-color: white;
+    border: none;
+    width: 17rem;
+    height: 1.5rem;
+    border-radius: 0.3rem;
+    padding: 0.5rem;
+}

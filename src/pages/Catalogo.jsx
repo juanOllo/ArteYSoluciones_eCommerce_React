@@ -24,7 +24,7 @@ class Catalogo extends React.Component{
             return(
                 <Link to="/producto" state={{itemId : elem.id, originalList: this.props.originalList}} className="catalogo-article">
                     <h2>{elem.nombre}</h2>
-                    <img src={elem.imagen} alt="imagen del producto" className="catalogo-img"/>
+                    <img src={elem.images[0]} alt="imagen del producto" className="catalogo-img"/>
                 </Link>
             )
         })
@@ -42,7 +42,7 @@ class Catalogo extends React.Component{
                 return(
                     <Link to="/producto" state={{itemId : elem.id}} className="catalogo-article">
                         <h2>{elem.nombre}</h2>
-                        <img src={elem.imagen} alt="imagen del producto" className="catalogo-img"/>
+                        <img src={elem.images[0]} alt="imagen del producto" className="catalogo-img"/>
                     </Link>
                 )
             })

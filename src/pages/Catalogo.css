@@ -67,7 +67,8 @@
     max-height: calc(100svh - 8rem);
     padding-top: 4.5rem;
     padding-bottom: 1rem;
-    padding-right: 0.5rem;
+    /* padding-right: 0.5rem; */
+    padding-left: 0.5rem;
 
     overflow-y: scroll;
     scrollbar-width: none;
@@ -94,7 +95,7 @@
     /* margin-top: 1rem; */
     border-radius: 1rem;
     /* box-shadow: 0.4rem 0.4rem black; */
-    box-shadow: 0.4rem 0.4rem black;
+    /* box-shadow: 0.4rem 0.4rem black; */
     border: 2px solid black;
 
     display: flex;
@@ -122,8 +123,8 @@
 
 @keyframes catalogo-article-click-anim {
     100%{
-        box-shadow: 0 0 transparent;
-        transform: translate(0.4rem, 0.4rem);
+        box-shadow: 0.3rem 0.3rem black;
+        transform: translate(-0.3rem, -0.3rem);
 
         /* box-shadow: 0.4rem 0.4rem black;
         transform: translate(-0.5rem, -0.5rem); */

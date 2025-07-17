@@ -1,10 +1,10 @@
-// import ReactDOM from 'react-dom';
 import React from 'react';
-import './Administracion.css';
+// import './Administracion.css';
 
-class Administracio extends React.Component{
+class ItemsTable extends React.Component{
     constructor(props){
-        super(props);
+        super(props)
+
         this.state={
             actualList: this.props.originalList,
         }
@@ -16,11 +16,14 @@ class Administracio extends React.Component{
 
         this.handleStartDemo = this.handleStartDemo.bind(this);
         this.handleFinishDemo = this.handleFinishDemo.bind(this);
+
+        this.handleNewItem = this.handleNewItem.bind(this);
+        this.handleRemoveItem = this.handleRemoveItem.bind(this);
     }
 
     handleInputChange(index, key, info, index2){
 
-        if(index2){
+        if(index2 || index2==0){
             this.state.actualList[index][key][index2] = info;
         } else {
             this.state.actualList[index][key] = info;
@@ -62,24 +65,60 @@ class Administracio extends React.Component{
         localStorage.clear("demoList");
         window.location.reload();
     }
+    
+    handleNewItem(){
+
+        let newItemId;
+
+        do{
+            newItemId = Math.floor(Math.random() * (999 - 1)) + 1;
+        }while(this.state.actualList.find(elem => (elem.id === newItemId)))
+
+        const newItemObj = {
+            'id': newItemId,
+            'nombre': '',
+            'precios': [],
+            'descripcion': '',
+            'images': []
+        }
+
+        this.state.actualList.push(newItemObj);
+
+        this.setState({
+            actualList: this.state.actualList
+        })
+    }
+
+    handleRemoveItem(index){
+        const updatedList = [...this.state.actualList];
+        updatedList.splice(index, 1);
+
+
+        // this.state.actualList.splice(index, 1)
+        this.setState({
+            actualList: updatedList
+        })
+        console.log("actualList: ", updatedList)
+    }
 
     render(){
-
-        // console.log("render");
-
         return(
-            <div className='administracion-body'>
-
-                {/* <h1 style={{paddingTop: "-5rem"}}>ADMINISTRACION</h1> */}
-                <div style={{height: "3.5rem"}}></div>
+            <div>
+                <button onClick={this.handleStartDemo}>GUARDAR</button>
+                {
+                    localStorage.getItem("demoList") ?
+                    <button onClick={this.handleFinishDemo}>TERMINAR DEMO</button>
+                    : false
+                }
 
                 <table>
                     <thead>
-                        <th style={{width: "5rem"}}>ID</th>
+                        <th style={{width: "3rem"}}>ID</th>
                         <th style={{width: "15rem"}}>Nombre</th>
                         <th style={{width: "15svw"}}>Tamaño/Precio</th>
-                        <th>Descripcion</th>
-                        <th>Imagenes</th>
+                        <th style={{width: "27rem"}}>Descripcion</th>
+                        <th>Imagenes (max: 4)</th>
+                        <th style={{width: "3rem"}}>DEL</th>
                     </thead>
 
                     <tbody>
@@ -127,16 +166,25 @@ class Administracio extends React.Component{
                                                     value={iElem} type="text" placeholder={iElem}
                                                     />)
                                             }
+
                                             <span style={{display: "flex"}}>
                                                 {
-                                                    elem.images.length < 4 && elem.images[elem.images.length-1]? 
+                                                    elem.images.length < 4 && (elem.images[elem.images.length-1] || elem.images.length == 0)? 
                                                     <button style={{width: "40%", margin: "0 auto"}} onClick={(e) => this.handleNewInput(index, 'images')}>AGREGAR</button>
                                                     : false
                                                 }
 
-                                                <button style={{width: "40%", margin: "0 auto"}} onClick={(e) => this.handleRemoveInput(index, 'images')}>BORRAR</button>
+                                                {
+                                                    elem.images.length > 1 ?
+                                                    <button style={{width: "40%", margin: "0 auto"}} onClick={(e) => this.handleRemoveInput(index, 'images')}>BORRAR</button>
+                                                     : false
+                                                }
+
                                             </span>
                                             
+                                        </td>
+                                        <td>
+                                            <button onClick={() => this.handleRemoveItem(index)}>X</button>
                                         </td>
                                     </tr>
                                 )
@@ -144,19 +192,13 @@ class Administracio extends React.Component{
                         }
                     </tbody>
 
-                    
                 </table>
 
-                <button onClick={this.handleStartDemo}>GUARDAR</button>
-                {
-                    localStorage.getItem("demoList") ?
-                    <button onClick={this.handleFinishDemo}>TERMINAR DEMO</button>
-                    : false
-                }
+                <button onClick={this.handleNewItem} style={{margin: "3rem auto"}}>AÑADIR PRODUCTO</button>
 
             </div>
         )
     }
 }
 
-export default Administracio;
+export default ItemsTable;
