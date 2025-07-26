@@ -41,7 +41,7 @@ class Navbar extends React.Component{
                 <Link to="/catalogo" className="navbar-btn">
                     {/* <div className="estrella"></div> */}
                     {this.props.location.pathname === "/catalogo" ? <div className="estrella estrella-focus"></div> : <div className="estrella"></div>}
-                    <p>CATALOGO</p>
+                    <p>CATÁLOGO</p>
                 </Link>
 
                 <Link to="/carro" onClick={this.handleClick} className="shopping-car-btn btn">

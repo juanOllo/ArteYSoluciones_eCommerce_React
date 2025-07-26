@@ -191,7 +191,7 @@
 }
 
 .img-producto-focus {
-    border: 0.15rem solid black;
+    /* border: 0.15rem solid black; */
     background-color: var(--amarillo);
 
     width: 25rem;
@@ -199,13 +199,14 @@
     margin-bottom: auto;
 }
 
-/* .img-producto:hover {
+/* .img-producto-focus:hover {
     animation: img-producto-hover-anim 0.1s ease-in-out forwards;
 } */
 
 @keyframes img-producto-hover-anim {
     100%{
         scale: 1.05;
+        box-shadow: 0 0 2rem 0.1rem rgba(0, 0, 0, 0.5);
         /* border: 0.35rem solid black; */
         /* border-color: transparent; */
     }

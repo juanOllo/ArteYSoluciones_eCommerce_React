@@ -20,8 +20,9 @@ class Catalogo extends React.Component{
     }
 
     listItems(){
-        const listaCompleta = this.props.originalList.map(elem => {
+        const listaCompleta = this.props.originalList.map((elem, index) => {
             return(
+                // <Link style={{animation: "article-catalog-anim 1s ease 0." + ((index+1)*2) + "s forwards"}} to="/producto" state={{itemId : elem.id, originalList: this.props.originalList}} className="catalogo-article">
                 <Link to="/producto" state={{itemId : elem.id, originalList: this.props.originalList}} className="catalogo-article">
                     <h2>{elem.nombre}</h2>
                     <img src={elem.images[0]} alt="imagen del producto" className="catalogo-img"/>
@@ -57,9 +58,7 @@ class Catalogo extends React.Component{
 
         if (e.target.value) {
             this.userInput = e.target.value;
-            // this.setState({
-            //     userInput: e.target.value
-            // });
+            this.searchItems();
         } else {
             this.userInput = "";
             this.setState({
@@ -74,12 +73,19 @@ class Catalogo extends React.Component{
     render(){
         return(
             <div className='catalogo-body'>
+                
+                {/* <button className='filter-btn'>
+                    <img src="https://imgs.search.brave.com/rwtpttxP_Wxz2KDBuiQvkfWObbuoHIC5YKFU_8JhGIk/rs:fit:860:0:0:0/g:ce/aHR0cHM6Ly9jZG4u/aWNvbnNjb3V0LmNv/bS9pY29uL3ByZW1p/dW0vcG5nLTI1Ni10/aHVtYi9maWx0ZXIt/aWNvbi1kb3dubG9h/ZC1pbi1zdmctcG5n/LWdpZi1maWxlLWZv/cm1hdHMtLWZpbHRl/cmluZy1zZXR0aW5n/LXNlYXJjaC1vcHRp/b25zLWVzc2VudGlh/bHMtcGFjay11c2Vy/LWludGVyZmFjZS1p/Y29ucy0xMDMxMjI4/MC5wbmc_Zj13ZWJw/Jnc9MTI4" alt="filters" />
+                </button>
+                <div className='filters-div'></div> */}
+
                 <div id="catalogo-buscador">
                     <input onChange={this.changeUserInput} type="text" placeholder="Buscar"/>
                     <button onClick={this.searchItems}>
                         <img alt="lupa" className="search-img" src="https://media.discordapp.net/attachments/1393296986161152141/1393357055397593209/free-search-icon-2907-thumb.png?ex=6872e061&is=68718ee1&hm=2b6d0585cff0fe2861e3117aa14d052319329cc15ca854265e1788e4cd3321fe&=&format=webp&quality=lossless&width=640&height=640"/>
                     </button>
                 </div>
+                
                 <div id="catalogo-lista">
                     {this.state.listaEnPantalla}
                     {/* {this.state.listaEnPantalla.length != 0 ? this.state.listaEnPantalla : this.state.listaCompleta} */}

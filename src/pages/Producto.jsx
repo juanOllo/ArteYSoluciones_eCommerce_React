@@ -172,7 +172,7 @@ class ProductoRender extends React.Component {
                 <span className='producto-span'>
                     <h1>{this.state.item.nombre}</h1>
                     <p>{this.state.item.descripcion}</p>
-                    <h2>Seleccione un precio por tamaño:</h2>
+                    <h2>Seleccione el tamaño:</h2>
                     <div className='span-precios'>
                         {precios}
                     </div>

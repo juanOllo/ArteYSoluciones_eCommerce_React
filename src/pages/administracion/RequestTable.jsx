@@ -13,7 +13,7 @@ class RequestTable extends React.Component{
     }
 
     handleClearRequestList(){
-        localStorage.clear("requests");
+        localStorage.removeItem("requests");
         this.setState({
             requestsList : []
         })
@@ -30,7 +30,7 @@ class RequestTable extends React.Component{
                         <th>Contacto</th>
                         <th style={{width: "45rem"}}>Lista de compra</th>
                         <th style={{width: "10rem"}}>Precio Final</th>
-                        <th style={{width: "5rem"}}>Fecha</th>
+                        <th style={{width: "10rem"}}>Fecha</th>
                     </thead>
 
                     <tbody>
@@ -51,7 +51,7 @@ class RequestTable extends React.Component{
 
                                                             <h5 style={{marginRight: "1rem"}}>[{item.id}]</h5>
                                                             <h5>{item.name}</h5>
-                                                            <h5 style={{marginLeft: "auto"}}>{item.size[0]}</h5>
+                                                            <h5 style={{marginLeft: "auto"}}>{item.size[0]}, ${item.size[1]}</h5>
                                                             <h5 style={{marginLeft: "1rem"}}>(X{item.cant})</h5>
                                                         </div>
                                                     )

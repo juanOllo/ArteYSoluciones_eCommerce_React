@@ -109,14 +109,19 @@
 }
 
 .catalogo-completo-btn:hover {
-    animation: catalogo-completo-btn-click-anim 0.15s forwards;
+    animation: catalogo-completo-btn-click-anim 1.7s infinite;
     background-color: antiquewhite;
 }
 
 @keyframes catalogo-completo-btn-click-anim {
-    50%{
+    5%{
         box-shadow: 0 0 transparent;
         transform: translate(0.3rem, 0.3rem);
+        /* border-color: white; */
+    }
+    15%{
+        box-shadow: 0.3rem 0.3rem black;
+        transform: translate(0, 0);
         /* border-color: white; */
     }
 }

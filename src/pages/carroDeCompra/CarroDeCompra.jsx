@@ -10,21 +10,7 @@ class CarroDeCompra extends React.Component{
         //     cartList : []
         // }
 
-        // oculta el punto rojo en el boton del carrito
-        
-        this.loadCartList = this.loadCartList.bind(this);
-        this.clearCartList = this.clearCartList.bind(this);
-        this.removeArticle = this.removeArticle.bind(this);
-        this.changeCant = this.changeCant.bind(this);
-        this.sendRequest = this.sendRequest.bind(this);
-
-        this.loadCartList();
-    }
-
-    loadCartList(){
         const data = localStorage.getItem("cart") ? JSON.parse(localStorage.getItem("cart")) : [];
-
-        // console.log("data: ", data);
 
         const finalList = [];
         if (data) {
@@ -46,15 +32,18 @@ class CarroDeCompra extends React.Component{
             }
         }
 
-        // console.log("final list: ", finalList);
-
         this.state = {
             cartList : finalList
         }
+
+        this.clearCartList = this.clearCartList.bind(this);
+        this.removeArticle = this.removeArticle.bind(this);
+        this.changeCant = this.changeCant.bind(this);
+
     }
 
     clearCartList(e){
-        localStorage.clear("cart");
+        localStorage.removeItem("cart");
 
         e.target.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
         setTimeout(() => {
@@ -112,32 +101,6 @@ class CarroDeCompra extends React.Component{
         })
     }
 
-    sendRequest(){
-        const data = localStorage.getItem("requests") ? JSON.parse(localStorage.getItem("requests")) : [];
-
-        const itemsList = this.state.cartList.map(elem => {
-            return {
-                'id': elem.id,
-                'name': elem.nombre,
-                'size': elem.precios[elem.precioFinal],
-                'cant': elem.cant
-            }
-        })
-
-        const newRequest = {
-            'name': 'juan',
-            'contact': 'juan@gmail.com',
-            'date': 'fecha',
-            'items': itemsList,
-            'price': this.state.cartList.reduce((acc, cur) => acc + parseInt(cur.precios[cur.precioFinal][1]) * parseInt(cur.cant), 0)
-        }
-
-        console.log("newRequest: ", newRequest);
-
-        data.push(newRequest);
-        localStorage.setItem("requests", JSON.stringify(data));
-    }
-
     render(){
 
         // console.log("cart-list: ", this.state.cartList)
@@ -153,16 +116,16 @@ class CarroDeCompra extends React.Component{
                                     <article className="carrito-articulo">
                                         <button value={index} onClick={this.removeArticle} className="remove-article-btn">X</button>
                                         <img className="carrito-articulo-img" src={elem.images[0]} alt="imagen del producto"/>
-                                        <Link to="/producto" state={{itemId : elem.id}} style={{color: "black"}}>{elem.nombre}</Link>
+                                        <Link to="/producto" state={{itemId : elem.id, originalList: this.props.originalList}} style={{color: "black"}}>{elem.nombre}</Link>
                                         <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.precios[elem.precioFinal][0]} <br/>${parseInt(elem.precios[elem.precioFinal][1]) * elem.cant}</h4>   
-                                        <span style={{fontWeight: "900", display: "flex", flexDirection: "column", position: "relative", right: "-0.5rem"}}>
-                                                <button  name={index} onClick={this.changeCant} style={{fontSize: "1.5rem", fontFamily: "var(--ffamily01)", backgroundColor: "var(--amarillo)", cursor: "pointer", width: "2.5rem", height: "2.3rem", border: "none", borderRadius: "0.3rem"}}>+</button>
+                                        <span style={{fontWeight: "900", display: "flex", flexDirection: "column", position: "relative", right: "-1rem"}}>
+                                                <button className="car-cant-btn"  name={index} onClick={this.changeCant}>+</button>
                                                 <span style={{display: "flex", justifyContent: "center", margin: "0.6rem 0"}}>
                                                     <div>x</div>
                                                     {/* <div>{elem.cant}</div> */}
-                                                    <input name={index} type="text" value={elem.cant} onChange={this.changeCant} style={{backgroundColor: "transparent", border: "none", width: "1.5rem"}}/>
+                                                    <input name={index} type="text" value={elem.cant} onChange={this.changeCant} style={{backgroundColor: "transparent", border: "none", width: "2.5rem", fontSize: "1.3rem", margin: "-0.5rem 0"}}/>
                                                 </span>
-                                                <button  name={index} onClick={this.changeCant} style={{fontSize: "1.5rem", fontFamily: "var(--ffamily01)", backgroundColor: "var(--amarillo)", cursor: "pointer", width: "2.5rem", height: "2.3rem", border: "none", borderRadius: "0.3rem"}}>-</button>
+                                                <button className="car-cant-btn" name={index} onClick={this.changeCant}>-</button>
                                         </span>
                                     </article>
                                 )
@@ -177,14 +140,11 @@ class CarroDeCompra extends React.Component{
                     <button className="clear-car-btn encargar-btn encargar-btn-ready" onClick={this.clearCartList}>VACIAR CARRO</button>
                 </div>
                 <div className="car-info-tile car-tile">
-                    {/* <h1>Precio Final: ${this.state.cartList.reduce((acc, cur) => acc + parseInt(cur.precios[cur.precioFinal][1]) * parseInt(cur.cant), 0)}</h1> */}
-                    {/* <form action="submit"></form> */}
-                    {
-                        this.state.cartList.length ?
+                    {/* {
+                        this.state.cartList.length ? */}
                         <CarForm finalPrice={this.state.cartList.reduce((acc, cur) => acc + parseInt(cur.precios[cur.precioFinal][1]) * parseInt(cur.cant), 0)} itemsList={this.state.cartList}/>
-                        : false
-                    }
-                    {/* <button onClick={this.sendRequest}>ENVIAR PEDIDO</button> */}
+                        {/* : null
+                    } */}
                 </div>
             </div>
         )
