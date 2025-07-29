@@ -10,6 +10,12 @@
     display: flex;
     justify-content: center;
     font-family: var(--ffamily01);
+    /* background-color: red; */
+    flex-wrap: wrap;
+
+    overflow-y: visible;
+    /* scrollbar-width: none;
+    scrollbar-color: black transparent; */
 }
 
 /* #carro-de-compra *{
@@ -20,12 +26,18 @@
     /* background-color: rgba(0, 0, 0, 50%); */
     padding-top: 3.5rem;
     width: 40%;
+    min-width: 24rem;
+    max-width: 90svw;
 
     display: flex;
     flex-direction: column;
     /* justify-content: center; */
     align-items: center;
     gap: 2rem;
+}
+
+.car-list-tile{
+    max-height: calc(100svh - 4rem);
 }
 
 .list-div {
@@ -43,16 +55,18 @@
     background-color: rgba(0, 0, 0, 0.1);
     background-color: var(--amarillo);
     height: 5rem;
-    padding: 1rem;
+    padding-top: 1rem;
+    padding-bottom: 1rem;
     border-radius: 0.3rem;
     border: 2px solid black;
     box-shadow: 0.3rem 0.3rem black;
     margin-bottom: 1rem;
 
     display: flex;
-    /* justify-content: space-between; */
+    justify-content: space-evenly;
     align-items: center;
     gap: 1rem;
+    /* gap: 0.5rem; */
 
     font-family: var(--ffamily01);
     color: black;
@@ -90,7 +104,9 @@
     border-radius: 50%;
     background-color:rgb(252, 56, 56);
 
-    margin-bottom: auto;
+    /* margin-left: 0.5rem; */
+    z-index: 3;
+    margin: 0 -2rem auto 0.7rem;
 }
 
 .remove-article-btn:hover {
@@ -128,18 +144,31 @@
     background-color: red;
 } */
 
-#carform{
+/* #carform{
     overflow-y: scroll;
     scrollbar-color: black transparent;
     scrollbar-width: none;
+    background-color: red;
+    max-height: 90svh;
+    margin-bottom: 3rem;
+    padding-bottom: 3rem;
+} */
+
+.car-info-tile{
+    overflow-y: scroll;
+    scrollbar-color: black transparent;
+    scrollbar-width: none;
+    /* background-color: red; */
+    max-height: calc(100% - 3.5rem);
+    margin-bottom: 3rem;
 }
 
 .car-form{
     /* background-color: green; */
     width: 80%;
-    margin: 2rem auto 0;
+    margin: 2rem auto 2rem;
     padding: 2rem;
-    border-radius: 0.5rem;
+    border-radius: 0 0.5rem;
     border: 0.1rem solid black;
     /* box-shadow: 0.3rem 0.3rem black; */
 
@@ -149,6 +178,7 @@
     align-items: start;
 
     /* background-color: var(--amarillo); */
+    /* background-color: var(--violeta); */
 }
 
 .car-form input{

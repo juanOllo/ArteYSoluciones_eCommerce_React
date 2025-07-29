@@ -1,5 +1,5 @@
 import React from "react";
-import CarroDeCompra from "./CarroDeCompra";
+// import CarroDeCompra from "./CarroDeCompra";
 
 class CarForm extends React.Component{
     constructor(props){
@@ -9,7 +9,6 @@ class CarForm extends React.Component{
             customerInfo: {
                 'name': '',
                 'contact': '',
-                'date': '',
                 'date': '',
                 'finalPrice': '',
             }

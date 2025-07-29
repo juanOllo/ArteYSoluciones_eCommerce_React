@@ -11,6 +11,14 @@
     scrollbar-width: none;
 }
 
+.admin-text{
+    background-color: white;
+    width: fit-content;
+    padding: 2rem;
+    margin: 5rem auto 3rem;
+    border: 0.1rem solid black;
+}
+
 button{
     cursor: pointer;
 }
