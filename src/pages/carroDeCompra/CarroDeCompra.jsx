@@ -17,7 +17,7 @@ class CarroDeCompra extends React.Component{
             // const finalList = listaDeArticulos.filter(elem => {
             //     for (let item of data){
             //         if (item.id == elem.id) {
-            //             elem.precioFinal = item.precio;
+            //             elem.priceXSizeIndex = item.precio;
             //             return true;
             //         }
             //     }
@@ -27,7 +27,7 @@ class CarroDeCompra extends React.Component{
             for (const d of data) {
                 const articulo = this.props.originalList.find(a => a.id === d.id);
                 if (articulo) {
-                    finalList.push({ ...articulo, precioFinal: d.precio, cant: d.cant });
+                    finalList.push({ ...articulo, priceXSizeIndex: d.priceXSizeIndex, cant: d.cant });
                 }
             }
         }
@@ -132,7 +132,7 @@ class CarroDeCompra extends React.Component{
                                         <button value={index} onClick={this.removeArticle} className="remove-article-btn">X</button>
                                         <img className="carrito-articulo-img" src={elem.images[0]} alt="imagen del producto"/>
                                         <Link to="/producto" state={{itemId : elem.id, originalList: this.props.originalList}} style={{color: "black"}}>{elem.nombre}</Link>
-                                        <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.precios[elem.precioFinal][0]} <br/>${parseInt(elem.precios[elem.precioFinal][1]) * elem.cant}</h4>   
+                                        <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.priceXSize[elem.priceXSizeIndex].size} <br/>${parseInt(elem.priceXSize[elem.priceXSizeIndex].price) * elem.cant}</h4>   
                                         <span style={{fontWeight: "900", display: "flex", flexDirection: "column", position: "relative"}}>
                                                 <button className="car-cant-btn"  name={index} onClick={this.changeCant}>+</button>
                                                 <span style={{display: "flex", justifyContent: "center", margin: "0.6rem 0"}}>
@@ -157,7 +157,7 @@ class CarroDeCompra extends React.Component{
                 <div className="car-info-tile car-tile">
                     {/* {
                         this.state.carList.length ? */}
-                        <CarForm finalPrice={this.state.carList.reduce((acc, cur) => acc + parseInt(cur.precios[cur.precioFinal][1]) * parseInt(cur.cant), 0)} itemsList={this.state.carList}/>
+                        <CarForm finalPrice={this.state.carList.reduce((acc, cur) => acc + parseInt(cur.priceXSize[cur.priceXSizeIndex].price) * parseInt(cur.cant), 0)} itemsList={this.state.carList}/>
                         {/* : null
                     } */}
                 </div>

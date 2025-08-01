@@ -6,13 +6,12 @@ class ItemsTable extends React.Component{
         super(props)
 
         this.state={
-            actualList: this.props.originalList,
+            displayedList: this.props.originalList,
         }
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleNewInput = this.handleNewInput.bind(this);
         this.handleRemoveInput = this.handleRemoveInput.bind(this);
-
 
         this.handleStartDemo = this.handleStartDemo.bind(this);
         this.handleFinishDemo = this.handleFinishDemo.bind(this);
@@ -21,45 +20,49 @@ class ItemsTable extends React.Component{
         this.handleRemoveItem = this.handleRemoveItem.bind(this);
     }
 
-    handleInputChange(index, key, info, index2, index3){
+    handleInputChange(index, key, info, index2, key2){
 
-        if (index3) {
-            this.state.actualList[index][key][index2][parseInt(index3)] = info;
-        } else if(index2 || index2==0){
-            this.state.actualList[index][key][index2] = info;
+        const updatedList = this.state.displayedList;
+
+        if (key2) {
+            updatedList[index][key][index2][key2] = info;
+        } else if(index2 || index2 === 0){
+            updatedList[index][key][index2] = info;
         } else {
-            this.state.actualList[index][key] = info;
+            updatedList[index][key] = info;
         }
 
-        // console.log("actualList: ", this.state.actualList);
-
         this.setState({
-            actualList: this.state.actualList
+            displayedList: updatedList
         })
     }
 
     handleNewInput(index, key, data){
-        this.state.actualList[index][key][this.state.actualList[index][key].length] = data;
-        // console.log(this.state.actualList[index][key]);
+
+        const updatedList = this.state.displayedList; 
+
+        console.log("llego");
+
+        updatedList[index][key][updatedList[index][key].length] = data;
 
         this.setState({
-            actualList: this.state.actualList
+            displayedList: updatedList
         })
     }
 
     handleRemoveInput(index, key){
-        // this.state.actualList[index][key][this.state.actualList[index][key].length] = "";
-        // console.log(this.state.actualList[index][key]);
 
-        this.state.actualList[index][key].splice(-1, 1);
+        const updatedList = this.state.displayedList; 
+
+        updatedList[index][key].splice(-1, 1);
 
         this.setState({
-            actualList: this.state.actualList
+            displayedList: updatedList
         })
     }
 
     handleStartDemo(){
-        localStorage.setItem("demoList", JSON.stringify(this.state.actualList));
+        localStorage.setItem("demoList", JSON.stringify(this.state.displayedList));
         window.location.reload();
     }
 
@@ -72,35 +75,44 @@ class ItemsTable extends React.Component{
 
         let newItemId;
 
+        const usedIds = this.state.displayedList.map(elem => elem.id);
+
+        console.log("ids: ", usedIds)
+
         do{
-            newItemId = Math.floor(Math.random() * (999 - 1)) + 1;
-        }while(this.state.actualList.find(elem => (elem.id === newItemId)))
+            newItemId = (Math.floor(Math.random() * (999 - 1)) + 99).toString();
+        }while(usedIds.includes(newItemId))
+        // }while(this.state.displayedList.find(elem => (elem.id === newItemId)))
+
 
         const newItemObj = {
             'id': newItemId,
             'nombre': '',
-            'precios': [],
+            'precios': [
+                ["", ""]
+            ],
             'descripcion': '',
-            'images': []
+            'images': [
+                ""
+            ]
         }
 
-        this.state.actualList.push(newItemObj);
+        this.state.displayedList.push(newItemObj);
 
         this.setState({
-            actualList: this.state.actualList
+            displayedList: this.state.displayedList
         })
     }
 
     handleRemoveItem(index){
-        const updatedList = [...this.state.actualList];
+        const updatedList = [...this.state.displayedList];
+        
         updatedList.splice(index, 1);
 
-
-        // this.state.actualList.splice(index, 1)
         this.setState({
-            actualList: updatedList
+            displayedList: updatedList
         })
-        console.log("actualList: ", updatedList)
+        // console.log("displayedList: ", updatedList)
     }
 
     render(){
@@ -115,24 +127,26 @@ class ItemsTable extends React.Component{
 
                 <table>
                     <thead>
-                        <th style={{width: "3rem"}}>ID</th>
-                        <th style={{width: "15rem"}}>Nombre</th>
-                        <th style={{width: "15svw"}}>Tamaño/Precio</th>
-                        <th style={{width: "27rem"}}>Descripcion</th>
-                        <th>Imagenes (max: 4)</th>
-                        <th style={{width: "3rem"}}>DEL</th>
+                        <tr>
+                            <th style={{width: "3rem"}}>ID</th>
+                            <th style={{width: "15rem"}}>Nombre</th>
+                            <th style={{width: "15svw"}}>Tamaño/Precio</th>
+                            <th style={{width: "27rem"}}>Descripcion</th>
+                            <th>Imagenes (max: 4)</th>
+                            <th style={{width: "3rem"}}>DEL</th>
+                        </tr>
                     </thead>
 
                     <tbody>
 
                         {
-                            this.state.actualList.map((elem, index) => {
+                            this.state.displayedList.map((elem, index) => {
                                 return(
                                     <tr>
-                                        {/* ID */}
+                                    {/* ID */}
                                         <td>{elem.id}</td>
 
-                                        {/* NAME */}
+                                    {/* NAME */}
                                         <td>
                                             <textarea
                                             value={elem.nombre}
@@ -140,50 +154,37 @@ class ItemsTable extends React.Component{
                                             />
                                         </td>
 
-                                        {/* PRICES */}
+                                    {/* PRICES */}
                                         <td style={{display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
-                                            {/* {
-                                                elem.precios.map((pElem) => 
-                                                    <div style={{width: "100%"}}>
-                                                        <input style={{width: "40%"}} value={pElem[0]} type="text" placeholder={pElem[0]}/>
-                                                        $
-                                                        <input style={{width: "40%"}} value={pElem[1]} type="text" placeholder={pElem[1]}/>
-                                                    </div>
-                                                )
-                                            } */}
-
                                             {
-                                                elem.precios.map((pElem, pIndex) => 
-                                                    // <input 
-                                                    // onChange={(e) => this.handleInputChange(index, 'prices', e.target.value, pIndex)}
-                                                    // value={pElem} type="text" placeholder={pElem}
-                                                    // />
+                                                elem.priceXSize.map((pElem, pIndex) => 
 
                                                     <div style={{width: "100%"}}>
-                                                        <input onChange={(e) => this.handleInputChange(index, 'precios', e.target.value, pIndex, '0')} style={{width: "40%"}} value={pElem[0]} type="text" placeholder={pElem[0]}/>
+                                                        <input onChange={(e) => this.handleInputChange(index, 'priceXSize', e.target.value, pIndex, 'size')} style={{width: "40%"}} value={pElem.size} type="text" placeholder={pElem.size}/>
                                                         $
-                                                        <input onChange={(e) => this.handleInputChange(index, 'precios', e.target.value, pIndex, '1')} style={{width: "40%"}} value={pElem[1]} type="text" placeholder={pElem[1]}/>
+                                                        <input onChange={(e) => this.handleInputChange(index, 'priceXSize', e.target.value, pIndex, 'price')} style={{width: "40%"}} value={pElem.price} type="text" placeholder={pElem.price}/>
                                                     </div>
                                                 )
                                             }
 
                                             <span style={{display: "flex"}}>
                                                 {
-                                                    elem.precios[elem.precios.length-1][0] && elem.precios[elem.precios.length-1][1]? 
-                                                    <button style={{width: "40%", margin: "0 auto"}} onClick={(e) => this.handleNewInput(index, 'precios', [])}>AGREGAR</button>
+                                                    // elem.precios.length === 0 || (elem.precios[elem.precios.length-1][0] && elem.precios[elem.precios.length-1][1])? 
+                                                    elem.priceXSize[elem.priceXSize.length-1].price && elem.priceXSize[elem.priceXSize.length-1].size? 
+                                                    <button style={{width: "40%", margin: "0 auto"}} onClick={(e) => this.handleNewInput(index, 'priceXSize', {})}>AGREGAR</button>
                                                     : false
                                                 }
 
                                                 {
-                                                    elem.precios.length > 1 ?
-                                                    <button style={{width: "40%", margin: "0 auto"}} onClick={(e) => this.handleRemoveInput(index, 'precios')}>BORRAR</button>
+                                                    elem.priceXSize.length > 1 ?
+                                                    <button style={{width: "40%", margin: "0 auto"}} onClick={(e) => this.handleRemoveInput(index, 'priceXSize')}>BORRAR</button>
                                                      : false
                                                 }
 
                                             </span>
                                         </td>
 
-                                        {/* INFO */}
+                                    {/* INFO */}
                                         <td>
                                             <textarea
                                             value={elem.descripcion}
@@ -191,7 +192,7 @@ class ItemsTable extends React.Component{
                                             />
                                         </td>
 
-                                        {/* IMAGES */}
+                                    {/* IMAGES */}
                                         <td style={{display: "flex", flexDirection: "column"}}>
                                             {
                                                 elem.images.map((iElem, iIndex) => <input 
@@ -202,7 +203,7 @@ class ItemsTable extends React.Component{
 
                                             <span style={{display: "flex"}}>
                                                 {
-                                                    elem.images.length < 4 && (elem.images[elem.images.length-1] || elem.images.length == 0)? 
+                                                    elem.images.length < 4 && (elem.images[elem.images.length-1] || elem.images.length === 0)? 
                                                     <button style={{width: "40%", margin: "0 auto"}} onClick={(e) => this.handleNewInput(index, 'images', "")}>AGREGAR</button>
                                                     : false
                                                 }

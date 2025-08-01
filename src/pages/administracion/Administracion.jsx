@@ -5,13 +5,11 @@ import RequestTable from './RequestTable';
 import ItemsTable from './ItemsTable';
 
 class Administracio extends React.Component{
-    constructor(props){
-        super(props);
-    }
+    // constructor(props){
+    //     super(props);
+    // }
 
     render(){
-
-        console.log("render");
 
         return(
             <div className='administracion-body'>

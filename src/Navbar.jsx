@@ -1,7 +1,7 @@
 // import ReactDOM from 'react-dom';
 import React from 'react';
 import './Navbar.css'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 
 class Navbar extends React.Component{
     constructor(props){
@@ -11,6 +11,7 @@ class Navbar extends React.Component{
 
     }
 
+    // maneja el punto rojo del carrito
     handleClick(e){
         const btn = e.target.classList.contains("btn") ? e.target : e.target.parentElement;
 
@@ -29,17 +30,18 @@ class Navbar extends React.Component{
 
                 {/* <Link className="navbar-btn" >CONTACTO</Link> */}
                 <Link to="/administracion" className="navbar-btn">
-                    {/* <div className="estrella estrella-focus"></div> */}
                     {this.props.location.pathname === "/administracion" ? <div className="estrella estrella-focus"></div> : <div className="estrella"></div>}
                     <p>ADMIN</p>
                 </Link>
+                {/* <Link to="/" className="navbar-btn">
+                    {this.props.location.pathname === "/" ? <div className="estrella estrella-focus"></div> : <div className="estrella"></div>}
+                    <p>INGENIERIA</p>
+                </Link> */}
                 <Link to="/" className="navbar-btn">
-                    {/* <div className="estrella estrella-focus"></div> */}
                     {this.props.location.pathname === "/" ? <div className="estrella estrella-focus"></div> : <div className="estrella"></div>}
                     <p>INICIO</p>
                 </Link>
                 <Link to="/catalogo" className="navbar-btn">
-                    {/* <div className="estrella"></div> */}
                     {this.props.location.pathname === "/catalogo" ? <div className="estrella estrella-focus"></div> : <div className="estrella"></div>}
                     <p>CATÁLOGO</p>
                 </Link>
@@ -47,7 +49,7 @@ class Navbar extends React.Component{
                 {/* {this.props.location.pathname !== "/carro" ? */}
                     <Link to="/carro" onClick={this.handleClick} className="shopping-car-btn btn">
                         <div className='shopping-car-point'></div>
-                        <img src="https://media.discordapp.net/attachments/1393296986161152141/1393297674601496717/basket-cart-icon-27.png?ex=6872a913&is=68715793&hm=b72a7fb1cdea9fe6310abd4b1ce09ee308df2774b66e25447b0c2e538d1d5256&=&format=webp&quality=lossless&width=400&height=400" alt="shopping car" className="shopping-car-img"/>
+                        <img src="https://media.discordapp.net/attachments/1393296986161152141/1393297674601496717/basket-cart-icon-27.png?ex=688d0713&is=688bb593&hm=d355350c51b10997096680c1fd28b2997a60a28da4b8e8e97c19506ba971f434&=&format=webp&quality=lossless&width=288&height=288" alt="shopping car" className="shopping-car-img"/>
                     </Link>
                     {/* :
                     null

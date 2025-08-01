@@ -7,10 +7,10 @@ class CarForm extends React.Component{
 
         this.state={
             customerInfo: {
-                'name': '',
-                'contact': '',
-                'date': '',
-                'finalPrice': '',
+                // 'name': '',
+                // 'contact': '',
+                // 'date': '',
+                // 'finalPrice': '',
             }
         }
 
@@ -64,7 +64,7 @@ class CarForm extends React.Component{
             return {
                 'id': elem.id,
                 'name': elem.nombre,
-                'size': elem.precios[elem.precioFinal],
+                'priceXSizeRequest': elem.priceXSize[elem.priceXSizeIndex],
                 'cant': elem.cant
             }
         })
@@ -88,7 +88,7 @@ class CarForm extends React.Component{
 
         // setTimeout(() => {
             
-            localStorage.removeItem("cart");
+            localStorage.removeItem("car");
         // }, 1000);
 
     }
@@ -110,7 +110,7 @@ class CarForm extends React.Component{
                         this.props.itemsList.map(elem => {
                             return elem.cant > 0 ?
                             (
-                                <h5 style={{marginTop: "0.1rem"}}>(x{elem.cant}) {elem.nombre} [{elem.precios[elem.precioFinal][0]}]</h5>
+                                <h5 style={{marginTop: "0.1rem"}}>(x{elem.cant}) {elem.nombre} [{elem.priceXSize[elem.priceXSizeIndex].size}]</h5>
                             )
                             :
                             null

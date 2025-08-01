@@ -1,8 +1,8 @@
 import React from 'react';
 import { useLocation } from 'react-router-dom';
 import './Producto.css'
-import Navbar from '../Navbar';
 
+// useLocation solo funciona en funciones de react
 const Producto = () =>{
     const location = useLocation();
     const id = location.state?.itemId;
@@ -25,37 +25,24 @@ class ProductoRender extends React.Component {
         super(props);
         this.state={
             item : props.itemToRender,
-            selectedPrice : -1, //hay q corregir esto y su intervencion en el if de addToCart()
-            imageIndex: 0
+            priceXSizeIndex : -1, //hay q corregir esto y su intervencion en el if de addToCar()
+            focusImageIndex: 0
         }
-        this.selectPrice = this.selectPrice.bind(this);
-        this.addToCart = this.addToCart.bind(this);
-        this.changeImageFocusIndex = this.changeImageFocusIndex.bind(this);
+        this.selectPriceXSize = this.selectPriceXSize.bind(this);
+        this.addToCar = this.addToCar.bind(this);
+        this.changeFocusImageIndex = this.changeFocusImageIndex.bind(this);
     }
 
-    selectPrice(e){
-
-        const encargarBtn = e.target.parentElement.parentElement.childNodes[4].children[0];
-        // encargarBtn.style.backgroundColor = "var(--amarillo)";
-        encargarBtn.classList.add("encargar-btn-ready");
-
-        for(let p of e.target.parentElement.childNodes){
-            if(p.classList.contains("precios-selected")){
-                p.classList.remove("precios-selected");
-            }
-        }
-
-        e.target.classList.add("precios-selected");
+    selectPriceXSize(e){
 
         this.setState({
-            selectedPrice : e.target.value
+            priceXSizeIndex : parseInt(e.target.value)
         })
-
     }
 
     // Este metodo agrega el id y el precio seleccionado del producto a una lista en el localStorage
-    addToCart(e){
-        if(this.state.selectedPrice >= 0){
+    addToCar(e){
+        if(this.state.priceXSizeIndex >= 0){
             
             const btn = e.target.classList.contains("btn") ? e.target : e.target.parentElement;
 
@@ -72,14 +59,14 @@ class ProductoRender extends React.Component {
 
             const newItemToCart = {
                 id : this.state.item.id, 
-                precio : this.state.selectedPrice,
+                priceXSizeIndex : this.state.priceXSizeIndex,
                 cant : 1
             };
 
             const data = localStorage.getItem("car") ? JSON.parse(localStorage.getItem("car")) : [];
 
             // este if no permite agregar el mismo item con el mismo precio al carrito
-            if (data.find(elem => (elem.precio === newItemToCart.precio && elem.id === newItemToCart.id))) {
+            if (data.find(elem => (elem.priceXSizeIndex === newItemToCart.priceXSizeIndex && elem.id === newItemToCart.id))) {
                 console.log("este elemento ya esta en el carro de compra");
             } else {
                 data.unshift(newItemToCart);
@@ -98,38 +85,48 @@ class ProductoRender extends React.Component {
         }
     }
 
-    changeImageFocusIndex(e){
+    changeFocusImageIndex(e){
         this.setState({
-            imageIndex: e.target.id
+            focusImageIndex: parseInt(e.target.id)
         })
     }
 
     render(){
-        // console.log("new selectedPrice: ", this.state.selectedPrice);
-
-        const precios = this.state.item.precios.map((elem, index) => {
-            return <button onClick={this.selectPrice} value={index} className="precios">{elem[0]} = ${elem[1]}</button>
-        })
-
-        // console.log(precios);
 
         return(
             <div id='producto'>
                 <div className='images-tile'>
-                    <img className="img-producto-focus" src={this.state.item.images[this.state.imageIndex]} alt="imagen del producto"/>
-                    {this.state.item.images.map((elem, index) => {
-                        return index != this.state.imageIndex ? <img onClick={this.changeImageFocusIndex} id={index} className='img-producto' src={elem}/> : <img className="img-producto" src="" alt="" />;
-                    })}
+                    <img className="img-producto-focus" src={this.state.item.images[this.state.focusImageIndex]} alt="imagen del producto"/>
+                    {
+                        this.state.item.images.map((elem, index) => {
+                            return index !== this.state.focusImageIndex ?
+                                <img onClick={this.changeFocusImageIndex} id={index} className='img-producto' src={elem} alt='imagen del producto'/> 
+                                : 
+                                <img className="img-producto"/>;
+                        })
+                    }
                 </div>
                 <span className='producto-span'>
                     <h1>{this.state.item.nombre}</h1>
                     <p>{this.state.item.descripcion}</p>
                     <h2>Seleccione el tamaño:</h2>
                     <div className='span-precios'>
-                        {precios}
+                        {
+                            this.state.item.priceXSize.map((elem, index) => {
+                                return index === this.state.priceXSizeIndex? 
+                                    <button onClick={this.selectPriceXSize} value={index} className="precios precios-selected">{elem.size} = ${elem.price}</button>
+                                    :
+                                    <button onClick={this.selectPriceXSize} value={index} className="precios">{elem.size} = ${elem.price}</button>;
+                            })
+                        }
                     </div>
                     <div className="encargar-btns-div">
-                        <button onClick={this.addToCart} className="encargar-btn btn">AGREGAR AL CARRO</button>
+                        {
+                            this.state.priceXSizeIndex === -1?
+                                <button onClick={this.addToCar} className="encargar-btn btn">AGREGAR AL CARRO</button>
+                                :
+                                <button onClick={this.addToCar} className="encargar-btn encargar-btn-ready btn">AGREGAR AL CARRO</button>
+                        }
                     </div>
                 </span>
             </div>
