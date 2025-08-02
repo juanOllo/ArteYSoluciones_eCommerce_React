@@ -88,10 +88,13 @@ class ItemsTable extends React.Component{
         const newItemObj = {
             'id': newItemId,
             'nombre': '',
-            'precios': [
-                ["", ""]
+            'priceXSize': [
+                {
+                    'price': '',
+                    'size' : ''
+                }
             ],
-            'descripcion': '',
+            'info': '',
             'images': [
                 ""
             ]
@@ -187,8 +190,8 @@ class ItemsTable extends React.Component{
                                     {/* INFO */}
                                         <td>
                                             <textarea
-                                            value={elem.descripcion}
-                                            onChange={(e) => this.handleInputChange(index, 'descripcion', e.target.value)}
+                                            value={elem.info}
+                                            onChange={(e) => this.handleInputChange(index, 'info', e.target.value)}
                                             />
                                         </td>
 

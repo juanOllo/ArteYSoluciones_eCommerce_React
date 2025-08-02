@@ -1,13 +1,15 @@
 import React from 'react';
-import { useLocation } from 'react-router-dom';
-import './Producto.css'
+import { useParams, useLocation } from 'react-router-dom';
+import './Producto.css';
 
-// useLocation solo funciona en funciones de react
+// "useLocation" solo funciona en funciones de react
+// "useParams" solo funciona en funciones de react
 const Producto = () =>{
+    // const id = location.state?.itemId;
+    const id = useParams().id;
+    
+    // en vez de usar el "useLocation" haria fetch del item
     const location = useLocation();
-    const id = location.state?.itemId;
-    // console.log(id);
-
     const itemToRender = location.state.originalList.find(elem => elem.id === id);
 
     return(
@@ -59,8 +61,7 @@ class ProductoRender extends React.Component {
 
             const newItemToCart = {
                 id : this.state.item.id, 
-                priceXSizeIndex : this.state.priceXSizeIndex,
-                cant : 1
+                priceXSizeIndex : this.state.priceXSizeIndex
             };
 
             const data = localStorage.getItem("car") ? JSON.parse(localStorage.getItem("car")) : [];
@@ -73,10 +74,10 @@ class ProductoRender extends React.Component {
                 localStorage.setItem("car", JSON.stringify(data));
 
                 // anim punto rojo en el boton del carrito
-                document.getElementById("navbar-div").childNodes[3].childNodes[0].style.animation = "ponit-car-img-anim 0.25s ease-in-out forwards";
+                document.getElementById("navbar-div").lastElementChild.childNodes[0].style.animation = "ponit-car-img-anim 0.25s ease-in-out forwards";
                 setTimeout(() => {
-                    document.getElementById("navbar-div").childNodes[3].childNodes[0].style.backgroundColor = "red";
-                    document.getElementById("navbar-div").childNodes[3].childNodes[0].style.animation = "none";
+                    document.getElementById("navbar-div").lastElementChild.childNodes[0].style.backgroundColor = "red";
+                    document.getElementById("navbar-div").lastElementChild.childNodes[0].style.animation = "none";
                 }, 400);
             }
 
@@ -102,13 +103,13 @@ class ProductoRender extends React.Component {
                             return index !== this.state.focusImageIndex ?
                                 <img onClick={this.changeFocusImageIndex} id={index} className='img-producto' src={elem} alt='imagen del producto'/> 
                                 : 
-                                <img className="img-producto"/>;
+                                <img className="img-producto" alt=""/>;
                         })
                     }
                 </div>
                 <span className='producto-span'>
                     <h1>{this.state.item.nombre}</h1>
-                    <p>{this.state.item.descripcion}</p>
+                    <p>{this.state.item.info}</p>
                     <h2>Seleccione el tamaño:</h2>
                     <div className='span-precios'>
                         {

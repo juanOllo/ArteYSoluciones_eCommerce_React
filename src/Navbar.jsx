@@ -49,7 +49,7 @@ class Navbar extends React.Component{
                 {/* {this.props.location.pathname !== "/carro" ? */}
                     <Link to="/carro" onClick={this.handleClick} className="shopping-car-btn btn">
                         <div className='shopping-car-point'></div>
-                        <img src="https://media.discordapp.net/attachments/1393296986161152141/1393297674601496717/basket-cart-icon-27.png?ex=688d0713&is=688bb593&hm=d355350c51b10997096680c1fd28b2997a60a28da4b8e8e97c19506ba971f434&=&format=webp&quality=lossless&width=288&height=288" alt="shopping car" className="shopping-car-img"/>
+                        <img src="https://i.postimg.cc/Jh4cbmt7/basket-cart-icon-27.png" alt="shopping car" className="shopping-car-img"/>
                     </Link>
                     {/* :
                     null

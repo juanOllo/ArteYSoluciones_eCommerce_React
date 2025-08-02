@@ -12,9 +12,11 @@
     background-color: var(--verde);
 
     /* width: 100%; */
-    width: 70%;
-    height: 100svh;
-    margin: 0 auto;
+    width: 70rem;
+    max-width: 70%;
+    /* min-width: 40rem; */
+    height: calc(100svh - 3.5rem);
+    margin: 3.5rem auto 0;
     
     
     /* z-index: 2; */
@@ -42,12 +44,6 @@
     flex-direction: column;
 } */
 
-@media only screen and (max-width: 50rem) {
-    
-    #producto {
-        max-width: 96%;
-    }
-}
 
 #producto h1 {
     background-color: white;
@@ -56,7 +52,7 @@
     padding: 0.5rem 0;
     width: 100%;
     height: fit-content;
-    margin-top: 6.5rem;
+    /* margin-top: 6.5rem; */
     /* font-family: var(--ffamily02);
     font-weight: 100; */
     font-weight: 900;
@@ -68,6 +64,9 @@
 .producto-span{
     /* background-color: red; */
     width: 50%;
+    min-height: calc(100svh - 3.5rem);
+    /* min-height: 100%;
+    height: fit-content; */
 
     display: flex;
     flex-direction: column;
@@ -100,7 +99,7 @@
     
     /* border-radius: 0 0 1rem 1rem; */
     border-radius: 1rem 0 0 1rem;
-    /* margin: auto; */
+    margin: auto 0;
 }
 
 .span-precios{
@@ -108,11 +107,10 @@
     /* flex-direction: column; */
     /* flex-wrap: wrap; */
     gap: 1rem;
-    margin-left: 0;
+    /* margin-left: 0; */
 }
 
 .precios {
-    background-color: var(--azul);
     background-color: var(--amarillo);
     border: none;
     /* height: 2rem; */
@@ -152,9 +150,7 @@
     border-radius: 0 1rem 1rem 0;
 } */
 
-#producto h3 {
-    /* color: black; */
-    /* border: 0.3rem dashed black; */
+/* #producto h3 {
     color: white;
     background-color: black;
     width: fit-content;
@@ -164,14 +160,14 @@
     margin-right: 1rem;
     border: 0.2rem dashed black;
     cursor: pointer;
-}
+} */
 
 .images-tile{
     /* background-color: red; */
     min-height: 31rem;
     max-height: calc(90% - 8rem);
     max-width: 25rem;
-    margin: 8rem auto auto;
+    margin: 4rem auto auto;
     /* height: 80%; */
     z-index: 5;
 
@@ -181,6 +177,21 @@
     justify-content: center;
     /* gap: 1rem; */
     flex-wrap: wrap;
+}
+
+@media only screen and (max-width: 50rem) {
+    
+    #producto {
+        width: 100svw;
+        max-width: none;
+        /* background-color: green; */
+    }
+    .producto-span{
+        width: 90%;
+    }
+    .images-tile{
+        margin-top: 2rem;
+    }
 }
 
 .img-producto{

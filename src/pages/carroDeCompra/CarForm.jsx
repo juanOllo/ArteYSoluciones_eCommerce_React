@@ -6,12 +6,7 @@ class CarForm extends React.Component{
         super(props)
 
         this.state={
-            customerInfo: {
-                // 'name': '',
-                // 'contact': '',
-                // 'date': '',
-                // 'finalPrice': '',
-            }
+            customerInfo: {}
         }
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -32,17 +27,20 @@ class CarForm extends React.Component{
     handleSubmit(e){
         e.preventDefault();
 
-        console.log("target: ", e.target.lastChild);
+        // console.log("target: ", e.target.lastChild);
 
+        // no te permite enviar pedido vacio
         if(this.props.finalPrice<=0){
             return;
         }
 
+        // animacion de boton ENVIAR listo
         e.target.lastChild.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
         setTimeout(() => {
             e.target.lastChild.style.animation = "none";
         }, 100);
 
+        // desaparece todos los elementos del form
         setTimeout(() => {
             for (let i = e.target.childNodes.length-1; i >= 0; i--) {
                 setTimeout(() => {
@@ -58,8 +56,9 @@ class CarForm extends React.Component{
 
         const data = localStorage.getItem("requests") ? JSON.parse(localStorage.getItem("requests")) : [];
 
-        console.log("itemsList: ", this.props.itemsList);
+        // console.log("itemsList: ", this.props.itemsList);
 
+        // crea la lista de items del pedido
         const itemsList = this.props.itemsList.map(elem => {
             return {
                 'id': elem.id,
@@ -69,10 +68,11 @@ class CarForm extends React.Component{
             }
         })
 
+        // crea y forma la fecha del pedido
         const date = new Date();
-
         const formerDate = date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
 
+        // crea finalmente el pedido
         const newRequest = {
             ...this.state.customerInfo,
             'date': formerDate,

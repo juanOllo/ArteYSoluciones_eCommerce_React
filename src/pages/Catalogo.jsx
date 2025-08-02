@@ -1,6 +1,6 @@
 import React from 'react';
-import './Catalogo.css'
-import {Link} from 'react-router-dom'
+import './Catalogo.css';
+import {Link} from 'react-router-dom';
 
 class Catalogo extends React.Component{
     constructor(props){
@@ -17,8 +17,11 @@ class Catalogo extends React.Component{
 
     searchItems(){
 
-        if (this.inputSearch) {
-            const newList = this.props.originalList.filter(x => x.nombre.toLowerCase().replaceAll("á", "a").includes(this.inputSearch))
+        // tengo que hacer esto porq no se si el usuario va a usar mayusculas y/o tildes
+        const cleanInputSearch = this.inputSearch.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u");
+
+        if (cleanInputSearch) {
+            const newList = this.props.originalList.filter(x => x.nombre.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u").includes(cleanInputSearch))
     
             this.setState({
                 displayedList: newList
@@ -51,7 +54,7 @@ class Catalogo extends React.Component{
                 <div id="catalogo-buscador">
                     <input onChange={this.changeInputSearch} type="text" placeholder="Buscar"/>
                     <button onClick={this.searchItems}>
-                        <img alt="lupa" className="search-img" src="https://media.discordapp.net/attachments/1393296986161152141/1393357055397593209/free-search-icon-2907-thumb.png?ex=688c95a1&is=688b4421&hm=7829fc2628eec35865809ccf19ca9034f78d244e9bc0a2c99f5a0604b57a64a5&=&format=webp&quality=lossless&width=461&height=461"/>
+                        <img alt="lupa" className="search-img" src="https://i.postimg.cc/4dcKcFvN/free-search-icon-2907-thumb.png"/>
                     </button>
                 </div>
                 
@@ -60,7 +63,7 @@ class Catalogo extends React.Component{
                         this.state.displayedList.map((elem, index) => {
                             return(
                                 // <Link style={{animation: "article-catalog-anim 1s ease 0." + ((index+1)*2) + "s forwards"}} to="/producto" state={{itemId : elem.id, originalList: this.props.originalList}} className="catalogo-article">
-                                <Link to="/producto" state={{itemId : elem.id, originalList: this.props.originalList}} className="catalogo-article">
+                                <Link to={"/producto/" + elem.id} state={{itemId : elem.id, originalList: this.props.originalList}} className="catalogo-article">
                                     <h2>{elem.nombre}</h2>
                                     <img src={elem.images[0]} alt="imagen del producto" className="catalogo-img"/>
                                 </Link>

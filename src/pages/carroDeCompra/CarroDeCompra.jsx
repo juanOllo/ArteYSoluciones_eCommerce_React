@@ -27,7 +27,7 @@ class CarroDeCompra extends React.Component{
             for (const d of data) {
                 const articulo = this.props.originalList.find(a => a.id === d.id);
                 if (articulo) {
-                    finalList.push({ ...articulo, priceXSizeIndex: d.priceXSizeIndex, cant: d.cant });
+                    finalList.push({ ...articulo, priceXSizeIndex: d.priceXSizeIndex, cant: 1});
                 }
             }
         }
@@ -64,11 +64,17 @@ class CarroDeCompra extends React.Component{
             carList : this.state.carList 
         })
 
-        // tamb borro el articulo en el localStorage
-        const data = localStorage.getItem("car") ? JSON.parse(localStorage.getItem("car")) : [];
-        data.splice(indexToRemove, 1);
-        localStorage.setItem("car", JSON.stringify(data));
-
+        if (this.state.carList.length) {
+            
+            // tamb borro el articulo en el localStorage
+            const data = localStorage.getItem("car") ? JSON.parse(localStorage.getItem("car")) : [];
+            data.splice(indexToRemove, 1);
+            localStorage.setItem("car", JSON.stringify(data));
+        } else {
+            
+            // si borre todos los articulos entonces tamb borro el localStorage
+            localStorage.removeItem("car");
+        }
     }
 
     changeCant(e){
@@ -130,25 +136,28 @@ class CarroDeCompra extends React.Component{
                                 return (
                                     <article className="carrito-articulo">
                                         <button value={index} onClick={this.removeArticle} className="remove-article-btn">X</button>
+
                                         <img className="carrito-articulo-img" src={elem.images[0]} alt="imagen del producto"/>
-                                        <Link to="/producto" state={{itemId : elem.id, originalList: this.props.originalList}} style={{color: "black"}}>{elem.nombre}</Link>
+
+                                        <Link to={"/producto/" + elem.id} state={{itemId : elem.id, originalList: this.props.originalList}} style={{color: "black"}}>{elem.nombre}</Link>
+
                                         <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.priceXSize[elem.priceXSizeIndex].size} <br/>${parseInt(elem.priceXSize[elem.priceXSizeIndex].price) * elem.cant}</h4>   
+
                                         <span style={{fontWeight: "900", display: "flex", flexDirection: "column", position: "relative"}}>
                                                 <button className="car-cant-btn"  name={index} onClick={this.changeCant}>+</button>
+                                                
                                                 <span style={{display: "flex", justifyContent: "center", margin: "0.6rem 0"}}>
                                                     <div>x</div>
-                                                    {/* <div>{elem.cant}</div> */}
                                                     <input name={index} type="text" value={elem.cant} onChange={this.changeCant} style={{backgroundColor: "transparent", border: "none", width: "1.7rem", fontSize: "1rem", margin: "-0.5rem 0"}}/>
                                                 </span>
+                                                
                                                 <button className="car-cant-btn" name={index} onClick={this.changeCant}>-</button>
                                         </span>
                                     </article>
                                 )
                             })
                             :
-                            <div>
-                                <h1 style={{textAlign: "center", marginTop: "25svh", fontFamily: "var(--ffamily01)", height: "10rem"}}>Carro de compra vacio :(</h1>
-                            </div>
+                            <h1 style={{textAlign: "center", fontFamily: "var(--ffamily01)", height: "1rem"}}>Carro de compra vacio :(</h1>
 
                         }
                     </div>
