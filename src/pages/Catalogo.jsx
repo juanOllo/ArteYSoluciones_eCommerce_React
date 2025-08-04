@@ -63,7 +63,7 @@ class Catalogo extends React.Component{
                         this.state.displayedList.map((elem, index) => {
                             return(
                                 // <Link style={{animation: "article-catalog-anim 1s ease 0." + ((index+1)*2) + "s forwards"}} to="/producto" state={{itemId : elem.id, originalList: this.props.originalList}} className="catalogo-article">
-                                <Link to={"/producto/" + elem.id} state={{itemId : elem.id, originalList: this.props.originalList}} className="catalogo-article">
+                                <Link to={`/producto/${elem.id}`} className="catalogo-article">
                                     <h2>{elem.nombre}</h2>
                                     <img src={elem.images[0]} alt="imagen del producto" className="catalogo-img"/>
                                 </Link>

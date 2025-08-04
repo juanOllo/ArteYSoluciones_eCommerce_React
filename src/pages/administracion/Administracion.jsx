@@ -4,7 +4,7 @@ import './Administracion.css';
 import RequestTable from './RequestTable';
 import ItemsTable from './ItemsTable';
 
-class Administracio extends React.Component{
+class Administracion extends React.Component{
     // constructor(props){
     //     super(props);
     // }
@@ -43,4 +43,4 @@ class Administracio extends React.Component{
     }
 }
 
-export default Administracio;
+export default Administracion;

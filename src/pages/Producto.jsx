@@ -1,20 +1,41 @@
-import React from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import './Producto.css';
 
-// "useLocation" solo funciona en funciones de react
 // "useParams" solo funciona en funciones de react
 const Producto = () =>{
-    // const id = location.state?.itemId;
+
+    // itemToRender    // El valor actual del estado           // Lo uso para mostrar datos en el render
+    // setItemToRender // La función para actualizar el estado // Lo uso para cambiar el valor y provocar un re-render
+    const [itemToRender, setItemToRender] = useState(null);
+
     const id = useParams().id;
-    
-    // en vez de usar el "useLocation" haria fetch del item
-    const location = useLocation();
-    const itemToRender = location.state.originalList.find(elem => elem.id === id);
+
+    useEffect(() => {
+        const getItemById = async () => {
+            try {
+                const response = await fetch(`http://localhost:2000/items/getItemById/${id}`, {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" }
+                });
+                const data = await response.json();
+                setItemToRender(data); // guarda el item en el estado
+            } catch (error) {
+                console.error("Error fetching item by id:", error);
+            }
+        };
+
+        getItemById();
+    }, [id]);
 
     return(
         <div className='producto-body'>
-            <ProductoRender itemToRender={itemToRender}/>
+            {
+                itemToRender?
+                <ProductoRender itemToRender={itemToRender}/>
+                :
+                null
+            }
         </div>
     )
 }
