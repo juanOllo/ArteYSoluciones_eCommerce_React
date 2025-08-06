@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import './Catalogo.css';
 import {Link} from 'react-router-dom';
+import { render } from '@testing-library/react';
 
 class Catalogo extends React.Component{
     constructor(props){
@@ -8,7 +9,8 @@ class Catalogo extends React.Component{
         this.inputSearch = "";
 
         this.state = {
-            displayedList: this.props.originalList,
+            // displayedList: this.props.originalList,
+            displayedList: localStorage.getItem("demoList") ? JSON.parse(localStorage.getItem("demoList")) : this.props.originalList,
         }
 
         this.searchItems = this.searchItems.bind(this);
@@ -62,11 +64,11 @@ class Catalogo extends React.Component{
                     {
                         this.state.displayedList.map((elem, index) => {
                             return(
-                                // <Link style={{animation: "article-catalog-anim 1s ease 0." + ((index+1)*2) + "s forwards"}} to="/producto" state={{itemId : elem.id, originalList: this.props.originalList}} className="catalogo-article">
-                                <Link to={`/producto/${elem.id}`} className="catalogo-article">
-                                    <h2>{elem.nombre}</h2>
-                                    <img src={elem.images[0]} alt="imagen del producto" className="catalogo-img"/>
-                                </Link>
+                                // <Link to={`/producto/${elem.id}`} className="catalogo-article">
+                                //     <h2>{elem.nombre}</h2>
+                                //     <img src={elem.images[0]} alt="imagen del producto" className="catalogo-img"/>
+                                // </Link>
+                                <Article item={elem}/>
                             )
                         })
                     }
@@ -75,6 +77,54 @@ class Catalogo extends React.Component{
             </div>
         )
     }
+}
+
+const Article = ({item}) => {
+    const [isHovered, setIsHovered] = useState(false);
+    const [indexImageHovered, setIndexImageHovered] = useState(0);
+    
+    // const [showAltImage, setShowAltImage] = useState(false);
+    // useEffect(() => {
+    //     let timer;
+    //     if (isHovered) {
+    //         timer = setTimeout(() => {
+    //         setShowAltImage(true);
+    //     }, 500); // Delay de 100ms
+    //     } else {
+    //         setShowAltImage(false);
+    //         clearTimeout(timer);
+    //     }
+
+    //     return () => clearTimeout(timer); // Limpieza
+    // }, [isHovered]);
+
+
+
+    return (
+            <Link to={`/producto/${item.id}`} className={"catalogo-article" + (isHovered ? " catalogo-article-hover" : "")}
+                // onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => {setIsHovered(false); setIndexImageHovered(0)}}
+                onMouseOver={() => setIsHovered(true)}
+                onMouseOut={() => setIsHovered(false)}
+            >
+                <h2>{item.nombre}</h2>
+                <span style={{animation: "catalog-img-span-spawn-delay 1s forwards", display: isHovered && item.images.length > 1 ? "" : "none"}} className='catalog-img-span'>
+                {/* <span style={{animation: "catalog-img-span-spawn-delay 0.1s forwards"}} className='catalog-img-span'> */}
+                    {
+                        item.images.map((src, index) => {
+                            // la primera imagen no aparece en el span y no deve reservarse el espacio
+                            if (index === 0) return null
+
+                            return indexImageHovered !== index ? 
+                                <img src={src} alt="" className='catalogo-img' onMouseEnter={() => setIndexImageHovered(index)}/>
+                                :
+                                <div className='catalogo-img'/>
+                        })
+                    }
+                </span>
+                <img src={item.images[indexImageHovered]} alt="imagen del producto" className="catalogo-img-focus"/>
+            </Link>
+        )
 }
 
 export default Catalogo;
