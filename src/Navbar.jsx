@@ -1,9 +1,13 @@
-// import ReactDOM from 'react-dom';
 import React from 'react';
+import { useLocation, Link } from 'react-router-dom';
 import './Navbar.css'
-import { Link } from 'react-router-dom'
 
-class Navbar extends React.Component{
+const Navbar = () => {
+  const location = useLocation();
+  return <NavbarTile location={location} />;
+};
+
+class NavbarTile extends React.Component{
     constructor(props){
         super(props);
 
@@ -61,4 +65,3 @@ class Navbar extends React.Component{
 }
 
 export default Navbar;
-// ReactDOM.render(<Navbar />, document.getElementById("App"));

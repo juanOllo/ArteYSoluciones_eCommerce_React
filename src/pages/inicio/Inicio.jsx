@@ -1,31 +1,38 @@
 // import ReactDOM from 'react-dom';
 import React from 'react';
 import './Inicio.css';
-import Mostrador from './Mostrador';
 import { Link } from 'react-router-dom'
 
 
 class Inicio extends React.Component{
-    // constructor(props){
-    //     super(props);
-    // }
 
     render(){
         return(
             <div className='body'>
 
                 <div id="inicio-container">
-                    {/* <img id="logo" src="https://media.discordapp.net/attachments/1393296986161152141/1393297141987938360/logo02.png?ex=6872a894&is=68715714&hm=3278d166722fd2b044e8ea0c80afac9b4873ed873a2e11b29da98e5a5c12a6de&=&format=webp&quality=lossless&width=800&height=800" alt="ArteYSoluciones Logo"/> */}
                     <img id="logo" src="https://i.postimg.cc/4NbvKnwH/logo02.png" alt="ArteYSoluciones Logo"/>
                     <Link to="/catalogo" className="catalogo-completo-btn btn">
                         <h4>CATÁLOGO COMPLETO</h4>
                     </Link>
                     <Mostrador originalList={this.props.originalList}/>
                 </div>
-
             </div>
         )
     }
+}
+
+const Mostrador = ({originalList}) => {
+    return(
+        <div id="mostrador">
+            {originalList.slice(0, 3).map(elem => {
+                return <Link key={elem.id} to={`/producto/${elem._id}`} className="inicio-article">
+                            <img src={elem.images[0]} alt="imagen del producto" />
+                            <h3>{elem.name}</h3>
+                        </Link>
+            })}
+        </div>
+    )
 }
 
 export default Inicio;

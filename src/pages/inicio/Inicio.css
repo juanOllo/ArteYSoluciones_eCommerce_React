@@ -19,7 +19,7 @@
 #logo {
     width: 80svw;
     /* max-width: 600px; */
-    max-width: 50vh;
+    max-width: 50svh;
 }
 
 #mostrador {
@@ -40,9 +40,9 @@
 
 .inicio-article {
     background-color: var(--amarillo);
-    /* width: 15rem; */
-    min-width: 16rem;
-    max-width: 15rem;
+    width: 15.5rem;
+    min-width: 15.5rem;
+    /* max-width: 15rem; */
     /* width: 16rem; */
     height: 20rem;
     max-height: 90%;
@@ -81,14 +81,16 @@
 }
 
 .inicio-article h3 {
-    max-width: 90%;
+    width: 100%;
+    /* max-width: 90%; */
     /* height: 70%; */
     font-family: var(--ffamily01);
     background-color: white;
     padding: 0.5rem;
-    border-radius: 0 1rem;
+    /* border-radius: 0 1rem; */
 
     color: black;
+    text-align: center;
 }
 
 /* .article-btn, */

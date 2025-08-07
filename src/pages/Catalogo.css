@@ -227,27 +227,36 @@
 
 .catalogo-img {
     height: 3rem;
-    width: 3rem;
+    max-width: 3rem;
 }
 
 .catalog-img-span{
     background-color: var(--amarillo);
     background-color: transparent;
     /* margin: 0 0 0.5rem .5rem; */
-    padding: 0.5rem;
+    /* padding: 0.5rem; */
     width: fit-content;
 
     display: flex;
     gap: 0.5rem;
     justify-content: start;
     align-items: start;
+    height: 0;
+    overflow: hidden;
 }
 
 @keyframes catalog-img-span-spawn-delay {
+    0%{
+        padding: 0.5rem;
+    }
     100%{
         /* display: flex; */
         /* background-color: rebeccapurple; */
         background-color: var(--amarillo);
+        /* width: 50%;
+        width: 13.5rem; */
+        height: 3rem;
+        padding: 0.5rem;
     }
 }
 

@@ -139,7 +139,7 @@ class CarroDeCompra extends React.Component{
 
                                         <img className="carrito-articulo-img" src={elem.images[0]} alt="imagen del producto"/>
 
-                                        <Link to={`/producto/${elem.id}`} style={{color: "black"}}>{elem.nombre}</Link>
+                                        <Link to={`/producto/${elem._id}`} style={{color: "black"}}>{elem.name}</Link>
 
                                         <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.priceXSize[elem.priceXSizeIndex].size} <br/>${parseInt(elem.priceXSize[elem.priceXSizeIndex].price) * elem.cant}</h4>   
 

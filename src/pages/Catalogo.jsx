@@ -23,7 +23,7 @@ class Catalogo extends React.Component{
         const cleanInputSearch = this.inputSearch.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u");
 
         if (cleanInputSearch) {
-            const newList = this.props.originalList.filter(x => x.nombre.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u").includes(cleanInputSearch))
+            const newList = this.props.originalList.filter(x => x.name.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u").includes(cleanInputSearch))
     
             this.setState({
                 displayedList: newList
@@ -65,7 +65,7 @@ class Catalogo extends React.Component{
                         this.state.displayedList.map((elem, index) => {
                             return(
                                 // <Link to={`/producto/${elem.id}`} className="catalogo-article">
-                                //     <h2>{elem.nombre}</h2>
+                                //     <h2>{elem.name}</h2>
                                 //     <img src={elem.images[0]} alt="imagen del producto" className="catalogo-img"/>
                                 // </Link>
                                 <Article item={elem}/>
@@ -101,14 +101,14 @@ const Article = ({item}) => {
 
 
     return (
-            <Link to={`/producto/${item.id}`} className={"catalogo-article" + (isHovered ? " catalogo-article-hover" : "")}
+            <Link to={`/producto/${item._id}`} className={"catalogo-article" + (isHovered ? " catalogo-article-hover" : "")}
                 // onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => {setIsHovered(false); setIndexImageHovered(0)}}
                 onMouseOver={() => setIsHovered(true)}
                 onMouseOut={() => setIsHovered(false)}
             >
-                <h2>{item.nombre}</h2>
-                <span style={{animation: "catalog-img-span-spawn-delay 1s forwards", display: isHovered && item.images.length > 1 ? "" : "none"}} className='catalog-img-span'>
+                <h2>{item.name}</h2>
+                <span style={{animation: "catalog-img-span-spawn-delay 0.15s ease-in-out 0.5s forwards", display: isHovered && item.images.length > 1 ? "flex" : "none"}} className='catalog-img-span'>
                 {/* <span style={{animation: "catalog-img-span-spawn-delay 0.1s forwards"}} className='catalog-img-span'> */}
                     {
                         item.images.map((src, index) => {
@@ -118,7 +118,7 @@ const Article = ({item}) => {
                             return indexImageHovered !== index ? 
                                 <img src={src} alt="" className='catalogo-img' onMouseEnter={() => setIndexImageHovered(index)}/>
                                 :
-                                <div className='catalogo-img'/>
+                                <div style={{width: "3rem"}} className='catalogo-img'/>
                         })
                     }
                 </span>

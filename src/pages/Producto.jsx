@@ -9,12 +9,12 @@ const Producto = () =>{
     // setItemToRender // La función para actualizar el estado // Lo uso para cambiar el valor y provocar un re-render
     const [itemToRender, setItemToRender] = useState(null);
 
-    const id = useParams().id;
+    const {_id} = useParams();
 
     useEffect(() => {
         const getItemById = async () => {
             try {
-                const response = await fetch(`http://localhost:2000/items/getItemById/${id}`, {
+                const response = await fetch(`http://localhost:2000/items/getItemById/${_id}`, {
                     method: "GET",
                     headers: { "Content-Type": "application/json" }
                 });
@@ -26,7 +26,7 @@ const Producto = () =>{
         };
 
         getItemById();
-    }, [id]);
+    }, [_id]);
 
     return(
         <div className='producto-body'>
@@ -129,7 +129,7 @@ class ProductoRender extends React.Component {
                     }
                 </div>
                 <span className='producto-span'>
-                    <h1>{this.state.item.nombre}</h1>
+                    <h1>{this.state.item.name}</h1>
                     <p>{this.state.item.info}</p>
                     <h2>Seleccione el tamaño:</h2>
                     <div className='span-precios'>

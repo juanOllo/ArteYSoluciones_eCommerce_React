@@ -34,7 +34,7 @@ class Administracion extends React.Component{
                     </h5>
                 </div>
 
-                <ItemsTable originalList={this.props.originalList}/>
+                <ItemsTable originalList={this.props.originalList} updateOriginalList={this.props.updateOriginalList}/>
 
                 <RequestTable />
 

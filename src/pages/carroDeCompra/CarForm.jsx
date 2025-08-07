@@ -62,7 +62,7 @@ class CarForm extends React.Component{
         const itemsList = this.props.itemsList.map(elem => {
             return {
                 'id': elem.id,
-                'name': elem.nombre,
+                'name': elem.name,
                 'priceXSizeRequest': elem.priceXSize[elem.priceXSizeIndex],
                 'cant': elem.cant
             }
@@ -99,7 +99,7 @@ class CarForm extends React.Component{
             <div  id="carform" style={{width: "100%"}}>
                 <form className="car-form" onSubmit={this.handleSubmit}>
                     <h1>Completar PEDIDO!</h1>
-                    <label htmlFor="input-name">Nombre y apellido:</label>
+                    <label htmlFor="input-name">name y apellido:</label>
                     <input id="input-name" type="text" onChange={(e) => this.handleInputChange(e, 'name')} required/>
 
                     <label htmlFor="input-contact">Contacto:</label>
@@ -110,7 +110,7 @@ class CarForm extends React.Component{
                         this.props.itemsList.map(elem => {
                             return elem.cant > 0 ?
                             (
-                                <h5 style={{marginTop: "0.1rem"}}>(x{elem.cant}) {elem.nombre} [{elem.priceXSize[elem.priceXSizeIndex].size}]</h5>
+                                <h5 style={{marginTop: "0.1rem"}}>(x{elem.cant}) {elem.name} [{elem.priceXSize[elem.priceXSizeIndex].size}]</h5>
                             )
                             :
                             null

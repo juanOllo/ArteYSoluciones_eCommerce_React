@@ -25,6 +25,7 @@ import items from './routes/items.js'
 
 const app = express();
 app.use(cors());
+app.use(express.json());
 app.use("/items", items);
 
 app.listen(2000, () => {

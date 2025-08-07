@@ -2,7 +2,7 @@
     "items": [
         {
             "id": "111",
-            "nombre": "Lámpara de Luna RGB!",
+            "name": "Lámpara de Luna RGB!",
             "priceXSize": [
                 {
                     "price": "12300",
@@ -17,7 +17,7 @@
         },
         {
             "id": "222",
-            "nombre": "SOPORTES PLEGABLES para NOTEBOOKS y netbooks!",
+            "name": "SOPORTES PLEGABLES para NOTEBOOKS y netbooks!",
             "priceXSize": [
                 {
                     "price": "12500",
@@ -39,7 +39,7 @@
         },
         {
             "id": "333",
-            "nombre": "🐙 Pulpo centro de mesa 🐙",
+            "name": "🐙 Pulpo centro de mesa 🐙",
             "priceXSize": [
                 {
                     "price": "12500",

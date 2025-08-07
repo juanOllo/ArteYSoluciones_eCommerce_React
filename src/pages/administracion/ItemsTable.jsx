@@ -1,12 +1,12 @@
 import React from 'react';
-// import './Administracion.css';
+import { Link } from 'react-router-dom';
 
 class ItemsTable extends React.Component{
     constructor(props){
         super(props)
 
         this.state={
-            displayedList: this.props.originalList,
+            displayedList: structuredClone(this.props.originalList),
         }
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -16,6 +16,9 @@ class ItemsTable extends React.Component{
         this.handleStartDemo = this.handleStartDemo.bind(this);
         this.handleFinishDemo = this.handleFinishDemo.bind(this);
 
+        
+        
+        this.handleUpdateItem = this.handleUpdateItem.bind(this);
         this.handleNewItem = this.handleNewItem.bind(this);
         this.handleRemoveItem = this.handleRemoveItem.bind(this);
     }
@@ -38,10 +41,9 @@ class ItemsTable extends React.Component{
     }
 
     handleNewInput(index, key, data){
+        // uso "data" porq el nuevo inputpuede ser un obj o un string
 
-        const updatedList = this.state.displayedList; 
-
-        console.log("llego");
+        const updatedList = this.state.displayedList;
 
         updatedList[index][key][updatedList[index][key].length] = data;
 
@@ -70,8 +72,33 @@ class ItemsTable extends React.Component{
         localStorage.removeItem("demoList");
         window.location.reload();
     }
-    
-    handleNewItem(){
+
+    async handleUpdateItem(id, index) {
+        // console.log("id to update: ", id);
+        // console.log("item updated: ", JSON.stringify(this.state.displayedList[index]));
+
+        try {
+            const response = await fetch(`http://localhost:2000/items/updateItem/${id}`, {
+                method: "PATCH",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(this.state.displayedList[index])
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error del servidor: ${response.status}`);
+            }
+
+            // const updatedItem = await response.json();
+            // console.log("Respuesta del servidor:", updatedItem);
+
+            this.props.updateOriginalList(structuredClone(this.state.displayedList));
+
+        } catch (error) {
+            console.error("Error fetching items:", error);
+        }
+    }
+
+    async handleNewItem(){
 
         let newItemId;
 
@@ -87,7 +114,7 @@ class ItemsTable extends React.Component{
 
         const newItemObj = {
             'id': newItemId,
-            'nombre': '',
+            'name': '',
             'priceXSize': [
                 {
                     'price': '',
@@ -100,14 +127,44 @@ class ItemsTable extends React.Component{
             ]
         }
 
-        this.state.displayedList.push(newItemObj);
+        // this.state.displayedList.push(newItemObj);
 
-        this.setState({
-            displayedList: this.state.displayedList
-        })
+        // this.setState({
+        //     displayedList: this.state.displayedList
+        // })
+
+        try {
+            const response = await fetch(`http://localhost:2000/items/addNewItem`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(newItemObj)
+            });
+
+            if (!response.ok) {
+                throw new Error(`Error del servidor: ${response.status}`);
+            }
+
+            // const updatedItem = await response.json();
+            // console.log("Respuesta del servidor:", updatedItem);
+
+            const updatedList = [...this.state.displayedList];
+        
+            updatedList.push(newItemObj);
+
+            this.setState({
+                displayedList: updatedList
+            })
+
+            this.props.updateOriginalList(structuredClone(updatedList));
+
+        } catch (error) {
+            console.error("Error fetching items:", error);
+        }
+
     }
+    
+    async handleRemoveItem(id, index){
 
-    handleRemoveItem(index){
         const updatedList = [...this.state.displayedList];
         
         updatedList.splice(index, 1);
@@ -115,28 +172,58 @@ class ItemsTable extends React.Component{
         this.setState({
             displayedList: updatedList
         })
-        // console.log("displayedList: ", updatedList)
+
+        if(window.confirm(`Borrar item "${this.state.displayedList[index].name}" ?`)) {
+            try {
+                const response = await fetch(`http://localhost:2000/items/deleteItem/${id}`, {
+                    method: "DELETE",
+                    headers: { "Content-Type": "application/json" }
+                });
+    
+                if (!response.ok) {
+                    throw new Error(`Error del servidor: ${response.status}`);
+                }
+    
+                // const updatedItem = await response.json();
+                // console.log("Respuesta del servidor:", updatedItem);
+
+                const updatedList = [...this.state.displayedList];
+        
+                updatedList.splice(index, 1);
+
+                this.setState({
+                    displayedList: updatedList
+                })
+    
+                this.props.updateOriginalList(structuredClone(updatedList));
+    
+            } catch (error) {
+                console.error("Error fetching items:", error);
+            }
+        }
     }
 
     render(){
+
         return(
             <div>
-                <button onClick={this.handleStartDemo}>GUARDAR</button>
+                {/* <button onClick={this.handleStartDemo}>GUARDAR</button>
                 {
                     localStorage.getItem("demoList") ?
                     <button onClick={this.handleFinishDemo}>TERMINAR DEMO</button>
                     : false
-                }
+                } */}
 
                 <table>
                     <thead>
                         <tr>
                             <th style={{width: "3rem"}}>ID</th>
-                            <th style={{width: "15rem"}}>Nombre</th>
+                            <th style={{width: "15rem"}}>name</th>
                             <th style={{width: "15svw"}}>Tamaño/Precio</th>
                             <th style={{width: "27rem"}}>Descripcion</th>
                             <th>Imagenes (max: 4)</th>
-                            <th style={{width: "3rem"}}>DEL</th>
+                            {/* <th style={{width: "3rem"}}>DEL</th> */}
+                            <th style={{width: "3rem"}}> </th>
                         </tr>
                     </thead>
 
@@ -152,8 +239,8 @@ class ItemsTable extends React.Component{
                                     {/* NAME */}
                                         <td>
                                             <textarea
-                                            value={elem.nombre}
-                                            onChange={(e) => this.handleInputChange(index, 'nombre', e.target.value)}
+                                            value={elem.name}
+                                            onChange={(e) => this.handleInputChange(index, 'name', e.target.value)}
                                             />
                                         </td>
 
@@ -220,8 +307,20 @@ class ItemsTable extends React.Component{
                                             </span>
                                             
                                         </td>
+                                    {/* DEL */}
+                                        {/* <td>
+                                        </td> */}
+                                    {/* SAVE */}
                                         <td>
-                                            <button onClick={() => this.handleRemoveItem(index)}>X</button>
+                                            {
+                                               JSON.stringify(this.props.originalList[index]) !== JSON.stringify(this.state.displayedList[index]) ?
+                                                <button style={{height: "2rem"}} onClick={() => this.handleUpdateItem(elem._id, index)}>GUARDAR</button>
+                                                :
+                                                <button style={{cursor: "default", height: "2rem", backgroundColor: "transparent", borderColor: "transparent", color: "gray"}}>GUARDAR</button>
+                                            }
+                                            <button style={{margin: "0.5rem 0", height: "2rem"}} onClick={() => this.handleRemoveItem(elem._id, index)}>ELIMINAR</button>
+
+                                            <Link to={`/producto/${elem._id}`} style={{color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</Link>
                                         </td>
                                     </tr>
                                 )
