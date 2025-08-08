@@ -21,7 +21,7 @@ router.get("/allItemsList", async (req, res) => {
 });
 
 // GET item by _d
-router.get("/getItemById/:id", async (req, res) => {
+router.get("/getItem/:id", async (req, res) => {
   let collection = await db.collection("items");
   let query = { _id: new ObjectId(req.params.id) };
   let result = await collection.findOne(query);
@@ -69,7 +69,9 @@ router.post("/addNewItem", async (req, res) => {
     };
     let collection = await db.collection("items");
     let result = await collection.insertOne(newDocument);
-    res.send(result).status(204);
+    
+    // res.send(result).status(204);
+    res.status(201).send({ insertedId: result.insertedId });
   } catch (err) {
     console.error(err);
     res.status(500).send("Error adding item");

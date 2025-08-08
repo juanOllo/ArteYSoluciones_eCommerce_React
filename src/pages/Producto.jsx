@@ -14,7 +14,7 @@ const Producto = () =>{
     useEffect(() => {
         const getItemById = async () => {
             try {
-                const response = await fetch(`http://localhost:2000/items/getItemById/${_id}`, {
+                const response = await fetch(`http://localhost:2000/items/getItem/${_id}`, {
                     method: "GET",
                     headers: { "Content-Type": "application/json" }
                 });

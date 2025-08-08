@@ -28,7 +28,8 @@ const itemsList = await getItems();
 
 function App() {
 
-  const [allItemsList, setAllItemsList] = React.useState(itemsList);
+                                                        // Lo doy vuelta porq asi me queda mas facil de manejar en admin/itemsTable
+  const [allItemsList, setAllItemsList] = React.useState(itemsList.slice().reverse());
 
   const updateOriginalList = (newList) => {
     setAllItemsList(newList);
