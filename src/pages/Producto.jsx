@@ -32,7 +32,7 @@ const Producto = () =>{
         <div className='producto-body'>
             {
                 itemToRender?
-                <ProductoRender itemToRender={itemToRender}/>
+                <ProductoRender item={itemToRender}/>
                 :
                 null
             }
@@ -46,11 +46,12 @@ class ProductoRender extends React.Component {
 
     constructor(props){
         super(props);
+
         this.state={
-            item : props.itemToRender,
             priceXSizeIndex : -1, //hay q corregir esto y su intervencion en el if de addToCar()
             focusImageIndex: 0
         }
+
         this.selectPriceXSize = this.selectPriceXSize.bind(this);
         this.addToCar = this.addToCar.bind(this);
         this.changeFocusImageIndex = this.changeFocusImageIndex.bind(this);
@@ -65,45 +66,50 @@ class ProductoRender extends React.Component {
 
     // Este metodo agrega el id y el precio seleccionado del producto a una lista en el localStorage
     addToCar(e){
-        if(this.state.priceXSizeIndex >= 0){
-            
-            const btn = e.target.classList.contains("btn") ? e.target : e.target.parentElement;
 
-            // btn.style.backgroundColor = "transparent";
+        if(this.state.priceXSizeIndex < 0){
+            window.alert("SELECCIONE EL TAMAÑO DEL PRODUCTO");
+            return;
+        }
+
+        const btn = e.target.classList.contains("btn") ? e.target : e.target.parentElement;
+
+        // btn.style.backgroundColor = "transparent";
+        btn.style.animation = "none";
+
+        btn.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
+        setTimeout(() => {
             btn.style.animation = "none";
-
-            btn.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
-            setTimeout(() => {
-                btn.style.animation = "none";
-            }, 100);
+        }, 100);
 
 
 
 
-            const newItemToCart = {
-                id : this.state.item.id, 
-                priceXSizeIndex : this.state.priceXSizeIndex
-            };
+        const newItemToCart = {
+            _id : this.props.item._id, 
+            priceXSizeIndex : this.state.priceXSizeIndex
+            // Uso priceXSizeIndex en vez de usar directamente el precio (o el tamaño) seleccionado
+            //  para evitar que si el precio (o el tamañano) del producto es actualizado mientras 
+            //  el cliente aun tiene ese producto en el localStorage no se muestre en el carrito
+            //  con informacion vieja.
+            // En todo caso el cliente veria el producto con un tamaño que no seleccionó.
+        };
 
-            const data = localStorage.getItem("car") ? JSON.parse(localStorage.getItem("car")) : [];
+        const data = localStorage.getItem("car") ? JSON.parse(localStorage.getItem("car")) : [];
 
-            // este if no permite agregar el mismo item con el mismo precio al carrito
-            if (data.find(elem => (elem.priceXSizeIndex === newItemToCart.priceXSizeIndex && elem.id === newItemToCart.id))) {
-                console.log("este elemento ya esta en el carro de compra");
-            } else {
-                data.unshift(newItemToCart);
-                localStorage.setItem("car", JSON.stringify(data));
-
-                // anim punto rojo en el boton del carrito
-                document.getElementById("navbar-div").lastElementChild.childNodes[0].style.animation = "ponit-car-img-anim 0.25s ease-in-out forwards";
-                setTimeout(() => {
-                    document.getElementById("navbar-div").lastElementChild.childNodes[0].style.backgroundColor = "red";
-                    document.getElementById("navbar-div").lastElementChild.childNodes[0].style.animation = "none";
-                }, 400);
-            }
-
+        // este if no permite agregar el mismo item con el mismo precio al carrito
+        if (data.find(elem => (elem.priceXSizeIndex === newItemToCart.priceXSizeIndex && elem.id === newItemToCart.id))) {
+            console.log("este elemento ya esta en el carro de compra");
         } else {
-            console.log("precio no seleccionado");
+            data.unshift(newItemToCart);
+            localStorage.setItem("car", JSON.stringify(data));
+
+            // anim punto rojo en el boton del carrito
+            document.getElementById("navbar-div").lastElementChild.childNodes[0].style.animation = "ponit-car-img-anim 0.25s ease-in-out forwards";
+            setTimeout(() => {
+                document.getElementById("navbar-div").lastElementChild.childNodes[0].style.backgroundColor = "red";
+                document.getElementById("navbar-div").lastElementChild.childNodes[0].style.animation = "none";
+            }, 400);
         }
     }
 
@@ -118,9 +124,9 @@ class ProductoRender extends React.Component {
         return(
             <div id='producto'>
                 <div className='images-tile'>
-                    <img className="img-producto-focus" src={this.state.item.images[this.state.focusImageIndex]} alt="imagen del producto"/>
+                    <img className="img-producto-focus" src={this.props.item.images[this.state.focusImageIndex]} alt="imagen del producto"/>
                     {
-                        this.state.item.images.map((elem, index) => {
+                        this.props.item.images.map((elem, index) => {
                             return index !== this.state.focusImageIndex ?
                                 <img onClick={this.changeFocusImageIndex} id={index} className='img-producto' src={elem} alt='imagen del producto'/> 
                                 : 
@@ -129,12 +135,12 @@ class ProductoRender extends React.Component {
                     }
                 </div>
                 <span className='producto-span'>
-                    <h1>{this.state.item.name}</h1>
-                    <p>{this.state.item.info}</p>
+                    <h1>{this.props.item.name}</h1>
+                    <p>{this.props.item.info}</p>
                     <h2>Seleccione el tamaño:</h2>
                     <div className='span-precios'>
                         {
-                            this.state.item.priceXSize.map((elem, index) => {
+                            this.props.item.priceXSize.map((elem, index) => {
                                 return index === this.state.priceXSizeIndex? 
                                     <button onClick={this.selectPriceXSize} value={index} className="precios precios-selected">{elem.size} = ${elem.price}</button>
                                     :

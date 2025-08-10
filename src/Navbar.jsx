@@ -50,14 +50,16 @@ class NavbarTile extends React.Component{
                     <p>CATÁLOGO</p>
                 </Link>
 
-                {/* {this.props.location.pathname !== "/carro" ? */}
+                {
+                // this.props.location.pathname !== "/carro" && 
+                this.props.location.pathname !== "/administracion" ?
                     <Link to="/carro" onClick={this.handleClick} className="shopping-car-btn btn">
                         <div className='shopping-car-point'></div>
                         <img src="https://i.postimg.cc/Jh4cbmt7/basket-cart-icon-27.png" alt="shopping car" className="shopping-car-img"/>
                     </Link>
-                    {/* :
+                    :
                     null
-                } */}
+                }
 
             </div>
         )

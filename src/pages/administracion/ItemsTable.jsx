@@ -8,7 +8,8 @@ class ItemsTable extends React.Component{
         this.inputSearch = "";
 
         this.state={
-            displayedList: structuredClone(this.props.originalList),
+            displayedList: [],
+            originalList: []
         }
 
         this.handleInputSearchChange = this.handleInputSearchChange.bind(this);
@@ -27,6 +28,23 @@ class ItemsTable extends React.Component{
         this.handleRemoveItem = this.handleRemoveItem.bind(this);
     }
 
+    async componentDidMount(){
+        try {
+            const response = await fetch("http://localhost:2000/items/allItemsList", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            });
+            const data = await response.json();
+            this.setState({
+                displayedList: data.slice().reverse(),
+                originalList: data.slice().reverse()
+            })
+        } catch (error) {
+            console.error("Error fetching items:", error);
+        }
+        console.log("setState fetch");
+    }
+
     searchItems(){
 
         // console.log("this.inputSearch: ", this.inputSearch);
@@ -35,7 +53,7 @@ class ItemsTable extends React.Component{
         const cleanInputSearch = this.inputSearch.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u");
 
         if (cleanInputSearch) {
-            const updatedList = this.props.originalList.filter(x => x.name.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u").includes(cleanInputSearch) || x._id.includes(cleanInputSearch))
+            const updatedList = this.state.originalList.filter(x => x.name.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u").includes(cleanInputSearch) || x._id.includes(cleanInputSearch))
     
             this.setState({
                 displayedList: updatedList
@@ -50,7 +68,7 @@ class ItemsTable extends React.Component{
         } else {
             this.inputSearch = "";
             this.setState({
-                displayedList: this.props.originalList
+                displayedList: [...this.state.originalList]
             })
         }
     }
@@ -80,7 +98,7 @@ class ItemsTable extends React.Component{
     handleNewInput(index, key, data){
         // uso "data" porq el nuevo input puede ser un obj o un string
 
-        const updatedList = this.state.displayedList;
+        const updatedList = [...this.state.displayedList];
 
         updatedList[index][key][updatedList[index][key].length] = data;
 
@@ -91,7 +109,7 @@ class ItemsTable extends React.Component{
 
     handleRemoveInput(index, key){
 
-        const updatedList = this.state.displayedList; 
+        const updatedList = [...this.state.displayedList]; 
 
         updatedList[index][key].splice(-1, 1);
 
@@ -110,18 +128,36 @@ class ItemsTable extends React.Component{
     //     window.location.reload();
     // }
 
-    async handleUpdateItem(id, index) {
-        // console.log("id to update: ", id);
+    async handleUpdateItem(_id, index) {
+        // console.log("_id to update: ", _id);
         // console.log("item updated: ", JSON.stringify(this.state.displayedList[index]));
 
         // handleChange() edita la informacion del item en tiempo real dentro de this.state.displayedList
         //  por eso aqui para actualizarlo solo subo el item sin tocarlo mas.
 
-        const updatedItem = this.state.displayedList.filter(item => item._id === id)[0];
-        console.log("updatedItem: ", updatedItem);
+        const updatedItem = this.state.displayedList.find(item => item._id === _id);
+        // console.log("updatedItem: ", updatedItem);
+        if (!updatedItem) {
+            window.alert("No se encontró el item para actualizar.");
+            return;
+        }
+
+        // // Checkeo que ningun campo de updatedItem esté vaco
+        // if (!updatedItem.name || !updatedItem.info) {
+        //     window.alert("EL CAMPO NOMBRE O DESCRIPCION ESTA VACÍO")
+        //     return;
+        // }
+        // if (updatedItem.images.some(img => !img)) {
+        //     window.alert("UN CAMPO IMAGENES ESTÁ VACÍO");
+        //     return;
+        // }
+        // if (updatedItem.priceXSize.some(p => !p.price || !p.size)) {
+        //     window.alert("UN CAMPO PRECIO O TAMAÑO ESTÁ VACÍO");
+        //     return;
+        // }
 
         try {
-            const response = await fetch(`http://localhost:2000/items/updateItem/${id}`, {
+            const response = await fetch(`http://localhost:2000/items/updateItem/${_id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(updatedItem)
@@ -130,17 +166,17 @@ class ItemsTable extends React.Component{
             if (!response.ok) {
                 throw new Error(`Error del servidor: ${response.status}`);
             } else {
-                window.alert("Informacion del item actualizada exitosamente!!");
+                window.alert(`Informacion del item [${updatedItem.name}] actualizada exitosamente!!`);
             }
 
             // const updatedItem = await response.json();
             // console.log("Respuesta del servidor:", updatedItem);
 
-            const updatedList = this.props.originalList.map(item => {return item._id !== id ? item : updatedItem});
+            const updatedList = this.state.originalList.map(item => {return item._id !== _id ? item : updatedItem});
 
-            // Actualizo el originalList para no tener q volver a hacer el fetch de toda la lista
-            //  Aun sigo dudando que es mas eficiente/mejor practica.
-            this.props.updateOriginalList(structuredClone(updatedList));
+            this.setState({
+                originalList: updatedList
+            })
 
         } catch (error) {
             console.error("Error fetching items:", error);
@@ -192,16 +228,14 @@ class ItemsTable extends React.Component{
             newItemObj._id = newItem_id.insertedId;
 
             // const updatedList = [...this.state.displayedList, newItemObj];
-            const updatedList = [...this.state.displayedList];
+            const updatedList = [...this.state.originalList];
         
             updatedList.unshift(newItemObj);
 
             this.setState({
-                displayedList: updatedList
+                displayedList: updatedList,
+                originalList: updatedList
             })
-
-            // Actualizo el originalList para no tener q volver a hacer el fetch de toda la lista
-            this.props.updateOriginalList(structuredClone(updatedList));
 
         } catch (error) {
             console.error("Error fetching items:", error);
@@ -209,12 +243,12 @@ class ItemsTable extends React.Component{
 
     }
     
-    async handleRemoveItem(id, index){
+    async handleRemoveItem(_id, index){
         // Dejo el index solo para mostrar el nombre del item en el window.confirm
 
         if(window.confirm(`Borrar item "${this.state.displayedList[index].name}" ?`)) {
             try {
-                const response = await fetch(`http://localhost:2000/items/deleteItem/${id}`, {
+                const response = await fetch(`http://localhost:2000/items/deleteItem/${_id}`, {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" }
                 });
@@ -222,21 +256,16 @@ class ItemsTable extends React.Component{
                 if (!response.ok) {
                     throw new Error(`Error del servidor: ${response.status}`);
                 }
-    
-                // const updatedItem = await response.json();
-                // console.log("Respuesta del servidor:", updatedItem);
 
-                const updatedList = this.props.originalList.filter(item => item._id !== id);
-                const updatedDisplyedList = this.state.displayedList.filter(item => item._id !== id);
+                const updatedDisplayedList = this.state.displayedList.filter(item => item._id !== _id);
+                const updatedOriginalList = this.state.originalList.filter(item => item._id !== _id);
         
                 // updatedList.splice(index, 1);
 
                 this.setState({
-                    displayedList: updatedDisplyedList
+                    displayedList: updatedDisplayedList,
+                    originalList: updatedOriginalList
                 })
-    
-                // Actualizo el originalList para no tener q volver a hacer el fetch de toda la lista
-                this.props.updateOriginalList(structuredClone(updatedList));
     
             } catch (error) {
                 console.error("Error fetching items:", error);
@@ -255,7 +284,7 @@ class ItemsTable extends React.Component{
                     : false
                 } */}
 
-                <div style={{display: "flex", margin: "0 0 -1rem", width: "100%", backgroundColor: ""}}>
+                <div style={{display: "flex", margin: "4.5rem 0 -1rem", width: "100%", backgroundColor: ""}}>
                     <input onChange={(e) => this.handleInputSearchChange(e.target.value)} type="text" placeholder='buscar' style={{margin: "0", padding: "0.5rem", width: "14rem", height: "1.5rem"}} />
                     <button style={{margin: "0 auto 0 0", height: "2.7rem"}} onClick={this.searchItems}>BUSCAR</button>
                     {
@@ -271,8 +300,8 @@ class ItemsTable extends React.Component{
                         <tr>
                             {/* <th style={{width: "3rem"}}>ID</th> */}
                             <th style={{width: "15rem"}}>Id/Nombre</th>
-                            <th style={{width: "15svw"}}>Tamaño/Precio</th>
-                            <th style={{width: "27rem"}}>Descripcion</th>
+                            <th style={{width: "5rem"}}>Descripcion</th>
+                            <th style={{width: "11rem"}}>Tamaño/Precio</th>
                             <th>Imagenes (max: 4)</th>
                             {/* <th style={{width: "3rem"}}>DEL</th> */}
                             <th style={{width: "3rem"}}> </th>
@@ -289,79 +318,90 @@ class ItemsTable extends React.Component{
                                         {/* <td>{elem.id}</td> */}
 
                                     {/* ID/NAME */}
-                                        <td style={{borderTop: "1px solid black", borderRight: "1px solid black"}}>
-                                            <p style={{backgroundColor: "rgba(0, 0, 0, 0.2)", margin: "-0.1rem -0.1rem 0.3rem", padding: "0.3rem 0", fontSize: "0.9rem", borderBottom: "1px solid black"}}>{elem._id}</p>
+                                        <td style={{height: "10rem"}}>
+                                            <p className='items-table-p-id'>{elem._id}</p>
+
                                             <textarea
-                                            value={elem.name}
-                                            onChange={(e) => this.handleInputChange(index, 'name', e.target.value)}
+                                                className='items-table-textarea-name'
+                                                value={elem.name}
+                                                onChange={(e) => this.handleInputChange(index, 'name', e.target.value)}
                                             />
                                         </td>
 
-                                    {/* PRICES */}
-                                        <td style={{borderTop: "1px solid black", display: "flex", flexDirection: "column", justifyContent: "space-between"}}>
-                                            {
-                                                elem.priceXSize.map((pElem, pIndex) => 
-
-                                                    <div style={{width: "100%"}}>
-                                                        <input onChange={(e) => this.handleInputChange(index, 'priceXSize', e.target.value, pIndex, 'size')} style={{width: "40%"}} value={pElem.size} type="text" placeholder={pElem.size}/>
-                                                        $
-                                                        <input onChange={(e) => this.handleInputChange(index, 'priceXSize', e.target.value, pIndex, 'price')} style={{width: "40%"}} value={pElem.price} type="text" placeholder={pElem.price}/>
-                                                    </div>
-                                                )
-                                            }
-
-                                            <span style={{display: "flex"}}>
-                                                {
-                                                    // elem.precios.length === 0 || (elem.precios[elem.precios.length-1][0] && elem.precios[elem.precios.length-1][1])? 
-                                                    elem.priceXSize[elem.priceXSize.length-1].price && elem.priceXSize[elem.priceXSize.length-1].size? 
-                                                    <button style={{width: "40%", margin: "0 auto"}} onClick={(e) => this.handleNewInput(index, 'priceXSize', {})}>AGREGAR</button>
-                                                    : false
-                                                }
-
-                                                {
-                                                    elem.priceXSize.length > 1 ?
-                                                    <button style={{width: "40%", margin: "0 auto"}} onClick={(e) => this.handleRemoveInput(index, 'priceXSize')}>BORRAR</button>
-                                                     : false
-                                                }
-
-                                            </span>
-                                        </td>
-
                                     {/* INFO */}
-                                        <td style={{borderTop: "1px solid black", borderLeft: "1px solid black", borderRight: "1px solid black"}}>
+                                        <td>
                                             <textarea
+                                            className='items-table-textarea-info'
                                             value={elem.info}
                                             onChange={(e) => this.handleInputChange(index, 'info', e.target.value)}
                                             />
                                         </td>
 
+                                    {/* PRICES */}
+                                        <td style={{position: "relative", overflowY: "scroll", scrollbarWidth: "none"}}>
+                                            <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", position: "absolute", top: "0"}}>
+
+                                                {
+                                                    elem.priceXSize.map((pElem, pIndex) => 
+
+                                                        <div style={{width: "100%"}}>
+                                                            <input onChange={(e) => this.handleInputChange(index, 'priceXSize', e.target.value, pIndex, 'size')} style={{width: "4rem"}} value={pElem.size} type="text" placeholder={pElem.size}/>
+                                                            $
+                                                            <input onChange={(e) => this.handleInputChange(index, 'priceXSize', e.target.value, pIndex, 'price')} style={{width: "4rem"}} value={pElem.price} type="text" placeholder={pElem.price}/>
+                                                        </div>
+                                                    )
+                                                }
+
+                                                <span style={{display: "flex"}}>
+                                                    {
+                                                        // elem.precios.length === 0 || (elem.precios[elem.precios.length-1][0] && elem.precios[elem.precios.length-1][1])? 
+                                                        elem.priceXSize[elem.priceXSize.length-1].price && elem.priceXSize[elem.priceXSize.length-1].size? 
+                                                            <button style={{backgroundColor: "rgba(0, 0, 0, 0.3)", color: "white", border : "none", padding: "0.3rem", borderRadius: "0.3rem", margin: "0.5rem auto"}} onClick={(e) => this.handleNewInput(index, 'priceXSize', {})}>AGREGAR</button>
+                                                            : 
+                                                            null
+                                                    }
+
+                                                    {
+                                                        elem.priceXSize.length > 1 ?
+                                                            <button style={{backgroundColor: "rgba(0, 0, 0, 0.3)", color: "white", border : "none", padding: "0.3rem", borderRadius: "0.3rem", margin: "0.5rem auto"}} onClick={(e) => this.handleRemoveInput(index, 'priceXSize')}>BORRAR</button>
+                                                            : 
+                                                            null
+                                                    }
+
+                                                </span>
+                                            </div>
+                                        </td>
+
+
                                     {/* IMAGES */}
-                                        <td style={{borderTop: "1px solid black", display: "flex", flexDirection: "column"}}>
-                                            {
-                                                elem.images.map((iElem, iIndex) => <input 
-                                                    onChange={(e) => this.handleInputChange(index, 'images', e.target.value, iIndex)}
-                                                    value={iElem} type="text" placeholder={iElem}
-                                                    />)
-                                            }
-
-                                            <span style={{display: "flex"}}>
+                                        <td style={{position: "relative", overflowY: "scroll", scrollbarWidth: "none"}}>
+                                            <div style={{display: "flex", flexDirection: "column", position: "absolute", top: "0",  width: "100%"}}>
                                                 {
-                                                    elem.images.length < 4 && (elem.images[elem.images.length-1] || elem.images.length === 0)? 
-                                                    <button style={{width: "40%", margin: "0 auto"}} onClick={(e) => this.handleNewInput(index, 'images', "")}>AGREGAR</button>
-                                                    : false
+                                                    elem.images.map((iElem, iIndex) => <input 
+                                                        onChange={(e) => this.handleInputChange(index, 'images', e.target.value, iIndex)}
+                                                        value={iElem} type="text" placeholder={iElem}
+                                                        />)
                                                 }
 
-                                                {
-                                                    elem.images.length > 1 ?
-                                                    <button style={{width: "40%", margin: "0 auto"}} onClick={(e) => this.handleRemoveInput(index, 'images')}>BORRAR</button>
-                                                     : false
-                                                }
+                                                <span style={{display: "flex"}}>
+                                                    {
+                                                        elem.images.length < 4 && (elem.images[elem.images.length-1] || elem.images.length === 0)? 
+                                                        <button style={{ color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)", border : "none", padding: "0.3rem", borderRadius: "0.3rem", margin: "0 auto"}} onClick={(e) => this.handleNewInput(index, 'images', "")}>AGREGAR</button>
+                                                        : false
+                                                    }
 
-                                            </span>
+                                                    {
+                                                        elem.images.length > 1 ?
+                                                        <button style={{ color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)", border : "none", padding: "0.3rem", borderRadius: "0.3rem", margin: "0 auto"}} onClick={(e) => this.handleRemoveInput(index, 'images')}>BORRAR</button>
+                                                        : false
+                                                    }
+
+                                                </span>
+                                            </div>
                                             
                                         </td>
                                     {/* GUARDAR, BORRAR & VISTA_PREV */}
-                                        <td style={{borderTop: "1px solid black", borderLeft: "1px solid black"}}>
+                                        <td>
                                             {/* {
                                                 JSON.stringify(this.props.originalList[index]) !== JSON.stringify(this.state.displayedList[index]) ?
                                                     <button style={{margin: "-1rem 0 -0.5rem", borderRadius: "0.3rem", backgroundColor: "lightgreen", border: "none", height: "2rem"}} onClick={() => this.handleUpdateItem(elem._id, index)}>GUARDAR</button>

@@ -15,7 +15,7 @@
     background-color: white;
     width: fit-content;
     padding: 2rem;
-    margin: 5rem auto 3rem;
+    margin: 5rem auto 1rem;
     border: 0.1rem solid black;
 }
 
@@ -23,10 +23,10 @@ button{
     cursor: pointer;
 }
 
-/* table, th, td {
+table, th, td {
   border: 1px solid black;
   border-collapse: collapse;
-} */
+}
 
 .administracion-body table{
     /* padding-top: 5rem; */
@@ -42,6 +42,9 @@ button{
     background-color: rgba(255, 255, 255, 0.7);
 /* border: 1px solid black;
     border-collapse: collapse; */
+    position: sticky;
+    z-index: 11;
+    top: 3.5rem;
 }
 
 .administracion-body table td{
@@ -68,14 +71,38 @@ button{
 .administracion-body table td textarea{
     border: none;
     background-color: transparent;
-    width: 90%;
+    /* width: 90%; */
     /* height: 99%; */
     /* height: fit-content; */
     min-height: 5rem;
-    min-width: 5rem;
-    max-width: 25rem;
+    /* min-width: 5rem; */
+    /* width: 5rem; */
     padding: 0.3rem;
     scrollbar-width: none;
+}
+
+.items-table-p-id{
+    background-color: rgba(0, 0, 0, 0.2);
+    /* margin: -0.1rem -0.1rem 0.3rem; */
+    margin: -1.5rem 0 1rem;
+    padding: 0.3rem 0;
+    font-size: 0.9rem;
+    border-bottom: 1px solid black;
+
+    /* position: relative;
+    top: -1rem; */
+}
+
+.items-table-textarea-name{
+    width: 90%;
+}
+
+.items-table-textarea-info{
+    width: 5rem;
+}
+
+.items-table-textarea-info:focus{
+    width: 20rem;
 }
 
 .administracion-body table td input:hover,

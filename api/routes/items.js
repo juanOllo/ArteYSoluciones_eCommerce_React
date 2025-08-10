@@ -20,6 +20,33 @@ router.get("/allItemsList", async (req, res) => {
   res.send(results).status(200);
 });
 
+// GET list of items
+router.post("/getSomeItems", async (req, res) => {
+  try {
+    const ids = req.body;
+
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return res.status(400).send("Debes enviar una lista de IDs válida.");
+    }
+
+    const objectIds = ids.map(id => new ObjectId(id._id));
+    const collection = await db.collection("items");
+
+    const query = { _id: { $in: objectIds } };
+    const results = await collection.find(query).toArray();
+
+    if (results.length === 0) {
+      return res.status(404).send("No se encontraron ítems.");
+    }
+
+    res.status(200).send(results);
+  } catch (error) {
+    console.error("Error al obtener ítems:", error);
+    res.status(500).send("Error interno del servidor.");
+  }
+});
+
+
 // GET item by _d
 router.get("/getItem/:id", async (req, res) => {
   let collection = await db.collection("items");
@@ -29,6 +56,7 @@ router.get("/getItem/:id", async (req, res) => {
   if (!result) res.send("Not found").status(404);
   else res.send(result).status(200);
 });
+
 
 // PATCH item by _id
 router.patch("/updateItem/:id", async (req, res) => {

@@ -14,9 +14,9 @@ class Administracion extends React.Component{
         return(
             <div className='administracion-body'>
 
-                <div className='admin-text'>
+                {/* <div className='admin-text'>
                     <h3>SECCIÓN ADMINISTRATIVA</h3>
-                    {/* <h5 style={{width: "30rem", margin: "0 auto 2rem"}}>
+                    <h5 style={{width: "30rem", margin: "0 auto 2rem"}}>
                         Esta seccion te da control sobre los productos de la pagina.
                         <br />
                         En este caso se creara una version demo cada vez que presiones el boton "GUARDAR" 
@@ -29,10 +29,10 @@ class Administracion extends React.Component{
                         <br />
                         <br />
                         ACLARACION: Esta seccion estaria oculta en una version final del producto.
-                    </h5> */}
-                </div>
+                    </h5>
+                </div> */}
 
-                <ItemsTable originalList={this.props.originalList} updateOriginalList={this.props.updateOriginalList}/>
+                <ItemsTable />
 
                 <RequestTable />
 

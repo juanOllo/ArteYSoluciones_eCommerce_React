@@ -180,7 +180,7 @@
 }
 
 .catalogo-article-hover{
-    animation: catalogo-article-click-anim 0.1s forwards;
+    animation: catalogo-article-click-anim 0.2s forwards;
 }
 
 @keyframes catalogo-article-click-anim {

@@ -6,40 +6,71 @@ import CarForm from './CarForm';
 class CarroDeCompra extends React.Component{
     constructor(props){
         super(props);
-        // this.state={
-        //     carList : []
-        // }
-
-        const data = localStorage.getItem("car") ? JSON.parse(localStorage.getItem("car")) : [];
-
-        const finalList = [];
-        if (data) {
-            // const finalList = listaDeArticulos.filter(elem => {
-            //     for (let item of data){
-            //         if (item.id == elem.id) {
-            //             elem.priceXSizeIndex = item.precio;
-            //             return true;
-            //         }
-            //     }
-            //     return false;
-            // })
-
-            for (const d of data) {
-                const articulo = this.props.originalList.find(a => a.id === d.id);
-                if (articulo) {
-                    finalList.push({ ...articulo, priceXSizeIndex: d.priceXSizeIndex, cant: 1});
-                }
-            }
-        }
-
-        this.state = {
-            carList : finalList
+        this.state={
+            // displayedList: [],
+            carList: localStorage.getItem("car") ? JSON.parse(localStorage.getItem("car")) : [],
+            isLoading: true
         }
 
         this.clearCarList = this.clearCarList.bind(this);
         this.removeArticle = this.removeArticle.bind(this);
         this.changeCant = this.changeCant.bind(this);
 
+    }
+    
+    // Pasarle originalList como props hace que se cargue mas rapido siempre,
+    //  pero si refrecas la pagina o entras a la pagina /carro directamente
+    //  por la url los props no llegan de ningun lado, entonces hago el fetch.
+    async componentDidMount(){
+        // Si no hay nada en el carro de compra no hay informacion que tratar.
+        if (!Array.isArray(this.state.carList) && !(this.state.carList.length > 0)) {
+            return;
+        }
+
+        let vanillaItemsList = [];
+
+        if (Array.isArray(this.props.originalList) && this.props.originalList.length > 0) {
+
+            vanillaItemsList = [...this.props.originalList];
+            this.setState({
+                isLoading: false
+            })
+            console.log("setState originalList");
+        } else{
+            try {
+                const response = await fetch(`http://localhost:2000/items/getSomeItems`, {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(this.state.carList)
+                });
+                const data = await response.json();
+                vanillaItemsList = [...data];
+                this.setState({
+                    isLoading: false
+                })
+            } catch (error) {
+                console.error("Error fetching items:", error);
+            }
+            console.log("setState fetch");
+        }
+
+        let readyToRenderItemsList = [];
+
+        for (const d of this.state.carList) {
+            const articulo = vanillaItemsList.find(a => a._id === d._id);
+
+                            // Si selecciono el ultimo priceXSize disponible y luego lo borro en admin
+                            //  podria estar intentando acceder fuera de rango.
+                            // El articulo no pusheado en finalList por lo anteriormente explicado
+                            //  sigue en el localStorage, hay q resolverlo.
+            if (articulo && (articulo.priceXSize.length > d.priceXSizeIndex)) {
+                readyToRenderItemsList.push({...articulo, priceXSizeIndex: d.priceXSizeIndex, cant: 1});
+            }
+        }
+
+        this.setState({
+            carList: readyToRenderItemsList,
+        })
     }
 
     clearCarList(e){
@@ -111,6 +142,7 @@ class CarroDeCompra extends React.Component{
     render(){
 
         // console.log("car-list: ", this.state.carList)
+        // console.log("displayedList: ", this.state.displayedList);
 
         return(
             <div id="carro-de-compra">
@@ -131,7 +163,7 @@ class CarroDeCompra extends React.Component{
                     <div className="list-div">
 
                         {
-                            this.state.carList.length ?
+                            this.state.carList.length && !this.state.isLoading ?
                             this.state.carList.map((elem, index) => {
                                 return (
                                     <article className="carrito-articulo">
@@ -164,11 +196,11 @@ class CarroDeCompra extends React.Component{
                     <button className="clear-car-btn encargar-btn encargar-btn-ready" onClick={this.clearCarList}>VACIAR CARRO</button>
                 </div>
                 <div className="car-info-tile car-tile">
-                    {/* {
-                        this.state.carList.length ? */}
+                    {
+                        this.state.carList.length && !this.state.isLoading?
                         <CarForm finalPrice={this.state.carList.reduce((acc, cur) => acc + parseInt(cur.priceXSize[cur.priceXSizeIndex].price) * parseInt(cur.cant), 0)} itemsList={this.state.carList}/>
-                        {/* : null
-                    } */}
+                        : null
+                    }
                 </div>
             </div>
         )

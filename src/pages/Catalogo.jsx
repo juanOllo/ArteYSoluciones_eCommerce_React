@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import './Catalogo.css';
 import {Link} from 'react-router-dom';
 import { render } from '@testing-library/react';
@@ -9,12 +9,46 @@ class Catalogo extends React.Component{
         this.inputSearch = "";
 
         this.state = {
-            // displayedList: this.props.originalList,
-            displayedList: localStorage.getItem("demoList") ? JSON.parse(localStorage.getItem("demoList")) : this.props.originalList,
+            // displayedList: localStorage.getItem("demoList") ? JSON.parse(localStorage.getItem("demoList")) : this.props.originalList,
+            displayedList: [],
+            isLoading: true,
+            isFetchError: false
         }
 
         this.searchItems = this.searchItems.bind(this);
         this.changeInputSearch = this.changeInputSearch.bind(this);
+    }
+
+    // Pasarle originalList como props hace que se cargue mas rapido siempre,
+    //  pero si refrecas la pagina o entras a la pagina /catalogo directamente
+    //  por la url los props no llegan de ningun lado, entonces hago el fetch.
+    async componentDidMount(){
+        if (Array.isArray(this.props.originalList) && this.props.originalList.length > 0) {
+            this.setState({
+                displayedList: this.props.originalList,
+                isLoading: false
+            })
+            console.log("setState originalList");
+        } else{
+            try {
+                const response = await fetch("http://localhost:2000/items/allItemsList", {
+                    method: "GET",
+                    headers: { "Content-Type": "application/json" }
+                });
+                const data = await response.json();
+                this.setState({
+                    displayedList: data,
+                    isLoading: false
+                })
+            } catch (error) {
+                console.error("Error fetching items:", error);
+                this.setState({
+                    isLoading: false,
+                    isFetchError: true
+                })
+            }
+            console.log("setState fetch");
+        }
     }
 
     searchItems(){
@@ -62,6 +96,9 @@ class Catalogo extends React.Component{
                 
                 <div id="catalogo-lista">
                     {
+                        this.state.isLoading ? 
+                        <div style={{marginTop: "30svh", fontFamily: "var(--ffamily01)", fontSize: "1.5rem"}}>CARGANDO ITEMS!!!</div>
+                        :
                         this.state.displayedList.map((elem, index) => {
                             return(
                                 // <Link to={`/producto/${elem.id}`} className="catalogo-article">
@@ -82,23 +119,6 @@ class Catalogo extends React.Component{
 const Article = ({item}) => {
     const [isHovered, setIsHovered] = useState(false);
     const [indexImageHovered, setIndexImageHovered] = useState(0);
-    
-    // const [showAltImage, setShowAltImage] = useState(false);
-    // useEffect(() => {
-    //     let timer;
-    //     if (isHovered) {
-    //         timer = setTimeout(() => {
-    //         setShowAltImage(true);
-    //     }, 500); // Delay de 100ms
-    //     } else {
-    //         setShowAltImage(false);
-    //         clearTimeout(timer);
-    //     }
-
-    //     return () => clearTimeout(timer); // Limpieza
-    // }, [isHovered]);
-
-
 
     return (
             <Link to={`/producto/${item._id}`} className={"catalogo-article" + (isHovered ? " catalogo-article-hover" : "")}
@@ -108,11 +128,11 @@ const Article = ({item}) => {
                 onMouseOut={() => setIsHovered(false)}
             >
                 <h2>{item.name}</h2>
-                <span style={{animation: "catalog-img-span-spawn-delay 0.15s ease-in-out 0.5s forwards", display: isHovered && item.images.length > 1 ? "flex" : "none"}} className='catalog-img-span'>
+                <span style={{animation: "catalog-img-span-spawn-delay 0.13s ease-out 0.5s forwards", display: isHovered && item.images.length > 1 ? "flex" : "none"}} className='catalog-img-span'>
                 {/* <span style={{animation: "catalog-img-span-spawn-delay 0.1s forwards"}} className='catalog-img-span'> */}
                     {
                         item.images.map((src, index) => {
-                            // la primera imagen no aparece en el span y no deve reservarse el espacio
+                            // la primera imagen no aparece en el span y no debe reservarse el espacio
                             if (index === 0) return null
 
                             return indexImageHovered !== index ? 
