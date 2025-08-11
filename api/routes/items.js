@@ -68,7 +68,8 @@ router.patch("/updateItem/:id", async (req, res) => {
         name: req.body.name,
         priceXSize: req.body.priceXSize,
         info: req.body.info,
-        images: req.body.images
+        images: req.body.images,
+        stock: req.body.stock
       },
     };
 
@@ -93,7 +94,8 @@ router.post("/addNewItem", async (req, res) => {
       name: req.body.name,
       priceXSize: req.body.priceXSize,
       info: req.body.info,
-      images: req.body.images
+      images: req.body.images,
+      stock: req.body.stock
     };
     let collection = await db.collection("items");
     let result = await collection.insertOne(newDocument);

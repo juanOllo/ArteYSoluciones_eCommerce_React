@@ -80,14 +80,17 @@ class ItemsTable extends React.Component{
         if (key2) {
             // editar price o size
             updatedList[index][key][index2][key2] = info;
+            // console.log("Intentó editar pXs");
 
-        } else if(index2 && index2 >= 0){
+        } else if(index2 != null && index2 >= 0){
             // editar images
             updatedList[index][key][index2] = info;
+            // console.log("Intentó editar images");
 
         } else {
             // editar name o info
             updatedList[index][key] = info;
+            // console.log("Intentó editar name/info, info: ", info, " key: ", key, " index: ", index);
         }
 
         this.setState({
@@ -136,7 +139,7 @@ class ItemsTable extends React.Component{
         //  por eso aqui para actualizarlo solo subo el item sin tocarlo mas.
 
         const updatedItem = this.state.displayedList.find(item => item._id === _id);
-        // console.log("updatedItem: ", updatedItem);
+        console.log("updatedItem: ", updatedItem);
         if (!updatedItem) {
             window.alert("No se encontró el item para actualizar.");
             return;
@@ -185,30 +188,24 @@ class ItemsTable extends React.Component{
 
     async handleNewItem(){
 
-        // Creo un id para el item nuevo que no este en uso
-        //  probablemente lo quite ya q mongodb le genera uno automaticamente a cada item
-        let newItemId;
-        const usedIds = this.state.displayedList.map(elem => elem.id);
-        // console.log("ids: ", usedIds)
-        do{
-            newItemId = (Math.floor(Math.random() * (999 - 1)) + 99).toString();
-        }while(usedIds.includes(newItemId))
-
         // Creo un item "vacio" con todos los campos para postearlo en la db
         //  Probablemente haya mejores maneras de tratar la creacion de un item.
         const newItemObj = {
-            'id': newItemId,
-            'name': '',
+            'name': 'Nombre del nuevo producto',
             'priceXSize': [
                 {
-                    'price': '',
-                    'size' : ''
+                    'price': '1000',
+                    'size' : '10x10'
                 }
             ],
-            'info': '',
+            'info': 'Info del nuevo producto',
             'images': [
-                ""
-            ]
+                "Link de imagen"
+            ],
+            // 'colors': [
+            //     ""
+            // ],
+            'stock': false,
         }
 
         try {
@@ -304,6 +301,7 @@ class ItemsTable extends React.Component{
                             <th style={{width: "11rem"}}>Tamaño/Precio</th>
                             <th>Imagenes (max: 4)</th>
                             {/* <th style={{width: "3rem"}}>DEL</th> */}
+                            {/* <th style={{width: "3rem"}}>Stock</th> */}
                             <th style={{width: "3rem"}}> </th>
                         </tr>
                     </thead>
@@ -383,36 +381,83 @@ class ItemsTable extends React.Component{
                                                         />)
                                                 }
 
-                                                <span style={{display: "flex"}}>
+                                                <span style={{display: "flex", gap: "0.5rem", width: "fit-content", margin: "0 auto"}}>
                                                     {
                                                         elem.images.length < 4 && (elem.images[elem.images.length-1] || elem.images.length === 0)? 
-                                                        <button style={{ color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)", border : "none", padding: "0.3rem", borderRadius: "0.3rem", margin: "0 auto"}} onClick={(e) => this.handleNewInput(index, 'images', "")}>AGREGAR</button>
-                                                        : false
+                                                            <button style={{ color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)", border : "none", padding: "0.3rem", borderRadius: "0.3rem"}} onClick={(e) => this.handleNewInput(index, 'images', "")}>
+                                                                AGREGAR</button>
+                                                            : 
+                                                            null
                                                     }
 
                                                     {
                                                         elem.images.length > 1 ?
-                                                        <button style={{ color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)", border : "none", padding: "0.3rem", borderRadius: "0.3rem", margin: "0 auto"}} onClick={(e) => this.handleRemoveInput(index, 'images')}>BORRAR</button>
-                                                        : false
+                                                            <button style={{ color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)", border : "none", padding: "0.3rem", borderRadius: "0.3rem"}} onClick={(e) => this.handleRemoveInput(index, 'images')}>
+                                                                BORRAR</button>
+                                                            : 
+                                                            null
                                                     }
 
                                                 </span>
                                             </div>
-                                            
                                         </td>
+                                    {/* STOCK */}
+                                        {/* <td>
+                                            <select 
+                                                style={{backgroundColor: "rgba(0, 0, 0, 0.2)", color: "", padding: "0.3rem"}}
+                                                defaultValue={elem.stock} 
+                                                onChange={e => {
+                                                    e.target.value === "true"?
+                                                        this.handleInputChange(index, 'stock', true)
+                                                        :
+                                                        this.handleInputChange(index, 'stock', false);
+                                                    }
+                                                }
+                                            >
+                                                <option value="true">Si</option>
+                                                <option value="false">NO</option>
+                                            </select>
+                                        </td> */}
                                     {/* GUARDAR, BORRAR & VISTA_PREV */}
                                         <td>
-                                            {/* {
-                                                JSON.stringify(this.props.originalList[index]) !== JSON.stringify(this.state.displayedList[index]) ?
-                                                    <button style={{margin: "-1rem 0 -0.5rem", borderRadius: "0.3rem", backgroundColor: "lightgreen", border: "none", height: "2rem"}} onClick={() => this.handleUpdateItem(elem._id, index)}>GUARDAR</button>
-                                                    :
-                                                    <Link to={`/producto/${elem._id}`} style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</Link>
-                                            } */}
-
                                             <button style={{margin: "0 0 0.8rem", borderRadius: "0.3rem", backgroundColor: "lightgreen", border: "none", height: "2rem"}} onClick={() => this.handleUpdateItem(elem._id, index)}>GUARDAR</button>
                                             <Link to={`/producto/${elem._id}`} style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</Link>
                                             <button style={{borderRadius: "0.3rem", backgroundColor: "var(--rojo)", color: "white", border: "none", margin: "0.8rem 0 0", height: "2rem"}} onClick={() => this.handleRemoveItem(elem._id, index)}>ELIMINAR</button>
+                                            <div>
+                                                Stock? 
 
+                                                {/* Hay que solucionar el problema del re-render con el select */}
+                                                <select 
+                                                    style={{backgroundColor: "rgba(0, 0, 0, 0.2)", color: "", padding: "0.3rem 0", margin: "0.3rem 0 0 0.3rem"}}
+                                                    defaultValue={elem.stock} 
+                                                    onChange={e => {
+                                                        if(e.target.value === "true"){
+
+                                                            // Checkeo que ningun campo de elem esté vaco
+                                                            if (!elem.name || !elem.info) {
+                                                                window.alert("EL CAMPO NOMBRE O DESCRIPCION ESTA VACÍO")
+                                                                return;
+                                                            }
+                                                            if (elem.images.some(img => !img)) {
+                                                                window.alert("UN CAMPO IMAGENES ESTÁ VACÍO");
+                                                                return;
+                                                            }
+                                                            if (elem.priceXSize.some(p => !p.price || !p.size)) {
+                                                                window.alert("UN CAMPO PRECIO O TAMAÑO ESTÁ VACÍO");
+                                                                return;
+                                                            }
+
+                                                            this.handleInputChange(index, 'stock', true)
+                                                        } else {
+                                                            this.handleInputChange(index, 'stock', false);
+                                                        }
+                                                        }
+                                                    }
+                                                >
+                                                    <option value="true">Si</option>
+                                                    <option value="false">NO</option>
+                                                </select>
+                                            </div>
                                         </td>
                                     </tr>
                                 )

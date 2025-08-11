@@ -116,13 +116,15 @@
     
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
+    /* justify-content: center; */
     align-items: center;
     /* justify-content: start;
     align-items: start; */
     gap: 1.5rem;
 
-    max-width: 96rem;
+    width: 79rem;
+    /* max-width: 96rem; */
+    max-width: 95svw;
     margin: 0 auto;
 }
 
@@ -156,6 +158,7 @@
 
     text-decoration: none;
     color: black;
+    /* margin: 0 auto; */
 }
 
 @media only screen and (max-width: 50rem) {
@@ -165,6 +168,7 @@
         transform: translate(-0.3rem, -0.3rem);
         border: 2px solid black;
         border-radius: 0.7rem;
+        margin: 0 auto;
     }
     .catalogo-img-focus{
         background-color: rgba(0, 0, 0, 0.05);
@@ -267,3 +271,8 @@
     /* animation: article-catalog-anim 1s ease 0s forwards; */
     /* animation: name duration timing-function delay iteration-count direction fill-mode; */
 }
+
+
+/* #catalogo-lista *:last-child {
+    margin: 0 auto 0 0;
+} */

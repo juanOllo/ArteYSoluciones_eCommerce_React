@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './Catalogo.css';
 import {Link} from 'react-router-dom';
-import { render } from '@testing-library/react';
+// import { render } from '@testing-library/react';
 
 class Catalogo extends React.Component{
     constructor(props){
@@ -97,15 +97,13 @@ class Catalogo extends React.Component{
                 <div id="catalogo-lista">
                     {
                         this.state.isLoading ? 
-                        <div style={{marginTop: "30svh", fontFamily: "var(--ffamily01)", fontSize: "1.5rem"}}>CARGANDO ITEMS!!!</div>
+                        <div style={{margin: "30svh auto 0", fontFamily: "var(--ffamily01)", fontSize: "1.5rem"}}>CARGANDO ITEMS!!!</div>
                         :
                         this.state.displayedList.map((elem, index) => {
-                            return(
-                                // <Link to={`/producto/${elem.id}`} className="catalogo-article">
-                                //     <h2>{elem.name}</h2>
-                                //     <img src={elem.images[0]} alt="imagen del producto" className="catalogo-img"/>
-                                // </Link>
-                                <Article item={elem}/>
+                            return( elem.stock ?
+                                        <Article item={elem}/>
+                                        :
+                                        null
                             )
                         })
                     }
