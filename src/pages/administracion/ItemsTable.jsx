@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+// import { Link } from 'react-router-dom';
 
 class ItemsTable extends React.Component{
     constructor(props){
@@ -30,7 +30,8 @@ class ItemsTable extends React.Component{
 
     async componentDidMount(){
         try {
-            const response = await fetch("http://localhost:2000/items/allItemsList", {
+            // const response = await fetch("http://localhost:2000/items/allItemsList", {
+            const response = await fetch("https://ays-api.onrender.com/items/allItemsList", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" }
             });
@@ -160,7 +161,7 @@ class ItemsTable extends React.Component{
         // }
 
         try {
-            const response = await fetch(`http://localhost:2000/items/updateItem/${_id}`, {
+            const response = await fetch(`https://ays-api.onrender.com/items/updateItem/${_id}`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(updatedItem)
@@ -209,7 +210,7 @@ class ItemsTable extends React.Component{
         }
 
         try {
-            const response = await fetch(`http://localhost:2000/items/addNewItem`, {
+            const response = await fetch(`https://ays-api.onrender.com/items/addNewItem`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(newItemObj)
@@ -245,7 +246,7 @@ class ItemsTable extends React.Component{
 
         if(window.confirm(`Borrar item "${this.state.displayedList[index].name}" ?`)) {
             try {
-                const response = await fetch(`http://localhost:2000/items/deleteItem/${_id}`, {
+                const response = await fetch(`https://ays-api.onrender.com/items/deleteItem/${_id}`, {
                     method: "DELETE",
                     headers: { "Content-Type": "application/json" }
                 });
@@ -299,7 +300,7 @@ class ItemsTable extends React.Component{
                             <th style={{width: "15rem"}}>Id/Nombre</th>
                             <th style={{width: "5rem"}}>Descripcion</th>
                             <th style={{width: "11rem"}}>Tamaño/Precio</th>
-                            <th>Imagenes (max: 4)</th>
+                            <th>Imagenes (max:6)</th>
                             {/* <th style={{width: "3rem"}}>DEL</th> */}
                             {/* <th style={{width: "3rem"}}>Stock</th> */}
                             <th style={{width: "3rem"}}> </th>
@@ -383,7 +384,8 @@ class ItemsTable extends React.Component{
 
                                                 <span style={{display: "flex", gap: "0.5rem", width: "fit-content", margin: "0 auto"}}>
                                                     {
-                                                        elem.images.length < 4 && (elem.images[elem.images.length-1] || elem.images.length === 0)? 
+                                                        elem.images.length < 6 && (elem.images[elem.images.length-1] || elem.images.length === 0)? 
+                                                        // (elem.images[elem.images.length-1] || elem.images.length === 0)? 
                                                             <button style={{ color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)", border : "none", padding: "0.3rem", borderRadius: "0.3rem"}} onClick={(e) => this.handleNewInput(index, 'images', "")}>
                                                                 AGREGAR</button>
                                                             : 
@@ -421,7 +423,8 @@ class ItemsTable extends React.Component{
                                     {/* GUARDAR, BORRAR & VISTA_PREV */}
                                         <td>
                                             <button style={{margin: "0 0 0.8rem", borderRadius: "0.3rem", backgroundColor: "lightgreen", border: "none", height: "2rem"}} onClick={() => this.handleUpdateItem(elem._id, index)}>GUARDAR</button>
-                                            <Link to={`/producto/${elem._id}`} style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</Link>
+                                            {/* <Link to={`/producto/${elem._id}`} style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</Link> */}
+                                            <a href={`http://localhost:3000/producto/${elem._id}`} target="_blank" style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</a>
                                             <button style={{borderRadius: "0.3rem", backgroundColor: "var(--rojo)", color: "white", border: "none", margin: "0.8rem 0 0", height: "2rem"}} onClick={() => this.handleRemoveItem(elem._id, index)}>ELIMINAR</button>
                                             <div>
                                                 Stock? 
@@ -433,19 +436,19 @@ class ItemsTable extends React.Component{
                                                     onChange={e => {
                                                         if(e.target.value === "true"){
 
-                                                            // Checkeo que ningun campo de elem esté vaco
-                                                            if (!elem.name || !elem.info) {
-                                                                window.alert("EL CAMPO NOMBRE O DESCRIPCION ESTA VACÍO")
-                                                                return;
-                                                            }
-                                                            if (elem.images.some(img => !img)) {
-                                                                window.alert("UN CAMPO IMAGENES ESTÁ VACÍO");
-                                                                return;
-                                                            }
-                                                            if (elem.priceXSize.some(p => !p.price || !p.size)) {
-                                                                window.alert("UN CAMPO PRECIO O TAMAÑO ESTÁ VACÍO");
-                                                                return;
-                                                            }
+                                                            // // Checkeo que ningun campo de elem esté vaco
+                                                            // if (!elem.name || !elem.info) {
+                                                            //     window.alert("EL CAMPO NOMBRE O DESCRIPCION ESTA VACÍO")
+                                                            //     return;
+                                                            // }
+                                                            // if (elem.images.some(img => !img)) {
+                                                            //     window.alert("UN CAMPO IMAGENES ESTÁ VACÍO");
+                                                            //     return;
+                                                            // }
+                                                            // if (elem.priceXSize.some(p => !p.price || !p.size)) {
+                                                            //     window.alert("UN CAMPO PRECIO O TAMAÑO ESTÁ VACÍO");
+                                                            //     return;
+                                                            // }
 
                                                             this.handleInputChange(index, 'stock', true)
                                                         } else {

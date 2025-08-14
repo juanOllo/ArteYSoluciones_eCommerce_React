@@ -1,5 +1,5 @@
 // import logo from './logo.svg';
-import React, { setState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import {Routes, Route} from 'react-router-dom';
 import './App.css';
 import Navbar from './Navbar';
@@ -16,7 +16,8 @@ function App() {
   useEffect(() => {
     const fetchItems = async () => {
       try {
-          const response = await fetch("http://localhost:2000/items/allItemsList", {
+          // const response = await fetch("http://localhost:2000/items/allItemsList", {
+          const response = await fetch("https://ays-api.onrender.com/items/allItemsList", {
               method: "GET",
               headers: { "Content-Type": "application/json" }
           });
@@ -38,8 +39,7 @@ function App() {
           <Route path="/" element={<Inicio originalList={allItemsList}/>}/>
           <Route path="/catalogo" element={<Catalogo originalList={allItemsList}/>}/>
           <Route path="/producto/:_id" element={<Producto />}/>
-          {/* <Route path="/producto/:id" element={<Producto originalList={allItemsList}/>}/> */}
-          <Route path="/carro" element={<CarroDeCompra originalList={allItemsList}/>}/>
+          <Route path="/carro" element={<CarroDeCompra />}/>
           <Route path='/administracion' element={<Administracion />}/>
         </Routes>
     </div>

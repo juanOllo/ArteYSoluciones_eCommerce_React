@@ -23,7 +23,10 @@ class CarroDeCompra extends React.Component{
     //  por la url los props no llegan de ningun lado, entonces hago el fetch.
     async componentDidMount(){
         // Si no hay nada en el carro de compra no hay informacion que tratar.
-        if (!Array.isArray(this.state.carList) && !(this.state.carList.length > 0)) {
+        if (!Array.isArray(this.state.carList) || !(this.state.carList.length > 0)) {
+            this.setState({
+                isLoading: false
+            })
             return;
         }
 
@@ -38,7 +41,8 @@ class CarroDeCompra extends React.Component{
             console.log("setState originalList");
         } else{
             try {
-                const response = await fetch(`http://localhost:2000/items/getSomeItems`, {
+                // const response = await fetch(`http://localhost:2000/items/getSomeItems`, {
+                const response = await fetch(`https://ays-api.onrender.com/items/getSomeItems`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(this.state.carList)
@@ -61,9 +65,9 @@ class CarroDeCompra extends React.Component{
 
                             // Si selecciono el ultimo priceXSize disponible y luego lo borro en admin
                             //  podria estar intentando acceder fuera de rango.
-                            // El articulo no pusheado en finalList por lo anteriormente explicado
+                            // El articulo no pusheado en readyToRenderItemsList por lo anteriormente explicado
                             //  sigue en el localStorage, hay q resolverlo.
-            if (articulo && (articulo.priceXSize.length > d.priceXSizeIndex)) {
+            if (articulo && (articulo.priceXSize.length > d.priceXSizeIndex) && articulo.stock) {
                 readyToRenderItemsList.push({...articulo, priceXSizeIndex: d.priceXSizeIndex, cant: 1});
             }
         }
@@ -171,7 +175,7 @@ class CarroDeCompra extends React.Component{
 
                                         <img className="carrito-articulo-img" src={elem.images[0]} alt="imagen del producto"/>
 
-                                        <Link to={`/producto/${elem._id}`} style={{color: "black"}}>{elem.name}</Link>
+                                        <Link to={`/producto/${elem._id}`} state={elem} style={{color: "black"}}>{elem.name}</Link>
 
                                         <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.priceXSize[elem.priceXSizeIndex].size} <br/>${parseInt(elem.priceXSize[elem.priceXSizeIndex].price) * elem.cant}</h4>   
 
@@ -189,8 +193,10 @@ class CarroDeCompra extends React.Component{
                                 )
                             })
                             :
-                            <h1 style={{textAlign: "center", fontFamily: "var(--ffamily01)", height: "1rem"}}>Carro de compra vacio :(</h1>
-
+                            this.state.isLoading ?
+                                <h2 style={{textAlign: "center", fontFamily: "var(--ffamily01)", height: "1rem", fontSize: "3.5svh"}}>Cargando items..</h2>
+                                :
+                                <h2 style={{textAlign: "center", fontFamily: "var(--ffamily01)", height: "1rem", fontSize: "3.5svh"}}>Carro de compra vacio :(</h2>
                         }
                     </div>
                     <button className="clear-car-btn encargar-btn encargar-btn-ready" onClick={this.clearCarList}>VACIAR CARRO</button>

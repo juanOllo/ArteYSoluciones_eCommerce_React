@@ -31,7 +31,8 @@ class Catalogo extends React.Component{
             console.log("setState originalList");
         } else{
             try {
-                const response = await fetch("http://localhost:2000/items/allItemsList", {
+                // const response = await fetch("http://localhost:2000/items/allItemsList", {
+                const response = await fetch("https://ays-api.onrender.com/items/allItemsList", {
                     method: "GET",
                     headers: { "Content-Type": "application/json" }
                 });
@@ -119,7 +120,8 @@ const Article = ({item}) => {
     const [indexImageHovered, setIndexImageHovered] = useState(0);
 
     return (
-            <Link to={`/producto/${item._id}`} className={"catalogo-article" + (isHovered ? " catalogo-article-hover" : "")}
+            // <Link to={`/producto/${item._id}`} className={"catalogo-article" + (isHovered ? " catalogo-article-hover" : "")}
+            <Link to={`/producto/${item._id}`} state={item} className={"catalogo-article" + (isHovered ? " catalogo-article-hover" : "")}
                 // onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => {setIsHovered(false); setIndexImageHovered(0)}}
                 onMouseOver={() => setIsHovered(true)}
@@ -131,7 +133,7 @@ const Article = ({item}) => {
                     {
                         item.images.map((src, index) => {
                             // la primera imagen no aparece en el span y no debe reservarse el espacio
-                            if (index === 0) return null
+                            if (index === 0 || index >= 5) return null
 
                             return indexImageHovered !== index ? 
                                 <img src={src} alt="" className='catalogo-img' onMouseEnter={() => setIndexImageHovered(index)}/>

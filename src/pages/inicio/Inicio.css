@@ -1,18 +1,22 @@
-.body {
+.home-body {
     box-sizing: border-box;
     /* margin-top: -1.35rem;  */
 
     background-color: var(--verde);
+    /* background-color: red; */
 
     width: 100%;
     height: 100svh;
+
+    /* overflow: hidden; */
 }
 
 #inicio-container {
     height: 100svh;
+    
     display: flex;
     flex-direction: column;
-    justify-content: center;
+    justify-content: end;
     align-items: center;
 }
 
@@ -20,9 +24,10 @@
     width: 80svw;
     /* max-width: 600px; */
     max-width: 50svh;
+    z-index: 5;
 }
 
-#mostrador {
+.mostrador {
     width: 100%;
     height: 50%;
     /* height: fit-content; */
@@ -36,13 +41,16 @@
 
     margin: 0 auto;
     max-width: fit-content;
+    z-index: 5;
 }
 
 .inicio-article {
     background-color: var(--amarillo);
+    /* width: 15.5rem; */
     width: 15.5rem;
-    min-width: 15.5rem;
-    /* max-width: 15rem; */
+    /* min-width: 15.5rem; */
+    min-width: 25svh;
+    max-width: 15.5svw;
     /* width: 16rem; */
     height: 20rem;
     max-height: 90%;
@@ -75,6 +83,57 @@
     }
 }
 
+/* @keyframes inicio-article-loading {
+    0%{
+        background-color: ;
+    }
+} */
+ 
+.inicio-article-loading-skeleton{
+    /* background-color: var(--verde); */
+    background-color: rgba(255, 255, 255, 0.3);
+    width: 15.5rem;
+    max-width: 15.5svw;
+    height: 20rem;
+    max-height: 90%;
+
+    margin: 0;
+    border-radius: 1rem;
+    box-shadow: 0.45rem 0.45rem black;
+    border: 2px solid black;
+    /* border: 2px solid rgba(0, 0, 0, 0.1); */
+
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-around;
+
+    overflow: hidden;
+    text-decoration: none;
+    scale: 0.9;
+}
+
+.inicio-article-loading-skeleton::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: -150px;
+    height: 100%;
+    width: 150px;
+    background: linear-gradient(to right, transparent 0%, rgba(255, 255, 255, 0.5) 50%, transparent 100%);
+    animation: shimmer 2s ease 0s infinite;
+}
+
+@keyframes shimmer {
+    100%{
+        transform: translateX(400%);
+    }
+}
+
+.inicio-article-loading-skeleton:hover{
+    animation: inicio-article-click-anim 0.1s forwards;
+}
+
 .inicio-article img {
     /* width: 90%; */
     height: 70%;
@@ -85,6 +144,7 @@
     /* max-width: 90%; */
     /* height: 70%; */
     font-family: var(--ffamily01);
+    font-size: 1.1rem;
     background-color: white;
     padding: 0.5rem;
     /* border-radius: 0 1rem; */
@@ -108,6 +168,7 @@
     font-weight: 500;
 
     text-decoration: none;
+    z-index: 5;
 }
 
 .catalogo-completo-btn:hover {
@@ -132,4 +193,59 @@
     margin: 0.7rem 0.7rem;
     color: black;
     text-align: center;
+}
+
+.blur {
+    position: relative;
+    transform: translate(-50%, -50%);
+    width: 150svh;
+    height: 150svh;
+    filter: blur(80px);
+    /* background: radial-gradient(circle at 50% 50%, var(--amarillo), #444bf700); */
+    background: radial-gradient(circle at 50% 50%, var(--amarillo), var(--verde));
+    /* opacity: 0.7; */
+    z-index: 0;
+
+    /* top: 1svh; */
+    left: 40svw;
+    top: 15svh;
+  }
+
+.star{
+    background-color: black;
+    background-color: var(--verde);
+    width: 90svh;
+    height: 90svh;
+    position: relative;
+    top: -130svh;
+    left: 45svw;
+    z-index: 1;
+    
+    clip-path: polygon(100% 50%,78.98% 57.76%,93.3% 75%,71.21% 71.21%,75% 93.3%,57.76% 78.98%,50% 100%,42.24% 78.98%,25% 93.3%,28.79% 71.21%,6.7% 75%,21.02% 57.76%,0% 50%,21.02% 42.24%,6.7% 25%,28.79% 28.79%,25% 6.7%,42.24% 21.02%,50% 0%,57.76% 21.02%,75% 6.7%,71.21% 28.79%,93.3% 25%,78.98% 42.24%);
+}
+
+@media only screen and (max-width: 50rem) {
+    .blur{
+        transform: translate(-50%, -50%);
+        background: radial-gradient(circle at 50svh 50svh, var(--amarillo), var(--amarillo));
+
+        width: 400px;
+        height: 400px;
+        background: radial-gradient(circle at 50svh 50svh, var(--amarillo), var(--amarillo));
+        top: 30svh;
+        left: 35svw;
+    }
+    .star{
+        clip-path: polygon(100% 50%,78.98% 57.76%,93.3% 75%,71.21% 71.21%,75% 93.3%,57.76% 78.98%,50% 100%,42.24% 78.98%,25% 93.3%,28.79% 71.21%,6.7% 75%,21.02% 57.76%,0% 50%,21.02% 42.24%,6.7% 25%,28.79% 28.79%,25% 6.7%,42.24% 21.02%,50% 0%,57.76% 21.02%,75% 6.7%,71.21% 28.79%,93.3% 25%,78.98% 42.24%);
+
+        background-color: var(--verde);
+        width: 40svh;
+        height: 40svh;
+        top: -25svh;
+        left: 45svw;
+    }
+    .inicio-article, .inicio-article-loading-skeleton {
+        min-width: 15.5rem;
+    }
+
 }
