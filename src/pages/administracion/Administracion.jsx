@@ -34,7 +34,7 @@ class Administracion extends React.Component{
 
                 <ItemsTable />
 
-                <RequestTable />
+                {/* <RequestTable /> */}
 
             </div>
         )

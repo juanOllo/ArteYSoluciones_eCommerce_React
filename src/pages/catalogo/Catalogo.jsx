@@ -189,8 +189,19 @@ const Article = ({item}) => {
                 onMouseOver={() => setIsHovered(true)}
                 onMouseOut={() => setIsHovered(false)}
             >
+
+                {
+                    item.off && item.off > 0 ?
+                        <div className='article-off-star'>
+                            <h4 style={{margin: "-0.6rem 0 0 0.55rem"}}>
+                                -{item.off}%
+                            </h4>
+                        </div>
+                        :
+                        null
+                }
                 <h2>{item.name}</h2>
-                <span style={{animation: "catalog-img-span-spawn-delay 0.13s ease-out 0.5s forwards", display: isHovered && item.images.length > 1 ? "flex" : "none"}} className='catalog-img-span'>
+                <span style={{display: isHovered && item.images.length > 1 ? "flex" : "none"}} className='catalog-img-span'>
                 {/* <span style={{animation: "catalog-img-span-spawn-delay 0.1s forwards"}} className='catalog-img-span'> */}
                     {
                         item.images.map((src, index) => {

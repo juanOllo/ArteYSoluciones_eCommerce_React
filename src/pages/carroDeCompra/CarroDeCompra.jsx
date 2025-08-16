@@ -177,7 +177,8 @@ class CarroDeCompra extends React.Component{
 
                                         <Link to={`/producto/${elem._id}`} state={elem} style={{color: "black"}}>{elem.name}</Link>
 
-                                        <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.priceXSize[elem.priceXSizeIndex].size} <br/>${parseInt(elem.priceXSize[elem.priceXSizeIndex].price) * elem.cant}</h4>   
+                                        {/* <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.priceXSize[elem.priceXSizeIndex].size} <br/>${parseInt(elem.priceXSize[elem.priceXSizeIndex].price) * elem.cant}</h4>    */}
+                                        <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.priceXSize[elem.priceXSizeIndex].size} <br/>${(parseInt(elem.priceXSize[elem.priceXSizeIndex].price) * (1 - elem.off / 100)) * elem.cant}</h4>   
 
                                         <span style={{fontWeight: "900", display: "flex", flexDirection: "column", position: "relative"}}>
                                                 <button className="car-cant-btn"  name={index} onClick={this.changeCant}>+</button>
@@ -204,7 +205,7 @@ class CarroDeCompra extends React.Component{
                 <div className="car-info-tile car-tile">
                     {
                         this.state.carList.length && !this.state.isLoading?
-                        <CarForm finalPrice={this.state.carList.reduce((acc, cur) => acc + parseInt(cur.priceXSize[cur.priceXSizeIndex].price) * parseInt(cur.cant), 0)} itemsList={this.state.carList}/>
+                        <CarForm finalPrice={this.state.carList.reduce((acc, cur) => acc + (parseInt(cur.priceXSize[cur.priceXSizeIndex].price) * (1 - cur.off / 100)) * parseInt(cur.cant), 0)} itemsList={this.state.carList}/>
                         : null
                     }
                 </div>

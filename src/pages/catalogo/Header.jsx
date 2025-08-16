@@ -79,9 +79,9 @@ class Header extends React.Component {
             case "name-desc":
                 return "Nombre Z-A";
             case "price-asc":
-                return "Precio Ascendente";
+                return "Mas Barato Primero";
             case "price-desc":
-                return "Precio Descendente";
+                return "Mas Caro Primero";
             default:
                 return "";
         }
@@ -103,8 +103,8 @@ class Header extends React.Component {
                     <option value="default">Ordenar por</option>
                     <option value="name-asc">Nombre A-Z</option>
                     <option value="name-desc">Nombre Z-A</option>
-                    <option value="price-asc">Precio Ascendente</option>
-                    <option value="price-desc">Precio Descendente</option>
+                    <option value="price-asc">Mas Barato Primero</option>
+                    <option value="price-desc">Mas Caro Primero</option>
                 </select>
 
                 <p style={{marginLeft: "auto", fontFamily: "var(--ffamily01)", fontWeight: "600", color: "rgba(0, 0, 0, 0.7)"}}>{this.props.cantItems} articulos.</p>

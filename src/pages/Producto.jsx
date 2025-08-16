@@ -73,9 +73,12 @@ class ProductoRender extends React.Component {
     }
 
     selectPriceXSize(e){
+        // console.log("selectPriceXSize: ", e.target.value);
+        // console.log("selectPriceXSize parentElement: ", e.target.parentElement.value);
+        // console.log("selectPriceXSize selected: ", parseInt(!isNaN(e.target.value)? e.target.value : e.target.parentElement.value));
 
         this.setState({
-            priceXSizeIndex : parseInt(e.target.value)
+            priceXSizeIndex : parseInt(!isNaN(e.target.value)? e.target.value : e.target.parentElement.value)
         })
     }
 
@@ -141,6 +144,17 @@ class ProductoRender extends React.Component {
                 <div className='images-tile'>
                     <h1 className='producto-h1-mobil'>{this.props.item.name}</h1>
 
+                    {
+                        this.props.item.off && this.props.item.off > 0 ?
+                            <div className='item-off-star' style={{overflow: "visible"}}>
+                                <h4 style={{margin: "0 0 0 0.9rem", fontSize: "2.5rem"}}>
+                                    -{this.props.item.off}%
+                                </h4>
+                            </div>
+                            :
+                            null
+                    }
+
                     <div className='img-producto-focus-holder'>
                         <img className="img-producto-focus" src={this.props.item.images[this.state.focusImageIndex]} alt="imagen del producto"/>
                     </div>
@@ -166,13 +180,39 @@ class ProductoRender extends React.Component {
                     <div className='span-precios'>
                         {
                             this.props.item.priceXSize.map((elem, index) => {
+                                // console.log("elem.off: ", elem.off);
                                 return index === this.state.priceXSizeIndex? 
                                     <button onClick={this.selectPriceXSize} value={index} className="precios precios-selected">
-                                        {elem.size} = ${elem.price}
+                                        <span style={{textDecoration: this.props.item.off? "line-through" : ""}}>
+                                            {elem.size} = ${elem.price}
+                                        </span>
+
+                                        {
+                                            this.props.item.off ?
+                                                <span>
+                                                    <br />
+                                                    {elem.size} =${parseInt(elem.price * (1 - (this.props.item.off || 100) / 100))}
+                                                </span>
+                                                :
+                                                null
+                                        }
                                     </button>
                                     :
                                     <button onClick={this.selectPriceXSize} value={index} className="precios">
-                                        {elem.size} = ${elem.price}
+                                        <span style={{textDecoration: this.props.item.off? "line-through" : ""}}>
+                                            {elem.size} = ${elem.price}
+                                        </span>
+
+                                        {
+                                            this.props.item.off ?
+                                                <span>
+                                                    <br />
+                                                    {elem.size} =${parseInt(elem.price * (1 - (this.props.item.off || 100) / 100))}
+                                                </span>
+                                                :
+                                                null
+                                        }
+
                                     </button>;
                             })
                         }
@@ -180,7 +220,7 @@ class ProductoRender extends React.Component {
                     <div className="encargar-btns-div">
                         {
                             this.state.priceXSizeIndex === -1?
-                                <button onClick={this.addToCar} className="encargar-btn btn">
+                                <button className="encargar-btn btn">
                                     AGREGAR AL CARRO
                                 </button>
                                 :

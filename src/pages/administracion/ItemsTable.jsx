@@ -78,20 +78,33 @@ class ItemsTable extends React.Component{
 
         const updatedList = this.state.displayedList;
 
-        if (key2) {
-            // editar price o size
-            updatedList[index][key][index2][key2] = info;
-            // console.log("Intentó editar pXs");
+        switch (key) {
+            
+        // editar name o info
+            case 'name':
+            case 'info':
+                updatedList[index][key] = info;
+                break;
 
-        } else if(index2 != null && index2 >= 0){
-            // editar images
-            updatedList[index][key][index2] = info;
-            // console.log("Intentó editar images");
+        // editar price o size
+            case 'priceXSize':
+                updatedList[index][key][index2][key2] = info;
+                break;
 
-        } else {
-            // editar name o info
-            updatedList[index][key] = info;
-            // console.log("Intentó editar name/info, info: ", info, " key: ", key, " index: ", index);
+        // editar images
+            case 'images':
+                updatedList[index][key][index2] = info;
+                break;
+
+        // editar off
+        // si no ingresas nada, entonces lo pongo en 0
+            case 'off':
+                if (!info) updatedList[index][key] = 0;
+                else updatedList[index][key] = parseInt(info);
+                break;
+                
+            default:
+                break;
         }
 
         this.setState({
@@ -161,7 +174,8 @@ class ItemsTable extends React.Component{
         // }
 
         try {
-            const response = await fetch(`https://ays-api.onrender.com/items/updateItem/${_id}`, {
+            const response = await fetch(`https://ays-api.onrender.com/items/updateItem`, {
+            // const response = await fetch(`http://localhost:2000/items/updateItem`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(updatedItem)
@@ -207,9 +221,11 @@ class ItemsTable extends React.Component{
             //     ""
             // ],
             'stock': false,
+            'off': 0,
         }
 
         try {
+            // const response = await fetch(`http://localhost:2000/items/addNewItem`, {
             const response = await fetch(`https://ays-api.onrender.com/items/addNewItem`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -301,6 +317,7 @@ class ItemsTable extends React.Component{
                             <th style={{width: "5rem"}}>Descripcion</th>
                             <th style={{width: "11rem"}}>Tamaño/Precio</th>
                             <th>Imagenes (max:6)</th>
+                            <th style={{width: "5rem"}}>Descuento</th>
                             {/* <th style={{width: "3rem"}}>DEL</th> */}
                             {/* <th style={{width: "3rem"}}>Stock</th> */}
                             <th style={{width: "3rem"}}> </th>
@@ -420,6 +437,10 @@ class ItemsTable extends React.Component{
                                                 <option value="false">NO</option>
                                             </select>
                                         </td> */}
+                                    {/* OFF */}
+                                        <td>
+                                            - <input onChange={(e) => this.handleInputChange(index, 'off', e.target.value)} value={elem.off} style={{width: "40%"}}></input> %
+                                        </td>
                                     {/* GUARDAR, BORRAR & VISTA_PREV */}
                                         <td>
                                             <button style={{margin: "0 0 0.8rem", borderRadius: "0.3rem", backgroundColor: "lightgreen", border: "none", height: "2rem"}} onClick={() => this.handleUpdateItem(elem._id, index)}>GUARDAR</button>
