@@ -139,3 +139,24 @@
         background-color: red;
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+@media only screen and (max-width: 50rem) {
+    .navbar-btn,
+    .navbar-btn:hover
+    .shopping-car-btn,
+    .shopping-car-btn:hover,
+    .shopping-car-img{
+        cursor: none;
+    }
+}

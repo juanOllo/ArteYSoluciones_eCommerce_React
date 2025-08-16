@@ -117,7 +117,7 @@
     width: calc(85% - 1rem);
     width: 90%;
 
-    /* background-color: rgba(0, 0, 0, 0.2); */
+    background-color: rgba(255, 255, 255, 0.5);
     /* width: fit-content; */
     text-align: center;
     font-weight: bold;
@@ -129,9 +129,12 @@
     
     /* border-radius: 0 0 1rem 1rem; */
     /* border-radius: 1rem 0 0 1rem; */
-    border-radius: 0 1rem 1rem 0;
-    background: linear-gradient(90deg, transparent 0%, var(--violeta) 60%, var(--violeta) 100%);
+    /* border-radius: 0 1rem 1rem 0; */
+    /* background: linear-gradient(90deg, transparent 0%, var(--amarillo) 60%, var(--amarillo) 100%); */
     margin: 2rem 0;
+
+    border-left: 0.3rem dashed var(--verde) ;
+    border-right: 0.3rem dashed var(--verde) ;
 
     white-space: pre-line;
 }
@@ -157,6 +160,7 @@
     font-family: var(--ffamily01);
 
     font-weight: bold;
+    /* white-space: nowrap; */
 }
 
 .precios:hover {
@@ -399,5 +403,13 @@
         border-top: 0.1rem solid rgba(0, 0, 0, 0.1);
         border-left: 0.1rem solid rgba(0, 0, 0, 0.1);
         /* linear-gradient(135deg, black 50%, transparent 50%); */
+    }
+    .img-producto,
+    .precios,
+    .precios:hover,
+    .precios-selected,
+    .encargar-btn,
+    .encargar-btn:hover{
+        cursor: none;
     }
 }

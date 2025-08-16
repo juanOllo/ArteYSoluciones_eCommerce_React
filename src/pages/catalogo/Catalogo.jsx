@@ -2,21 +2,32 @@ import React, { useState } from 'react';
 import './Catalogo.css';
 import {Link} from 'react-router-dom';
 // import { render } from '@testing-library/react';
+import Header from './Header.jsx';
 
 class Catalogo extends React.Component{
     constructor(props){
         super(props);
-        this.inputSearch = "";
 
         this.state = {
             // displayedList: localStorage.getItem("demoList") ? JSON.parse(localStorage.getItem("demoList")) : this.props.originalList,
             displayedList: [],
+            originalList: [],
             isLoading: true,
-            isFetchError: false
+            isFetchError: false,
+            listKeys: {
+                'sort': '',
+                'search': ''
+            }
         }
 
+        // this.searchItems = this.searchItems.bind(this);
+        // this.changeInputSearch = this.changeInputSearch.bind(this);
+        // this.handleHeaderAction = this.handleHeaderAction.bind(this);
+
+        this.setUpdatedKeys = this.setUpdatedKeys.bind(this);
+
         this.searchItems = this.searchItems.bind(this);
-        this.changeInputSearch = this.changeInputSearch.bind(this);
+        this.cleanName = this.cleanName.bind(this);
     }
 
     // Pasarle originalList como props hace que se cargue mas rapido siempre,
@@ -26,6 +37,7 @@ class Catalogo extends React.Component{
         if (Array.isArray(this.props.originalList) && this.props.originalList.length > 0) {
             this.setState({
                 displayedList: this.props.originalList,
+                originalList: this.props.originalList,
                 isLoading: false
             })
             console.log("setState originalList");
@@ -39,6 +51,7 @@ class Catalogo extends React.Component{
                 const data = await response.json();
                 this.setState({
                     displayedList: data,
+                    originalList: data,
                     isLoading: false
                 })
             } catch (error) {
@@ -52,31 +65,80 @@ class Catalogo extends React.Component{
         }
     }
 
-    searchItems(){
+    // handleHeaderAction(newDisplayedList){
+    //     if (newDisplayedList && Array.isArray(newDisplayedList) && newDisplayedList.length > 0) {
+    //         this.setState({
+    //             displayedList: newDisplayedList
+    //         })
+    //     } else {
+    //         this.setState({
+    //             displayedList: this.props.originalList
+    //         })
+    //     }
+    // }
 
-        // tengo que hacer esto porq no se si el usuario va a usar mayusculas y/o tildes
-        const cleanInputSearch = this.inputSearch.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u");
+    setUpdatedKeys(updatedListKeys){
+        console.log("Updated list keys: ", updatedListKeys);
+        this.setState({
+            listKeys: updatedListKeys,
+            // displayedList: this.state.originalList
+        }, this.searchItems)
 
-        if (cleanInputSearch) {
-            const newList = this.props.originalList.filter(x => x.name.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u").includes(cleanInputSearch))
-    
-            this.setState({
-                displayedList: newList
-            })
-        }
     }
 
-    changeInputSearch(e){
+    searchItems(){
 
-        if (e.target.value) {
-            this.inputSearch = e.target.value;
-            // this.searchItems();
-        } else {
-            this.inputSearch = "";
-            this.setState({
-                displayedList: this.props.originalList
-            })
+        let newDisplayedList = [...this.state.originalList];
+
+        if (this.state.listKeys.search) {
+            const inputSearch = this.state.listKeys.search;
+            console.log("Input search: ", inputSearch);
+    
+            if (inputSearch) {
+                const newList = this.state.originalList.filter(x => x.name.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u").includes(inputSearch))
+        
+                // this.setState({
+                //     displayedList: newList
+                // });
+                newDisplayedList = newList;
+            } 
         }
+
+        if (this.state.listKeys.sort) {
+            const sortKey = this.state.listKeys.sort;
+            // console.log("Sort key: ", sortKey);
+    
+            newDisplayedList.sort((a, b) => {
+                switch (sortKey) {
+                    case "name-asc":
+                        return this.cleanName(a.name).localeCompare(this.cleanName(b.name));
+                    
+                    case "name-desc":
+                        return this.cleanName(b.name).localeCompare(this.cleanName(a.name));
+
+                    case "price-asc":
+                        // return a.priceXSize.length - b.priceXSize.length;
+                        return (a.priceXSize.reduce((acc, cur) => acc + parseInt(cur.price), 0) / a.priceXSize.length) - (b.priceXSize.reduce((acc, cur) => acc + parseInt(cur.price), 0) / b.priceXSize.length);
+
+                    case "price-desc":
+                        // return b.priceXSize.length - a.priceXSize.length;
+                        return (b.priceXSize.reduce((acc, cur) => acc + parseInt(cur.price), 0) / b.priceXSize.length) - (a.priceXSize.reduce((acc, cur) => acc + parseInt(cur.price), 0) / a.priceXSize.length);
+                
+                    default:
+                        return 0; // Default case
+                }
+            })
+            
+        }
+
+        this.setState({
+            displayedList: newDisplayedList
+        });
+    }
+
+    cleanName(str) {
+        // Elimina todos los caracteres que no sean letras o números al principio
+        return str.replace(/^[^\p{L}\p{N}]+/u, '').toLowerCase();
     }
 
     render(){
@@ -88,12 +150,12 @@ class Catalogo extends React.Component{
                 </button>
                 <div className='filters-div'></div> */}
 
-                <div id="catalogo-buscador">
-                    <input onChange={this.changeInputSearch} type="text" placeholder="Buscar"/>
-                    <button onClick={this.searchItems}>
-                        <img alt="lupa" className="search-img" src="https://i.postimg.cc/4dcKcFvN/free-search-icon-2907-thumb.png"/>
-                    </button>
-                </div>
+                {
+                    !this.state.isLoading?
+                    <Header listKeys={this.state.listKeys} setUpdatedKeys={this.setUpdatedKeys} cantItems={this.state.displayedList.length}/>
+                    :
+                    null
+                }
                 
                 <div id="catalogo-lista">
                     {

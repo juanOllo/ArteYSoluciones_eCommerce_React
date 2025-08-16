@@ -4,7 +4,7 @@ import {Routes, Route} from 'react-router-dom';
 import './App.css';
 import Navbar from './Navbar';
 import Inicio from './pages/inicio/Inicio';
-import Catalogo from './pages/Catalogo';
+import Catalogo from './pages/catalogo/Catalogo';
 import Producto from './pages/Producto';
 import CarroDeCompra from './pages/carroDeCompra/CarroDeCompra';
 import Administracion from './pages/administracion/Administracion';
