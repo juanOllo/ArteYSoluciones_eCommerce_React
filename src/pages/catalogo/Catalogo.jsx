@@ -28,6 +28,8 @@ class Catalogo extends React.Component{
 
         this.searchItems = this.searchItems.bind(this);
         this.cleanName = this.cleanName.bind(this);
+
+        document.title = "Arte Y Soluciones / Catálogo";
     }
 
     // Pasarle originalList como props hace que se cargue mas rapido siempre,
@@ -164,7 +166,7 @@ class Catalogo extends React.Component{
                         :
                         this.state.displayedList.map((elem, index) => {
                             return( elem.stock ?
-                                        <Article item={elem}/>
+                                        <Article key={elem._id} item={elem}/>
                                         :
                                         null
                             )
@@ -209,7 +211,7 @@ const Article = ({item}) => {
                             if (index === 0 || index >= 5) return null
 
                             return indexImageHovered !== index ? 
-                                <img src={src} alt="" className='catalogo-img' onMouseEnter={() => setIndexImageHovered(index)}/>
+                                <img key={index} src={src} alt="" className='catalogo-img' onMouseEnter={() => setIndexImageHovered(index)}/>
                                 :
                                 <div style={{width: "3rem"}} className='catalogo-img'/>
                         })

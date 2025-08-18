@@ -42,46 +42,26 @@
     width: 79rem;
     /* max-width: 96rem; */
     max-width: 95svw;
+    max-width: 100svw;
     margin: 0 auto;
 }
 
 .catalogo-article {
-    /* background-color: var(--amarillo); */
     background-color: rgba(0, 0, 0, 0.05);
-    /* min-width: 50%; */
     height: 10rem;
-    /* margin: 0.7rem auto; */
-    /* margin-top: 1rem; */
+    width: 25rem;
+    max-width: 95svw;
     border-radius: 0.3rem;
-    /* box-shadow: 0.4rem 0.4rem black; */
-    /* box-shadow: 0.4rem 0.4rem black; */
     border: 2px solid transparent;
 
     display: flex;
     flex-wrap: wrap;
     flex-direction: column;
     align-items: start;
-    /* justify-content: space-between; */
-
-    /* overflow-x: hidden; */
-    /* scrollbar-width: none;
-    scrollbar-color: transparent transparent; */
-
-    /* width: 90%; */
-    width: 25rem;
-    /* max-width: 30svw;
-    max-width: 30rem; */
-    max-width: 90svw;
 
     text-decoration: none;
     color: black;
-    /* margin: 0 auto; */
 }
-
-/* .catalogo-article *{
-    background-color: red;
-} */
-
 
 .article-off-star{
     clip-path: polygon(100% 50%,78.98% 57.76%,93.3% 75%,71.21% 71.21%,75% 93.3%,57.76% 78.98%,50% 100%,42.24% 78.98%,25% 93.3%,28.79% 71.21%,6.7% 75%,21.02% 57.76%,0% 50%,21.02% 42.24%,6.7% 25%,28.79% 28.79%,25% 6.7%,42.24% 21.02%,50% 0%,57.76% 21.02%,75% 6.7%,71.21% 28.79%,93.3% 25%,78.98% 42.24%);
@@ -105,18 +85,11 @@
     transform: rotate(-10deg);
 }
 
-@keyframes article-catalog-anim-spawn {
-    100%{
-        background-color: rgba(0, 0, 0, 0.05);
-        color: black;
-    }
-}
-
 .catalogo-article-hover{
-    animation: catalogo-article-click-anim 0.2s forwards;
+    animation: catalogo-article-hover-anim 0.2s forwards;
 }
 
-@keyframes catalogo-article-click-anim {
+@keyframes catalogo-article-hover-anim {
     100%{
         box-shadow: 0.3rem 0.3rem black;
         transform: translate(-0.3rem, -0.3rem);
@@ -124,18 +97,6 @@
         background-color: var(--amarillo);
     }
 }
-
-/* @keyframes inicio-article-click-anim {
-    100%{
-        box-shadow: 0 0 transparent;
-        transform: translate(0.5rem, 0.5rem);
-    }
-} */
-
-/* .catalogo-article:first-child {
-    margin-top: 3.5rem;
-} */
-
 
 .catalogo-article h2, .catalogo-article h4 {
     height: fit-content;
@@ -226,31 +187,21 @@
 .catalogo-header {
     background-color: var(--verde);
     /* background-color: rgba(255, 255, 255, 0.5); */
-    position: sticky;
-    top: -3rem;
-    z-index: 2;
-    
-    height: fit-content;
-    /* max-height: calc(100svh - 8rem); */
-    /* padding-top: 4.5rem; */
-    /* padding-bottom: 1rem; */
-    /* padding-left: 0.5rem; */
-    padding: 0 2svw;
-    
-    display: flex;
-    /* flex-direction: column; */
-    flex-wrap: wrap;
-    /* justify-content: center; */
-    /* align-items: center; */
-    /* justify-content: start;
-    align-items: start; */
-    column-gap: 1.5rem;
-    row-gap: 1rem;
-
     width: 77rem;
     /* max-width: 96rem; */
     max-width: 96svw;
+    height: fit-content;
+    padding: 0 2svw;
     margin: 0 auto;
+    
+    z-index: 2;
+    position: sticky;
+    top: -6rem;
+    
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 1.5rem;
+    row-gap: 1rem;
 }
 
 .catalogo-header h1{
@@ -262,22 +213,11 @@
 
 #catalogo-buscador{
     background-color: white;
-    /* width: 70%;
-    max-width: 20rem; */
     width: 20rem;
     max-width: 80svw;
     height: 2rem;
     padding: 0.3rem;
-    /* padding-top: 3.5rem; */
     border-radius: 1.5rem;
-    /* box-shadow: 0.2rem 0.2rem black; */
-    /* margin: 0 auto; */
-    /* border: 2px solid black; */
-
-    /* position: absolute;
-    top: 4rem;
-    left: 50svw;
-    transform: translate(-50%); */
     
     display: flex;
     justify-content: space-between;
@@ -401,12 +341,9 @@
 
 @media only screen and (max-width: 50rem) {
     .catalogo-article{
-        /* background-color: var(--amarillo); */
-        /* box-shadow: 0.3rem 0.3rem black; */
-        transform: translate(-0.3rem, -0.3rem);
-        /* border: 2px solid black; */
-        /* border-radius: 0.7rem; */
-        margin: 0 auto;
+        /* transform: translate(-0.3rem, -0.3rem); */
+        /* transform: translateX(0.3rem); */
+        /* margin: 0 auto; */
         cursor: none;
     }
     /* .catalogo-img-focus{
@@ -420,5 +357,19 @@
         animation: none;
         display: none;
         width: 0;
+    }
+}
+
+@media only screen and (max-width: 81rem) {
+    #catalogo-lista,
+    .catalogo-header {
+        width: 52rem;
+        width: 52rem;
+    }
+}
+
+@media only screen and (max-width: 55rem) {
+    #catalogo-lista {
+        width: 26rem;
     }
 }

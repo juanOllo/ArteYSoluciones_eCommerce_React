@@ -41,7 +41,10 @@ const Producto = () =>{
         };
 
         getItemById();
-    }, [_id]);
+
+        document.title = itemToRender ? `${itemToRender.name}` : "AYS - Producto";
+
+    }, [_id, itemToRender]);
 
     return(
         <div className='producto-body'>
@@ -84,11 +87,6 @@ class ProductoRender extends React.Component {
 
     // Este metodo agrega el id y el precio seleccionado del producto a una lista en el localStorage
     addToCar(e){
-
-        if(this.state.priceXSizeIndex < 0){
-            window.alert("SELECCIONE EL TAMAÑO DEL PRODUCTO");
-            return;
-        }
 
         const btn = e.target.classList.contains("btn") ? e.target : e.target.parentElement;
 
@@ -220,7 +218,7 @@ class ProductoRender extends React.Component {
                     <div className="encargar-btns-div">
                         {
                             this.state.priceXSizeIndex === -1?
-                                <button className="encargar-btn btn">
+                                <button onClick={() => { window.alert("SELECCIONE EL TAMAÑO DEL PRODUCTO"); }} className="encargar-btn btn">
                                     AGREGAR AL CARRO
                                 </button>
                                 :

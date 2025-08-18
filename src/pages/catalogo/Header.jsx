@@ -90,7 +90,7 @@ class Header extends React.Component {
     render() {
         return (
             <div className="catalogo-header">
-                <h1>Catálogo</h1>
+                <h1>Catálogo.</h1>
 
                 <div id="catalogo-buscador">
                     <input onChange={this.changeInputSearch} type="text" placeholder="Buscar" value={this.state.inputSearch}/>
@@ -107,7 +107,7 @@ class Header extends React.Component {
                     <option value="price-desc">Mas Caro Primero</option>
                 </select>
 
-                <p style={{marginLeft: "auto", fontFamily: "var(--ffamily01)", fontWeight: "600", color: "rgba(0, 0, 0, 0.7)"}}>{this.props.cantItems} articulos.</p>
+                <p style={{marginLeft: "auto", fontFamily: "var(--ffamily01)", fontWeight: "600", color: "rgba(0, 0, 0, 0.7)"}}>{this.props.cantItems} {this.props.cantItems>1 ? "artículos.":"artículo."}</p>
 
                 <div className='aplicated-filters-div'>
                     {

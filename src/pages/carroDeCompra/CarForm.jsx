@@ -99,7 +99,7 @@ class CarForm extends React.Component{
             <div  id="carform" style={{width: "100%"}}>
                 <form className="car-form" onSubmit={this.handleSubmit}>
                     <h1>Completar PEDIDO!</h1>
-                    <label htmlFor="input-name">name y apellido:</label>
+                    <label htmlFor="input-name">Nombre y Apellido:</label>
                     <input id="input-name" type="text" onChange={(e) => this.handleInputChange(e, 'name')} required/>
 
                     <label htmlFor="input-contact">Contacto:</label>
@@ -119,12 +119,14 @@ class CarForm extends React.Component{
 
                     <h1>Precio Final: ${this.props.finalPrice}</h1>
 
-                    {
+                    {/* {
                         this.state.customerInfo.name && this.state.customerInfo.contact && this.props.finalPrice>0 ?
                         <button className="send-request-btn-ready send-request-btn">ENVIAR</button>
                         :
                         <button className="send-request-btn" style={{backgroundColor: "transparent"}}>ENVIAR</button>
-                    }
+                    } */}
+
+                    <p>Proximamente...</p>
 
                 </form>
             </div>

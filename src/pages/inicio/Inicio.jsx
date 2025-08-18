@@ -12,7 +12,7 @@ class Inicio extends React.Component{
 
 
                 <div style={{overflow: "hidden", zIndex: "1", left: "0", top: "0", position: "absolute", height: "100svh", width: "100svw", backgroundColor: ""}}>
-                    <div class="blur"></div>
+                    <div className="blur"></div>
                     <div className="star"></div>
                 </div>
 

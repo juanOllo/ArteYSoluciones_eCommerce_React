@@ -24,3 +24,6 @@ yarn-error.log*
 
 # db key
 /api/db/key.json
+
+# planes e ideas
+letras.txt

@@ -9,7 +9,8 @@ class ItemsTable extends React.Component{
 
         this.state={
             displayedList: [],
-            originalList: []
+            originalList: [],
+            allColorsList: [],
         }
 
         this.handleInputSearchChange = this.handleInputSearchChange.bind(this);
@@ -39,10 +40,26 @@ class ItemsTable extends React.Component{
             this.setState({
                 displayedList: data.slice().reverse(),
                 originalList: data.slice().reverse()
-            })
+            });
+            // console.log("Items obtenidos:", data);
         } catch (error) {
             console.error("Error fetching items:", error);
         }
+
+        try {
+            const response = await fetch("http://localhost:2000/colors/allColorsList", {
+            // const response = await fetch("https://ays-api.onrender.com/colors/allColorsList", {
+                method: "GET",
+                headers: { "Content-Type": "application/json" }
+            });
+            const data = await response.json();
+            this.setState({
+                allColorsList: data.sort((a, b) => a.colorName < b.colorName ? -1 : 1),
+            })
+        } catch (error) {
+            console.error("Error fetching colors:", error);
+        }
+
         console.log("setState fetch");
     }
 
@@ -76,13 +93,14 @@ class ItemsTable extends React.Component{
 
     handleInputChange(index, key, info, index2, key2){
 
-        const updatedList = this.state.displayedList;
+        const updatedList = [...this.state.displayedList];
 
         switch (key) {
             
         // editar name o info
             case 'name':
             case 'info':
+            case 'colors':
                 updatedList[index][key] = info;
                 break;
 
@@ -97,9 +115,9 @@ class ItemsTable extends React.Component{
                 break;
 
         // editar off
-        // si no ingresas nada, entonces lo pongo en 0
+        // si no ingresas nada o ingrersas mas de 90, entonces se ingresa 0
             case 'off':
-                if (!info) updatedList[index][key] = 0;
+                if (!info || parseInt(info) > 90) updatedList[index][key] = 0;
                 else updatedList[index][key] = parseInt(info);
                 break;
                 
@@ -108,7 +126,7 @@ class ItemsTable extends React.Component{
         }
 
         this.setState({
-            displayedList: updatedList
+            displayedList: [...updatedList]
         })
     }
 
@@ -178,7 +196,12 @@ class ItemsTable extends React.Component{
             // const response = await fetch(`http://localhost:2000/items/updateItem`, {
                 method: "PATCH",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(updatedItem)
+                body: JSON.stringify(updatedItem),
+                // body: JSON.stringify({...updatedItem,
+                //     "colors": [
+                //             ""
+                //         ]
+                // })
             });
 
             if (!response.ok) {
@@ -298,7 +321,7 @@ class ItemsTable extends React.Component{
                     : false
                 } */}
 
-                <div style={{display: "flex", margin: "4.5rem 0 -1rem", width: "100%", backgroundColor: ""}}>
+                <div style={{display: "flex", margin: "2.5rem 0 -1rem", width: "100%", backgroundColor: ""}}>
                     <input onChange={(e) => this.handleInputSearchChange(e.target.value)} type="text" placeholder='buscar' style={{margin: "0", padding: "0.5rem", width: "14rem", height: "1.5rem"}} />
                     <button style={{margin: "0 auto 0 0", height: "2.7rem"}} onClick={this.searchItems}>BUSCAR</button>
                     {
@@ -317,10 +340,9 @@ class ItemsTable extends React.Component{
                             <th style={{width: "5rem"}}>Descripcion</th>
                             <th style={{width: "11rem"}}>Tamaño/Precio</th>
                             <th>Imagenes (max:6)</th>
+                            <th style={{width: "6rem"}}>Colores</th>
                             <th style={{width: "5rem"}}>Descuento</th>
-                            {/* <th style={{width: "3rem"}}>DEL</th> */}
-                            {/* <th style={{width: "3rem"}}>Stock</th> */}
-                            <th style={{width: "3rem"}}> </th>
+                            <th style={{width: "3rem"}}>CONTROL</th>
                         </tr>
                     </thead>
 
@@ -420,26 +442,39 @@ class ItemsTable extends React.Component{
                                                 </span>
                                             </div>
                                         </td>
-                                    {/* STOCK */}
-                                        {/* <td>
-                                            <select 
-                                                style={{backgroundColor: "rgba(0, 0, 0, 0.2)", color: "", padding: "0.3rem"}}
-                                                defaultValue={elem.stock} 
-                                                onChange={e => {
-                                                    e.target.value === "true"?
-                                                        this.handleInputChange(index, 'stock', true)
-                                                        :
-                                                        this.handleInputChange(index, 'stock', false);
-                                                    }
+                                    {/* COLORS */}
+                                        <td style={{position: "relative", overflowY: "scroll", scrollbarWidth: "none"}}>
+                                            <div style={{display: "flex", flexDirection: "column", position: "absolute", top: "0",  width: "100%"}}>
+
+                                                {
+                                                    this.state.allColorsList.map((cElem, cIndex) =>
+                                                        cElem.available ?
+                                                            <label style={{display: "flex", height: "1.1rem"}} htmlFor={`color-checkbox-${elem._id}-${cElem._id}`}>
+                                                                <input id={`color-checkbox-${elem._id}-${cElem._id}`} value={cElem._id} type="checkbox" 
+                                                                    style={{margin: "0", width: "1.1rem", height: "1.1rem"}}
+                                                                    checked={elem.colors.includes(cElem._id)}
+                                                                    onChange={(e) => {
+                                                                        if (e.target.checked) {
+                                                                            this.handleInputChange(index, 'colors', [...elem.colors, cElem._id]);
+                                                                        } else {
+                                                                            this.handleInputChange(index, 'colors', elem.colors.filter(color => color !== cElem._id));
+                                                                        }
+                                                                    }}
+                                                                />
+                                                                <p style={{transform: "translateY(-1.1rem)"}}>
+                                                                    {cElem.colorName}
+                                                                </p>
+                                                            </label>
+                                                            :
+                                                            null
+                                                    )
                                                 }
-                                            >
-                                                <option value="true">Si</option>
-                                                <option value="false">NO</option>
-                                            </select>
-                                        </td> */}
+                                            </div>
+
+                                        </td>
                                     {/* OFF */}
                                         <td>
-                                            - <input onChange={(e) => this.handleInputChange(index, 'off', e.target.value)} value={elem.off} style={{width: "40%"}}></input> %
+                                            - <input onChange={(e) => this.handleInputChange(index, 'off', e.target.value)} value={elem.off} style={{width: "1rem"}}></input> %
                                         </td>
                                     {/* GUARDAR, BORRAR & VISTA_PREV */}
                                         <td>

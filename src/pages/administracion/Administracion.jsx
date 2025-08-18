@@ -3,11 +3,27 @@ import React from 'react';
 import './Administracion.css';
 import RequestTable from './RequestTable';
 import ItemsTable from './ItemsTable';
+import ColorsTable from './ColorsTable';
 
 class Administracion extends React.Component{
-    // constructor(props){
-    //     super(props);
-    // }
+    constructor(props){
+        super(props);
+
+        this.state = {
+            setKeyToRender: '',
+        }
+    }
+
+    whitchRender() {
+        switch (this.state.setKeyToRender) {
+            case 'items':
+                return <ItemsTable />;
+            case 'colors':
+                return <ColorsTable />;
+            default:
+                return null;
+        }
+    }
 
     render(){
 
@@ -32,7 +48,16 @@ class Administracion extends React.Component{
                     </h5>
                 </div> */}
 
-                <ItemsTable />
+                <div style={{display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap", width: "calc(100% - 1rem)", padding: "0 0.5rem", marginTop: "4.5rem"}}>
+                    <button onClick={() => this.setState({ setKeyToRender: 'items' })} style={{padding: "0.5rem"}}>
+                        CARGAR LISTA DE PRODUCTOS
+                    </button>
+                    <button onClick={() => this.setState({ setKeyToRender: 'colors' })} style={{padding: "0.5rem"}}>
+                        CARGAR LISTA DE COLORES
+                    </button>
+                </div>
+
+                {this.whitchRender()}
 
                 {/* <RequestTable /> */}
 

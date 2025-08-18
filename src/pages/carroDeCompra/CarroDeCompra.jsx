@@ -16,6 +16,7 @@ class CarroDeCompra extends React.Component{
         this.removeArticle = this.removeArticle.bind(this);
         this.changeCant = this.changeCant.bind(this);
 
+        document.title = "Arte Y Soluciones / Carro de Compra";
     }
     
     // Pasarle originalList como props hace que se cargue mas rapido siempre,
