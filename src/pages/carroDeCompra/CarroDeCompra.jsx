@@ -23,6 +23,7 @@ class CarroDeCompra extends React.Component{
     //  pero si refrecas la pagina o entras a la pagina /carro directamente
     //  por la url los props no llegan de ningun lado, entonces hago el fetch.
     async componentDidMount(){
+
         // Si no hay nada en el carro de compra no hay informacion que tratar.
         if (!Array.isArray(this.state.carList) || !(this.state.carList.length > 0)) {
             this.setState({
@@ -32,32 +33,23 @@ class CarroDeCompra extends React.Component{
         }
 
         let vanillaItemsList = [];
-
-        if (Array.isArray(this.props.originalList) && this.props.originalList.length > 0) {
-
-            vanillaItemsList = [...this.props.originalList];
+        
+        try {
+            // const response = await fetch(`http://localhost:2000/items/getSomeItems`, {
+            const response = await fetch(`https://ays-api.onrender.com/items/getSomeItems`, {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(this.state.carList)
+            });
+            const data = await response.json();
+            vanillaItemsList = [...data];
             this.setState({
                 isLoading: false
             })
-            console.log("setState originalList");
-        } else{
-            try {
-                // const response = await fetch(`http://localhost:2000/items/getSomeItems`, {
-                const response = await fetch(`https://ays-api.onrender.com/items/getSomeItems`, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(this.state.carList)
-                });
-                const data = await response.json();
-                vanillaItemsList = [...data];
-                this.setState({
-                    isLoading: false
-                })
-            } catch (error) {
-                console.error("Error fetching items:", error);
-            }
-            console.log("setState fetch");
+        } catch (error) {
+            console.error("Error fetching items:", error);
         }
+        console.log("setState fetch");
 
         let readyToRenderItemsList = [];
 
@@ -69,9 +61,15 @@ class CarroDeCompra extends React.Component{
                             // El articulo no pusheado en readyToRenderItemsList por lo anteriormente explicado
                             //  sigue en el localStorage, hay q resolverlo.
             if (articulo && (articulo.priceXSize.length > d.priceXSizeIndex) && articulo.stock) {
-                readyToRenderItemsList.push({...articulo, priceXSizeIndex: d.priceXSizeIndex, cant: 1});
+                readyToRenderItemsList.push({...articulo, 
+                    priceXSizeIndex: d.priceXSizeIndex, 
+                    cant: d.cant || 1,
+                    selectedColorId : d.selectedColorId,
+                });
             }
         }
+
+        console.log("item: ", readyToRenderItemsList);
 
         this.setState({
             carList: readyToRenderItemsList,
@@ -179,7 +177,14 @@ class CarroDeCompra extends React.Component{
                                         <Link to={`/producto/${elem._id}`} state={elem} style={{color: "black"}}>{elem.name}</Link>
 
                                         {/* <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.priceXSize[elem.priceXSizeIndex].size} <br/>${parseInt(elem.priceXSize[elem.priceXSizeIndex].price) * elem.cant}</h4>    */}
-                                        <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.priceXSize[elem.priceXSizeIndex].size} <br/>${(parseInt(elem.priceXSize[elem.priceXSizeIndex].price) * (1 - elem.off / 100)) * elem.cant}</h4>   
+                                        <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">
+                                            ({elem.colors.find(c => c.colorId === elem.selectedColorId).colorName})
+                                            <br/>
+                                            <br/>
+                                            {elem.priceXSize[elem.priceXSizeIndex].size} 
+                                            <br/>
+                                            ${parseInt((parseInt(elem.priceXSize[elem.priceXSizeIndex].price) * (1 - elem.off / 100)) * elem.cant)}
+                                        </h4>   
 
                                         <span style={{fontWeight: "900", display: "flex", flexDirection: "column", position: "relative"}}>
                                                 <button className="car-cant-btn"  name={index} onClick={this.changeCant}>+</button>
@@ -206,7 +211,7 @@ class CarroDeCompra extends React.Component{
                 <div className="car-info-tile car-tile">
                     {
                         this.state.carList.length && !this.state.isLoading?
-                        <CarForm finalPrice={this.state.carList.reduce((acc, cur) => acc + (parseInt(cur.priceXSize[cur.priceXSizeIndex].price) * (1 - cur.off / 100)) * parseInt(cur.cant), 0)} itemsList={this.state.carList}/>
+                        <CarForm finalPrice={parseInt(this.state.carList.reduce((acc, cur) => acc + (parseInt(cur.priceXSize[cur.priceXSizeIndex].price) * (1 - cur.off / 100)) * parseInt(cur.cant), 0))} itemsList={this.state.carList}/>
                         : null
                     }
                 </div>

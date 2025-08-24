@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './Catalogo.css';
 import {Link} from 'react-router-dom';
 // import { render } from '@testing-library/react';
@@ -17,7 +17,7 @@ class Catalogo extends React.Component{
             listKeys: {
                 'sort': '',
                 'search': ''
-            }
+            },
         }
 
         // this.searchItems = this.searchItems.bind(this);
@@ -29,21 +29,30 @@ class Catalogo extends React.Component{
         this.searchItems = this.searchItems.bind(this);
         this.cleanName = this.cleanName.bind(this);
 
-        document.title = "Arte Y Soluciones / Catálogo";
+        // document.title = "Arte Y Soluciones / Catálogo";
     }
+
+    // componentDidUpdate(prevProps, prevState) {
+    //     if (prevState.displayedList == [] || this.state.displayedList == []) {
+    //         console.log("no entro")
+    //         return;
+    //     } else if (prevState.displayedList !== this.state.displayedList) {
+    //         // this.setState({allowItemDisplayAnim: false});
+    //     }
+    // }
 
     // Pasarle originalList como props hace que se cargue mas rapido siempre,
     //  pero si refrecas la pagina o entras a la pagina /catalogo directamente
     //  por la url los props no llegan de ningun lado, entonces hago el fetch.
     async componentDidMount(){
-        if (Array.isArray(this.props.originalList) && this.props.originalList.length > 0) {
-            this.setState({
-                displayedList: this.props.originalList,
-                originalList: this.props.originalList,
-                isLoading: false
-            })
-            console.log("setState originalList");
-        } else{
+        // if (Array.isArray(this.props.originalList) && this.props.originalList.length > 0) {
+        //     this.setState({
+        //         displayedList: this.props.originalList,
+        //         originalList: this.props.originalList,
+        //         isLoading: false
+        //     })
+        //     console.log("setState originalList");
+        // } else{
             try {
                 // const response = await fetch("http://localhost:2000/items/allItemsList", {
                 const response = await fetch("https://ays-api.onrender.com/items/allItemsList", {
@@ -64,7 +73,9 @@ class Catalogo extends React.Component{
                 })
             }
             console.log("setState fetch");
-        }
+        // }
+
+
     }
 
     // handleHeaderAction(newDisplayedList){
@@ -166,7 +177,7 @@ class Catalogo extends React.Component{
                         :
                         this.state.displayedList.map((elem, index) => {
                             return( elem.stock ?
-                                        <Article key={elem._id} item={elem}/>
+                                        <Article key={elem._id} item={elem} index={index}/>
                                         :
                                         null
                             )
@@ -179,13 +190,30 @@ class Catalogo extends React.Component{
     }
 }
 
-const Article = ({item}) => {
+const Article = ({item, index}) => {
     const [isHovered, setIsHovered] = useState(false);
     const [indexImageHovered, setIndexImageHovered] = useState(0);
+    const [animationEnded,setAnimationEnded] = useState(false);
 
     return (
             // <Link to={`/producto/${item._id}`} className={"catalogo-article" + (isHovered ? " catalogo-article-hover" : "")}
-            <Link to={`/producto/${item._id}`} state={item} className={"catalogo-article" + (isHovered ? " catalogo-article-hover" : "")}
+            // <Link style={{animation: `catalogo-article-show 0.3s ease ${0.1 * (index + 1)}s forwards`}} to={`/producto/${item._id}`} state={item} className={"catalogo-article" + (isHovered ? " catalogo-article-hover" : "")}
+            // <Link to={`/producto/${item._id}`} state={item} className={"catalogo-article" + (isHovered ? " catalogo-article-hover" : "")}
+
+            <Link
+                to={`/producto/${item._id}`} 
+                onAnimationEnd={() => setAnimationEnded(true)}
+                style={
+                    animationEnded?
+                        {opacity: "100%"}
+                        :
+                        {animation: `catalogo-article-show 0.3s ease ${0.1 * (index + 1)}s forwards`}
+                }
+                // state={item} 
+
+                // className={"catalogo-article" + (isHovered && animationEnded ? " catalogo-article-hover" : "")}
+                className={"catalogo-article"}
+            
                 // onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => {setIsHovered(false); setIndexImageHovered(0)}}
                 onMouseOver={() => setIsHovered(true)}
@@ -206,12 +234,12 @@ const Article = ({item}) => {
                 <span style={{display: isHovered && item.images.length > 1 ? "flex" : "none"}} className='catalog-img-span'>
                 {/* <span style={{animation: "catalog-img-span-spawn-delay 0.1s forwards"}} className='catalog-img-span'> */}
                     {
-                        item.images.map((src, index) => {
-                            // la primera imagen no aparece en el span y no debe reservarse el espacio
-                            if (index === 0 || index >= 5) return null
+                        item.images.map((src, imageIndex) => {
+                            // la primera imagen no aparece en el span y no debe reservarse el espacio, solo muestra 4 imagenes
+                            if (imageIndex === 0 || imageIndex >= 5) return null
 
-                            return indexImageHovered !== index ? 
-                                <img key={index} src={src} alt="" className='catalogo-img' onMouseEnter={() => setIndexImageHovered(index)}/>
+                            return indexImageHovered !== imageIndex ? 
+                                <img key={imageIndex} src={src} alt="" className='catalogo-img' onMouseEnter={() => setIndexImageHovered(imageIndex)}/>
                                 :
                                 <div style={{width: "3rem"}} className='catalogo-img'/>
                         })

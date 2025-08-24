@@ -110,7 +110,7 @@ class CarForm extends React.Component{
                         this.props.itemsList.map(elem => {
                             return elem.cant > 0 ?
                             (
-                                <h5 style={{marginTop: "0.1rem"}}>(x{elem.cant}) {elem.name} [{elem.priceXSize[elem.priceXSizeIndex].size}]</h5>
+                                <h5 style={{marginTop: "0.1rem"}}>(x{elem.cant}) {elem.name} [{elem.priceXSize[elem.priceXSizeIndex].size}] ({elem.colors.find(c => c.colorId === elem.selectedColorId).colorName})</h5>
                             )
                             :
                             null

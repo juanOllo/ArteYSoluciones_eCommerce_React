@@ -8,32 +8,28 @@ const Producto = () =>{
     // itemToRender    // El valor actual del estado           // Lo uso para mostrar datos en el render
     // setItemToRender // La función para actualizar el estado // Lo uso para cambiar el valor y provocar un re-render
     const [itemToRender, setItemToRender] = useState(null);
+    // const [allColorsList, setAllColorsList] = useState([]);
 
     // Para una navegacion mas rapida le paso el item en vez de hacer el fetch.
-    const location = useLocation();
-    const item = location.state || {};
+    // const location = useLocation();
+    // const item = location.state || {};
     // console.log("location item: ", item);
     
     // Sino uso el _id del params para hacer el fetch del item.
     const {_id} = useParams();
     
     useEffect(() => {
-
         const getItemById = async () => {
-            if (item && Object.keys(item).length > 0) {
-                setItemToRender(item);
-                console.log("item con location");
-                return;
-            }
 
             try {
-                // const response = await fetch(`http://localhost:2000/items/getItem/${_id}`, {
+                // const response = await fetch(`http://192.168.1.16:2000/items/getItem/${_id}`, {
                 const response = await fetch(`https://ays-api.onrender.com/items/getItem/${_id}`, {
                     method: "GET",
                     headers: { "Content-Type": "application/json" }
                 });
                 const data = await response.json();
                 setItemToRender(data); // guarda el item en el estado
+                console.log("item fetched: ", data);
                 console.log("item con fetch");
             } catch (error) {
                 console.error("Error fetching item by id:", error);
@@ -41,10 +37,12 @@ const Producto = () =>{
         };
 
         getItemById();
+    }, [_id]);
 
+    useEffect(() => {
         document.title = itemToRender ? `${itemToRender.name}` : "AYS - Producto";
+    }, [itemToRender]);
 
-    }, [_id, itemToRender]);
 
     return(
         <div className='producto-body'>
@@ -66,13 +64,25 @@ class ProductoRender extends React.Component {
         super(props);
 
         this.state={
-            priceXSizeIndex : -1, //hay q corregir esto y su intervencion en el if de addToCar()
-            focusImageIndex: 0
+            // priceXSizeIndex : this.props.item.priceXSize.length > 1 ? -1 : 0, //hay q corregir esto y su intervencion en el if de addToCar()
+            priceXSizeIndex : 0, //hay q corregir esto y su intervencion en el if de addToCar()
+            focusImageIndex: 0,
+            selectedColorId: this.props.item.colors.length > 1 ? "default" : this.props.item.colors[0].colorId,
+            cant: 1,
+            animatePrice: false,
         }
 
         this.selectPriceXSize = this.selectPriceXSize.bind(this);
         this.addToCar = this.addToCar.bind(this);
         this.changeFocusImageIndex = this.changeFocusImageIndex.bind(this);
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if ((prevState.cant !== this.state.cant) || (prevState.priceXSizeIndex !== this.state.priceXSizeIndex)) {
+            this.setState({ animatePrice: true }, () => {
+            setTimeout(() => this.setState({ animatePrice: false }), 200); // duración de la animación
+            });
+        }
     }
 
     selectPriceXSize(e){
@@ -103,18 +113,21 @@ class ProductoRender extends React.Component {
 
         const newItemToCart = {
             _id : this.props.item._id, 
-            priceXSizeIndex : this.state.priceXSizeIndex
+            priceXSizeIndex : this.state.priceXSizeIndex,
             // Uso priceXSizeIndex en vez de usar directamente el precio (o el tamaño) seleccionado
             //  para evitar que si el precio (o el tamañano) del producto es actualizado mientras 
             //  el cliente aun tiene ese producto en el localStorage no se muestre en el carrito
             //  con informacion vieja.
             // En todo caso el cliente veria el producto con un tamaño que no seleccionó.
+
+            selectedColorId: this.state.selectedColorId,
+            cant: this.state.cant,
         };
 
         const data = localStorage.getItem("car") ? JSON.parse(localStorage.getItem("car")) : [];
 
         // este if no permite agregar el mismo item con el mismo precio al carrito
-        if (data.find(elem => (elem.priceXSizeIndex === newItemToCart.priceXSizeIndex && elem._id === newItemToCart._id))) {
+        if (data.find(elem => (elem.priceXSizeIndex === newItemToCart.priceXSizeIndex && elem._id === newItemToCart._id && elem.selectedColorId === newItemToCart.selectedColorId))) {
             console.log("este elemento ya esta en el carro de compra");
         } else {
             data.unshift(newItemToCart);
@@ -144,7 +157,7 @@ class ProductoRender extends React.Component {
 
                     {
                         this.props.item.off && this.props.item.off > 0 ?
-                            <div className='item-off-star' style={{overflow: "visible"}}>
+                            <div className='item-off-star'>
                                 <h4 style={{margin: "0 0 0 0.9rem", fontSize: "2.5rem"}}>
                                     -{this.props.item.off}%
                                 </h4>
@@ -171,53 +184,129 @@ class ProductoRender extends React.Component {
                 </div>
 
                 <span className='producto-span'>
-                    <h1 className='producto-h1-compu'>{this.props.item.name}</h1>
+                    {/* <div className='producto-blur'></div> */}
+
+                    <div className='producto-title-bar'>
+                        <h1 className='producto-h1-compu'>{this.props.item.name}</h1>
+                    </div>
+
+                    { 
+                        this.props.item.off?
+                            <h1 className='producto-precio-final-h1' 
+                                style={this.state.animatePrice ? 
+                                    {animation: "producto-precio-final-h1-change-anim 0.2s ease-in-out 0s forwards"}
+                                    :
+                                    {}
+                                }
+                            >$
+                                {parseInt(this.props.item.priceXSize[this.state.priceXSizeIndex].price * (1 - (this.props.item.off || 100) / 100)) * this.state.cant}
+                                <span style={{color: "rgba(0, 0, 0, 0.7)", fontSize: "2rem", margin: "0 0 0.5rem 1.5rem", textDecoration: "line-through"}}>
+                                    ${this.props.item.priceXSize[this.state.priceXSizeIndex].price * this.state.cant}</span>
+                            </h1>
+                            :
+                            <h1 className='producto-precio-final-h1'
+                                style={this.state.animatePrice ? 
+                                    {animation: "producto-precio-final-h1-change-anim 0.2s ease-in-out 0s forwards"}
+                                    :
+                                    {}
+                                }
+                            >$
+                                {this.props.item.priceXSize[this.state.priceXSizeIndex].price * this.state.cant}
+                            </h1>
+                    }
 
                     <p>{this.props.item.info}</p>
-                    <h2>Seleccione el tamaño:</h2>
-                    <div className='span-precios'>
-                        {
-                            this.props.item.priceXSize.map((elem, index) => {
-                                // console.log("elem.off: ", elem.off);
-                                return index === this.state.priceXSizeIndex? 
-                                    <button onClick={this.selectPriceXSize} value={index} className="precios precios-selected">
-                                        <span style={{textDecoration: this.props.item.off? "line-through" : ""}}>
-                                            {elem.size} = ${elem.price}
-                                        </span>
 
-                                        {
-                                            this.props.item.off ?
-                                                <span>
-                                                    <br />
-                                                    {elem.size} =${parseInt(elem.price * (1 - (this.props.item.off || 100) / 100))}
-                                                </span>
-                                                :
-                                                null
-                                        }
-                                    </button>
+                {/* COLORES */}
+                    <div 
+                        // style={{display: "flex", justifyContent: "", alignItems: "center", height: "3rem", width: "100%", background: "linear-gradient(to right, var(--amarillo) 0%, transparent 100%)"}}
+                        style={{marginBottom: "-0.5rem", backgroundColor: "", display: "flex", gap: "0.5rem", justifyContent: "start", alignItems: "center", height: "3rem", width: "90%"}}
+                    >
+                        <h3 style={{backgroundColor: "transparent", width: "fit-content"}}>Color:</h3>
+                        <select className='product-color-select' name="color-select" id="" value={this.state.selectedColorId}
+                            style={{backgroundColor: this.state.selectedColorId === "default" ? "var(--amarillo)" : "var(--violeta)"}}
+                            onChange={(e) => this.setState({ selectedColorId: e.target.value })}
+                        >
+                            {
+                                this.props.item.colors.length !== 1?
+                                    <option value="default">Colores</option>
                                     :
-                                    <button onClick={this.selectPriceXSize} value={index} className="precios">
-                                        <span style={{textDecoration: this.props.item.off? "line-through" : ""}}>
-                                            {elem.size} = ${elem.price}
-                                        </span>
-
-                                        {
-                                            this.props.item.off ?
-                                                <span>
-                                                    <br />
-                                                    {elem.size} =${parseInt(elem.price * (1 - (this.props.item.off || 100) / 100))}
-                                                </span>
-                                                :
-                                                null
-                                        }
-
-                                    </button>;
-                            })
+                                    null
+                            }
+                            {
+                                this.props.item.colors.map((cElem, cIndex) => 
+                                    <option key={cIndex} value={cElem.colorId}>
+                                        {cElem.colorName}
+                                    </option>
+                                )
+                            }
+                        </select>
+                        {
+                            this.props.item.colors.length === 1 ?
+                                <h5 style={{color: "rgba(0, 0, 0, 0.7)"}}>(Unico color disponible)</h5>
+                                :
+                                null
                         }
                     </div>
+                    
+                {/* TAMAÑOS */}
+                    <div className='span-precios'>
+                        <h3 style={{marginBottom: "-0.5rem"}}>Tamaño:</h3>
+                        {
+                            this.props.item.priceXSize.map((elem, index) => 
+                                <button onClick={this.selectPriceXSize} value={index} className={"precios" + (index === this.state.priceXSizeIndex || this.props.item.priceXSize.length === 0? " precios-selected" : "")}>
+                                    {elem.size}
+                                </button>
+                            )
+                        }
+                        {
+                            this.props.item.priceXSize.length === 1 ?
+                                <h5 style={{height: "0", color: "rgba(0, 0, 0, 0.7)"}}>(Unico tamaño disponible)</h5>
+                                :
+                                null
+                        }
+                    </div>
+
+                {/* CANTIDAD */}
+                    <div style={{marginBottom: "1rem", backgroundColor: "", width: "90%", display: "flex", flexWrap: "wrap"}}>
+                        <h3 style={{width: "100%", backgroundColor: "", marginBottom: "0.5rem" }}>Cantidad:</h3>
+                        <button className='producto-cant-btn' onClick={(e) => {
+                                if (this.state.cant <= 1) return;
+                                // e.target.style.animation = "none";
+                                e.target.style.animation = "cant-btn-click-anim 0.1s ease-in-out";
+                                setTimeout(() => {
+                                    e.target.style.animation = "none";
+                                }, 100);
+
+                                this.setState({ cant: this.state.cant - 1});
+                            }
+                            }>-</button>
+
+                        <input className='producto-cant-input'
+                            onChange={(e) => {
+                                if (e.target.value && !isNaN(e.target.value)) {
+                                    this.setState({ cant: parseInt(e.target.value) })
+                                } else {
+                                    this.setState({ cant: 0 })
+                                }
+                            }}
+                            type="text" value={this.state.cant}/>
+
+                        <button className='producto-cant-btn btn' onClick={(e) => {
+                                // e.target.style.animation = "none";
+                                e.target.style.animation = "cant-btn-click-anim 0.1s ease-in-out";
+                                setTimeout(() => {
+                                    e.target.style.animation = "none";
+                                }, 100);
+
+                                this.setState({ cant: this.state.cant + 1});
+                            }
+                            }>+</button>
+                    </div>
+
                     <div className="encargar-btns-div">
                         {
-                            this.state.priceXSizeIndex === -1?
+                            this.state.priceXSizeIndex === -1 || this.state.selectedColorId === "default" || this.state.cant <= 0?
                                 <button onClick={() => { window.alert("SELECCIONE EL TAMAÑO DEL PRODUCTO"); }} className="encargar-btn btn">
                                     AGREGAR AL CARRO
                                 </button>

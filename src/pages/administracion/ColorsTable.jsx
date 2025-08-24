@@ -18,8 +18,8 @@ class ColorsTable extends React.Component{
 
     async componentDidMount() {
         try {
-            const response = await fetch("http://localhost:2000/colors/allColorsList", {
-            // const response = await fetch("https://ays-api.onrender.com/colors/allColorsList", {
+            // const response = await fetch("http://localhost:2000/colors/allColorsList", {
+            const response = await fetch("https://ays-api.onrender.com/colors/allColorsList", {
                 method: "GET",
                 headers: { "Content-Type": "application/json" }
             });
@@ -42,7 +42,7 @@ class ColorsTable extends React.Component{
 
         switch (key) {
             case 'colorName':
-            case 'available':
+            case 'isAvailable':
                 updatedList[index][key] = info;
                 break;
                 
@@ -58,17 +58,20 @@ class ColorsTable extends React.Component{
     async handleUpdateColor(_id, index) {
 
         const updatedItem = this.state.displayedList.find(item => item._id === _id);
-        console.log("updatedItem: ", updatedItem);
+        // console.log("updatedItem: ", updatedItem);
         if (!updatedItem) {
             window.alert("No se encontró el item para actualizar.");
             return;
         }
 
         try {
-            // const response = await fetch(`https://ays-api.onrender.com/colors/updateColor`, {
-            const response = await fetch(`http://localhost:2000/colors/updateColor`, {
+            const response = await fetch(`https://ays-api.onrender.com/admin/updateColor`, {
+            // const response = await fetch(`http://localhost:2000/admin/updateColor`, {
                 method: "PATCH",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.props.token}`
+                },
                 body: JSON.stringify(updatedItem)
             });
 
@@ -98,14 +101,17 @@ class ColorsTable extends React.Component{
         //  Probablemente haya mejores maneras de tratar la creacion de un item.
         const newColorObj = {
             'colorName': '000Nuevo color',
-            'available': false,
+            'isAvailable': false,
         }
 
         try {
-            const response = await fetch(`http://localhost:2000/colors/addNewColor`, {
-            // const response = await fetch(`https://ays-api.onrender.com/colors/addNewColor`, {
+            // const response = await fetch(`http://localhost:2000/admin/addNewColor`, {
+            const response = await fetch(`https://ays-api.onrender.com/admin/addNewColor`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${this.props.token}`
+                },
                 body: JSON.stringify(newColorObj)
             });
 
@@ -139,11 +145,14 @@ class ColorsTable extends React.Component{
 
         if(window.confirm(`Borrar color "${this.state.displayedList[index].colorName}" ?`)) {
             try {
-                const response = await fetch(`http://localhost:2000/colors/deleteColor/${_id}`, {
-                // const response = await fetch(`https://ays-api.onrender.com/colors/deleteColor/${_id}`, {
+                // const response = await fetch(`http://localhost:2000/admin/deleteColor/${_id}`, {
+                const response = await fetch(`https://ays-api.onrender.com/admin/deleteColor/${_id}`, {
 
                     method: "DELETE",
-                    headers: { "Content-Type": "application/json" }
+                    headers: { 
+                        "Content-Type": "application/json",
+                        "Authorization": `Bearer ${this.props.token}`
+                    }
                 });
     
                 if (!response.ok) {
@@ -194,14 +203,14 @@ class ColorsTable extends React.Component{
                                     <input onChange={(e) => this.handleInputChange(index, 'colorName', e.target.value)} type="text" value={color.colorName} style={{width: "90%"}}/>
                                 </td>
 
-                            {/* Available */}
+                            {/* isAvailable */}
                                 <td style={{display: "flex", justifyContent: "center"}}>
                                     <label>
                                         <input
                                             type="radio"
                                             name={`availible-${index}`}
-                                            checked={color.available}
-                                            onChange={() => this.handleInputChange(index, 'available', true)}
+                                            checked={color.isAvailable}
+                                            onChange={() => this.handleInputChange(index, 'isAvailable', true)}
                                         />
                                         Sí
                                     </label>
@@ -209,8 +218,8 @@ class ColorsTable extends React.Component{
                                         <input
                                             type="radio"
                                             name={`availible-${index}`}
-                                            checked={!color.available}
-                                            onChange={() => this.handleInputChange(index, 'available', false)}
+                                            checked={!color.isAvailable}
+                                            onChange={() => this.handleInputChange(index, 'isAvailable', false)}
                                         />
                                         No
                                     </label>
