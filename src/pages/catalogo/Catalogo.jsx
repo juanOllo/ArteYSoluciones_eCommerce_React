@@ -104,25 +104,20 @@ class Catalogo extends React.Component{
         let newDisplayedList = [...this.state.originalList];
 
         if (this.state.listKeys.search) {
-            const inputSearch = this.state.listKeys.search;
+            const inputSearch = this.cleanName(this.state.listKeys.search);
             console.log("Input search: ", inputSearch);
     
             if (inputSearch) {
-                const newList = this.state.originalList.filter(x => x.name.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u").includes(inputSearch))
-        
-                // this.setState({
-                //     displayedList: newList
-                // });
-                newDisplayedList = newList;
-            } 
+                newDisplayedList = this.state.originalList.filter(x => x.name.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u").includes(inputSearch));
+            }
         }
 
         if (this.state.listKeys.sort) {
-            const sortKey = this.state.listKeys.sort;
+            // const sortKey = this.state.listKeys.sort;
             // console.log("Sort key: ", sortKey);
     
             newDisplayedList.sort((a, b) => {
-                switch (sortKey) {
+                switch (this.state.listKeys.sort) {
                     case "name-asc":
                         return this.cleanName(a.name).localeCompare(this.cleanName(b.name));
                     
@@ -144,14 +139,17 @@ class Catalogo extends React.Component{
             
         }
 
-        this.setState({
-            displayedList: newDisplayedList
-        });
+        this.setState({ displayedList: newDisplayedList });
     }
 
     cleanName(str) {
         // Elimina todos los caracteres que no sean letras o números al principio
-        return str.replace(/^[^\p{L}\p{N}]+/u, '').toLowerCase();
+        // return str.replace(/^[^\p{L}\p{N}]+/u, '').toLowerCase();
+
+        // Elimina todos los caracteres que no sean letras, números o espacios
+        // Y remplaza las letras con tilde.
+        // return str.replaceAll(/[^\p{L}\p{N}\p{Zs}]+/ug, '').toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u");
+        return str.replace(/[^\p{L}\p{N}\p{Zs}]+/ug, '').toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
     }
 
     render(){
@@ -165,9 +163,9 @@ class Catalogo extends React.Component{
 
                 {
                     !this.state.isLoading?
-                    <Header listKeys={this.state.listKeys} setUpdatedKeys={this.setUpdatedKeys} cantItems={this.state.displayedList.length}/>
-                    :
-                    null
+                        <Header listKeys={this.state.listKeys} setUpdatedKeys={this.setUpdatedKeys} cantItems={this.state.displayedList.length}/>
+                        :
+                        null
                 }
                 
                 <div id="catalogo-lista">
@@ -203,12 +201,7 @@ const Article = ({item, index}) => {
             <Link
                 to={`/producto/${item._id}`} 
                 onAnimationEnd={() => setAnimationEnded(true)}
-                style={
-                    animationEnded?
-                        {opacity: "100%"}
-                        :
-                        {animation: `catalogo-article-show 0.3s ease ${0.1 * (index + 1)}s forwards`}
-                }
+                style={ animationEnded? {opacity: "100%"} : {animation: `catalogo-article-show 0.3s ease ${0.1 * (index + 1)}s forwards`} }
                 // state={item} 
 
                 // className={"catalogo-article" + (isHovered && animationEnded ? " catalogo-article-hover" : "")}
@@ -241,7 +234,8 @@ const Article = ({item, index}) => {
                             return indexImageHovered !== imageIndex ? 
                                 <img key={imageIndex} src={src} alt="" className='catalogo-img' onMouseEnter={() => setIndexImageHovered(imageIndex)}/>
                                 :
-                                <div style={{width: "3rem"}} className='catalogo-img'/>
+                                <img key={imageIndex} src={src} alt="" className='catalogo-img' style={{opacity: "20%"}}/>
+                                // <div style={{width: "3rem"}} className='catalogo-img'/>
                         })
                     }
                 </span>

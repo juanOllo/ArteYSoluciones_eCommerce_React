@@ -25,8 +25,9 @@ class Administracion extends React.Component{
     }
 
     async componentDidMount(){
-        if (this.state.token == "") return;
+        if (this.state.token === "") return;
 
+        // Consulta si el token guardado en el localStorage sigue siendo util
         try {
             // const response = await fetch("http://localhost:2000/admin/tokenStillAvailable", {
             const response = await fetch("https://ays-api.onrender.com/admin/tokenStillAvailable", {
@@ -36,23 +37,15 @@ class Administracion extends React.Component{
                     "Authorization": `Bearer ${this.state.token}`
                 }
             });
-
             const data = await response.json();
-
-            console.log("data; ", data);
+            // console.log("data; ", data);
 
             if (data.tokenStillAvailable) {
-                this.setState({
-                    isLogged: true
-                })
+                this.setState({ isLogged: true });
             } else {
-                this.setState({
-                    token: ""
-                })
-
+                this.setState({ token: "" });
                 localStorage.removeItem("token");
             }
-
         } catch (error) {
             console.error("Token no available:", error);
             this.setState({
@@ -66,7 +59,7 @@ class Administracion extends React.Component{
 
         try{
             // const response = await fetch(`http://localhost:2000/admin/login`, {
-            const response = await fetch(`http://ays-api.onrender.com/admin/login`, {
+            const response = await fetch(`https://ays-api.onrender.com/admin/login`, {
                 method: "POST",
                 headers: { 
                     "Content-Type": "application/json",
@@ -78,11 +71,14 @@ class Administracion extends React.Component{
             });
 
             if (!response.ok) {
+                window.alert(`Usuario o conrtaseña incorrecta!!`);
+
+                this.setState({ username: "", password: "" });
+
                 throw new Error(`Error del servidor: ${response.status}`);
             } else {
                 window.alert(`Login correctamente!!`);
             }
-
             
             const data = await response.json();
 
@@ -95,7 +91,7 @@ class Administracion extends React.Component{
         }
     }
 
-    whitchRender() {
+    whitchTableRender() {
         switch (this.state.setKeyToRender) {
             case 'items':
                 return <ItemsTable token={this.state.token}/>;
@@ -146,15 +142,17 @@ class Administracion extends React.Component{
                 }
 
                 <div style={{display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap", width: "calc(100% - 1rem)", padding: "0 0.5rem", marginTop: "4.5rem"}}>
-                    <button onClick={() => this.setState({ setKeyToRender: 'items' })} style={{padding: "0.5rem"}}>
-                        CARGAR LISTA DE PRODUCTOS
-                    </button>
-                    <button onClick={() => this.setState({ setKeyToRender: 'colors' })} style={{padding: "0.5rem"}}>
-                        CARGAR LISTA DE COLORES
-                    </button>
+                    <select name="admin-table-select" id="admin-table-select" value={this.state.setKeyToRender}
+                        onChange={e => this.setState({ setKeyToRender: e.target.value })}
+                        style={{padding: "0.5rem"}}
+                    >
+                        <option value="">---DESPLEGAR TABLAS---</option>
+                        <option value="items">TABLA DE ITEMS</option>
+                        <option value="colors">TABLA DE COLORES</option>
+                    </select>
                 </div>
 
-                {this.whitchRender()}
+                {this.whitchTableRender()}
 
                 {/* <RequestTable /> */}
 

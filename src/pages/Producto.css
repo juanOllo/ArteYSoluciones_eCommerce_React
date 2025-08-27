@@ -26,6 +26,17 @@
     justify-content: center;
 
     overflow: visible;
+    opacity: 0%;
+    animation: producto-show-anim 0.3s ease-in-out 0s forwards;
+}
+
+@keyframes producto-show-anim {
+    0%{
+        opacity: 0%;
+    }
+    100%{
+        opacity: 100%;
+    }
 }
 
 /* #producto-tile {
@@ -51,6 +62,7 @@
     width: 100%;
     /* width: 50svw; */
     height: fit-content;
+    min-height: 4rem;
     margin: 1.3rem 0;
 
     /* position: sticky;
@@ -76,13 +88,30 @@
     /* color: white; */
 }
 
+/* #producto h1::after { */
+.producto-h1-compu-after::after{
+    background-color: black;
+    position: relative;
+    content: "";
+    width: 1.5rem;
+    height: 1.5rem;
+    display: block;
+    margin: auto 0 -0.5rem auto;
+    transform: translate(0.01rem, -1.005rem);
+
+    background: linear-gradient(-45deg, var(--verde) 0%, var(--verde) 50%, white 50%, white 100%);
+    border-top: 0.1rem solid rgba(0, 0, 0, 0.1);
+    border-left: 0.1rem solid rgba(0, 0, 0, 0.1);
+    /* linear-gradient(135deg, black 50%, transparent 50%); */
+}
+
 .producto-h1-mobil{
     display: none;
 }
 
 .producto-precio-final-h1{
     /* backdrop-filter: blur(10px); */
-    background-color: var(--verde);
+    /* background-color: var(--verde); */
     /* background-color: white; */
     padding: 0 0.5rem;
     border-radius: 10px;
@@ -112,12 +141,9 @@
 }
 
 .producto-span{
-    /* background-color: red; */
     /* background-color: rgba(255, 255, 255, 0.2); */
     width: 50%;
     min-height: calc(100svh - 3.5rem);
-    /* min-height: 100%;
-    height: fit-content; */
 
     display: flex;
     flex-direction: column;
@@ -138,22 +164,6 @@
     filter: blur(80px);
     background: radial-gradient(circle at 50% 50%, var(--amarillo), var(--verde));
     z-index: -1;
-}
-
-
-/* #producto h1::after { */
-.producto-h1-compu::after{
-    position: relative;
-    content: "";
-    width: 1.5rem;
-    height: 1.5rem;
-    background-color: black;
-    display: block;
-    margin: -1rem 0 -0.5rem auto;
-    background: linear-gradient(-45deg, var(--verde) 0%, var(--verde) 50%, white 50%, white 100%);
-    border-top: 0.1rem solid rgba(0, 0, 0, 0.1);
-    border-left: 0.1rem solid rgba(0, 0, 0, 0.1);
-    /* linear-gradient(135deg, black 50%, transparent 50%); */
 }
 
 #producto h3 {
@@ -339,13 +349,43 @@
     /* max-height: calc(90% - 8rem); */
     /* max-width: 25rem; */
     width: 50%;
-    margin: 3rem auto auto;
+    /* margin: 3rem auto auto; */
+    margin: 2.5rem auto auto;
     /* height: 80%; */
     /* z-index: 5; */
 
     display: flex;
     flex-direction: column;
     /* justify-content: space-between; */
+}
+
+.img-producto-focus-holder{
+    /* background-color: blue;  */
+    display: flex; 
+    align-items: center; 
+    overflow: hidden; 
+    margin: 0 auto;
+
+    /* max-width: 30rem; */
+    max-width: 90%;
+    
+    height: 35svw; 
+    /* max-height: 30rem; */
+    min-height: 23rem;
+    /* max-height: 90svw; */
+    /* max-height:60svh */
+}
+
+.img-producto-focus {
+    /* border: 0.15rem solid black; */
+    /* background-color: var(--amarillo); */
+
+    /* width: 25rem; */
+    /* max-width: 75%; */
+    width: 100%;
+    /* margin-bottom: auto; */
+    margin: 0 auto;
+    z-index: 1;
 }
 
 .images-tile-flex{
@@ -357,7 +397,8 @@
     gap: 1rem;
     /* flex-direction: column; */
     /* justify-content: space-evenly; */
-    justify-content: end;
+    justify-content: center;
+    /* justify-content: end; */
     align-items: center;
     /* flex-wrap: wrap; */
 }
@@ -365,9 +406,10 @@
 .img-producto{
     /* background-color: rgba(0, 0, 0, 0.1); */
     width: 5rem;
-    min-width: 5rem;
+    /* min-width: 5rem; */
+    max-width: 13%;
     cursor: pointer;
-    margin: 1rem 0 auto 0;
+    margin: 0.1rem 0 auto 0;
 }
 
 .item-off-star{
@@ -393,26 +435,6 @@
     z-index: 2;
 }
 
-.img-producto-focus {
-    /* border: 0.15rem solid black; */
-    /* background-color: var(--amarillo); */
-
-    /* width: 25rem; */
-    max-width: 75%;
-    /* margin-bottom: auto; */
-    margin: 0 auto;
-    z-index: 1;
-}
-
-.img-producto-focus-holder{
-    /* background-color: blue;  */
-    display: flex; 
-    align-items: start; 
-    overflow: hidden; 
-    height: 30rem; 
-    max-height:60svh
-}
-
 /* .img-producto-focus:hover {
     animation: img-producto-hover-anim 0.1s ease-in-out forwards;
 } */
@@ -429,13 +451,13 @@
 .encargar-btns-div{
     /* background-color: red; */
     width: calc(100% - 1rem);
-    position: relative;
-    bottom: 0;
-    
+    /* position: relative; */
+    /* bottom: 0; */
 
     display: flex;
     justify-content: center;
     gap: 1rem;
+    /* margin: 2rem 0 1rem; */
     margin: auto 0 1rem;
 }
 
@@ -512,6 +534,7 @@
     }
     .producto-span{
         width: 90%;
+        min-height: fit-content;
     }
     .images-tile{
         margin-top: 2rem;
@@ -525,11 +548,8 @@
         margin: 0 auto;
         max-height: 100%;
     }
-    .img-producto-focus-holder{
-        /* border-bottom: 0.25rem dashed black; */
-        height: 24rem; 
-    }
     .images-tile-flex{
+        /* background-color: rgba(0, 0, 0, 0.5); */
         width: calc(100svw - 1rem);
         transform: translateX(calc(-5svw ));
         justify-content: start;
@@ -539,20 +559,26 @@
         padding: 0 0.5rem;
         /* border-bottom: 0.25rem dashed black; */
         /* border-top: 0.25rem dashed black; */
+
+        justify-content: start;
     }
-    /* #producto h1 {
-        
-    } */
-    .producto-h1-compu{
+    .img-producto{
+        min-width: 4rem;
+        margin: auto 0;
+        /* max-width: 13%; */
+    }
+    .producto-title-bar{
         display: none;
+        /* background-color: white; */
     }
+
     .producto-h1-mobil{
         width: 88svw;
         height: fit-content;
-        font-size: 1.7rem;
+        /* font-size: 1.7rem; */
         text-align: center;
-        font-weight: 100;
-        font-family: var(--ffamily02);
+        /* font-weight: 100; */
+        font-family: var(--ffamily01);
 
         padding: 1rem;
         transform: translate(-1svw);
@@ -560,6 +586,7 @@
         display: block;
         margin: -0.1rem 0 1rem -1rem;
         background-color: white;
+        
         /* position: sticky;
         top: 3rem;
         z-index: 1; */
@@ -576,6 +603,9 @@
         border-top: 0.1rem solid rgba(0, 0, 0, 0.1);
         border-left: 0.1rem solid rgba(0, 0, 0, 0.1);
         /* linear-gradient(135deg, black 50%, transparent 50%); */
+    }
+    .encargar-btns-div{
+        margin: 2rem 0 2rem;
     }
     .img-producto,
     .precios,
@@ -597,5 +627,11 @@
     .producto-precio-final-h1{
         position: sticky;
         top: 3.5rem;
+    }
+}
+
+@media only screen and (max-width: 30rem) {
+.img-producto-focus-holder{
+        min-height: 90svw;
     }
 }

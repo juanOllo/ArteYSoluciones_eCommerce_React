@@ -17,7 +17,7 @@ class Inicio extends React.Component{
                 </div>
 
                 <div id="inicio-container">
-                    <img id="logo" src="https://i.postimg.cc/4NbvKnwH/logo02.png" alt="ArteYSoluciones Logo"/>
+                    <img id="logo" src="https://i.postimg.cc/cCh9ZN8T/ays-inicio-logo.png" alt="ArteYSoluciones Logo"/>
                     <Link to="/catalogo" className="catalogo-completo-btn btn">
                         <h4>CATÁLOGO COMPLETO</h4>
                     </Link>
@@ -69,7 +69,7 @@ const Mostrador = ({originalList}) => {
         <div className="mostrador">
             {menuItemsList.slice(0, 3).map(elem => {
                 return ( elem.stock ?
-                            <Link key={elem.id} state={elem} to={`/producto/${elem._id}`} className="inicio-article">
+                            <Link key={elem.id} to={`/producto/${elem._id}`} className="inicio-article">
                                 <img src={elem.images[0]} alt="imagen del producto" />
                                 <h3>{elem.name}</h3>
                             </Link>

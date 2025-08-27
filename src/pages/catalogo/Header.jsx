@@ -21,17 +21,13 @@ class Header extends React.Component {
 
     changeInputSearch(e){
 
-        if (e.target.value) {
-            this.setState({
-                inputSearch: e.target.value
-            });
-            // this.setKeys('search', this.state.inputSearch);
-        } else {
-            this.setState({
-                inputSearch: e.target.value
-            });
-            this.setKeys('search', '');
-        }
+        this.setState({
+            inputSearch: e.target.value
+        });
+
+        // if (!e.target.value) {
+        //     this.setKeys('search', '');
+        // }
     }
 
     setKeys(keyName, newKeyValue) {
@@ -40,17 +36,20 @@ class Header extends React.Component {
             case 'search':
                         // tengo que hacer esto porq no se si el usuario va a usar mayusculas y/o tildes
                 // const cleanInputSearch = this.inputSearch.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u");
-                const cleanInputSearch = newKeyValue.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u");
+                // const cleanInputSearch = newKeyValue.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u");
                 
                 const updatedListKeys = {
                     ...this.state.listKeys,
-                    'search': cleanInputSearch
+                    // 'search': cleanInputSearch
+                    'search': newKeyValue
                 };
 
                 this.props.setUpdatedKeys(updatedListKeys);
 
                 this.setState({
-                    listKeys: updatedListKeys
+                    listKeys: updatedListKeys,
+                    // Vacia el input en el UI
+                    // inputSearch: ""
                 });
                 break;
 
@@ -93,7 +92,7 @@ class Header extends React.Component {
                 <h1>Catálogo.</h1>
 
                 <div id="catalogo-buscador">
-                    <input onChange={this.changeInputSearch} type="text" placeholder="Buscar" value={this.state.inputSearch}/>
+                    <input onKeyDown={e => e.key === 'Enter' ? this.setKeys('search', this.state.inputSearch) : null} onChange={this.changeInputSearch} type="text" placeholder="Buscar" value={this.state.inputSearch}/>
                     <button onClick={() => this.setKeys('search', this.state.inputSearch)}>
                         <img alt="lupa" className="search-img" src="https://i.postimg.cc/4dcKcFvN/free-search-icon-2907-thumb.png"/>
                     </button>

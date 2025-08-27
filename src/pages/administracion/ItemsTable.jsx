@@ -200,10 +200,7 @@ class ItemsTable extends React.Component{
                 },
                 body: JSON.stringify(updatedItem),
                 // body: JSON.stringify({...updatedItem,
-                //     "colors": [
-                //             {
-                //             }
-                //         ]
+                //     "createdAt": new Date().toISOString(),
                 // })
             });
 

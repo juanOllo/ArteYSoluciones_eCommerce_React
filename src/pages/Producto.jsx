@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams, useLocation } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import './Producto.css';
 
 // "useParams" solo funciona en funciones de react
@@ -8,7 +8,6 @@ const Producto = () =>{
     // itemToRender    // El valor actual del estado           // Lo uso para mostrar datos en el render
     // setItemToRender // La función para actualizar el estado // Lo uso para cambiar el valor y provocar un re-render
     const [itemToRender, setItemToRender] = useState(null);
-    // const [allColorsList, setAllColorsList] = useState([]);
 
     // Para una navegacion mas rapida le paso el item en vez de hacer el fetch.
     // const location = useLocation();
@@ -20,7 +19,6 @@ const Producto = () =>{
     
     useEffect(() => {
         const getItemById = async () => {
-
             try {
                 // const response = await fetch(`http://192.168.1.16:2000/items/getItem/${_id}`, {
                 const response = await fetch(`https://ays-api.onrender.com/items/getItem/${_id}`, {
@@ -29,8 +27,8 @@ const Producto = () =>{
                 });
                 const data = await response.json();
                 setItemToRender(data); // guarda el item en el estado
-                console.log("item fetched: ", data);
-                console.log("item con fetch");
+                // console.log("item fetched: ", data);
+                // console.log("item con fetch");
             } catch (error) {
                 console.error("Error fetching item by id:", error);
             }
@@ -48,9 +46,9 @@ const Producto = () =>{
         <div className='producto-body'>
             {
                 itemToRender?
-                <ProductoRender item={itemToRender}/>
-                :
-                null
+                    <ProductoRender item={itemToRender}/>
+                    :
+                    null
             }
         </div>
     )
@@ -64,10 +62,10 @@ class ProductoRender extends React.Component {
         super(props);
 
         this.state={
-            // priceXSizeIndex : this.props.item.priceXSize.length > 1 ? -1 : 0, //hay q corregir esto y su intervencion en el if de addToCar()
-            priceXSizeIndex : 0, //hay q corregir esto y su intervencion en el if de addToCar()
+            // priceXSizeIndex : this.props.item.priceXSize.length > 1 ? -1 : 0,
+            priceXSizeIndex : 0,
             focusImageIndex: 0,
-            selectedColorId: this.props.item.colors.length > 1 ? "default" : this.props.item.colors[0].colorId,
+            selectedColorId: this.props.item.colors.length > 1 ? "" : this.props.item.colors[0].colorId,
             cant: 1,
             animatePrice: false,
         }
@@ -80,7 +78,7 @@ class ProductoRender extends React.Component {
     componentDidUpdate(prevProps, prevState) {
         if ((prevState.cant !== this.state.cant) || (prevState.priceXSizeIndex !== this.state.priceXSizeIndex)) {
             this.setState({ animatePrice: true }, () => {
-            setTimeout(() => this.setState({ animatePrice: false }), 200); // duración de la animación
+                setTimeout(() => this.setState({ animatePrice: false }), 150); // duración de la animación
             });
         }
     }
@@ -170,7 +168,8 @@ class ProductoRender extends React.Component {
                         <img className="img-producto-focus" src={this.props.item.images[this.state.focusImageIndex]} alt="imagen del producto"/>
                     </div>
 
-                    <div className="images-tile-flex" style={{display: this.props.item.images.length > 1 ? "flex" : "none"}}>
+                    {/* <div className="images-tile-flex" style={{display: this.props.item.images.length > 1 ? "flex" : "none"}}> */}
+                    <div className="images-tile-flex">
                         {
                             this.props.item.images.map((elem, index) => {
                                 return index !== this.state.focusImageIndex ?
@@ -186,50 +185,55 @@ class ProductoRender extends React.Component {
                 <span className='producto-span'>
                     {/* <div className='producto-blur'></div> */}
 
-                    <div className='producto-title-bar'>
+                {/* TITLE NAME */}
+                        {/* LETRAS */}
+                    <div className='producto-title-bar'
+                        style={{position: "sticky", left: "0", height: "0", minHeight: "0", marginBottom: "-2.3rem", backgroundColor: "transparent", zIndex: "1"}}
+                    >
                         <h1 className='producto-h1-compu'>{this.props.item.name}</h1>
                     </div>
 
+                        {/* FONDO */}
+                    <div className='producto-title-bar producto-h1-compu-after'
+                        style={{position: "sticky", top: "3.5rem", left: "0", minHeight: "0"}}
+                    >
+                        <h1 className='producto-h1-compu' style={{color: "transparent", height: "100%"}}>{this.props.item.name}</h1>
+                    </div>
+
+                {/* PRICE H1 */}
                     { 
                         this.props.item.off?
-                            <h1 className='producto-precio-final-h1' 
-                                style={this.state.animatePrice ? 
-                                    {animation: "producto-precio-final-h1-change-anim 0.2s ease-in-out 0s forwards"}
-                                    :
-                                    {}
-                                }
-                            >$
-                                {parseInt(this.props.item.priceXSize[this.state.priceXSizeIndex].price * (1 - (this.props.item.off || 100) / 100)) * this.state.cant}
-                                <span style={{color: "rgba(0, 0, 0, 0.7)", fontSize: "2rem", margin: "0 0 0.5rem 1.5rem", textDecoration: "line-through"}}>
-                                    ${this.props.item.priceXSize[this.state.priceXSizeIndex].price * this.state.cant}</span>
+                            <h1 className='producto-precio-final-h1'>
+                                <span style={this.state.animatePrice ? {animation: "producto-precio-final-h1-change-anim 0.15s ease-in-out 0s forwards"} : {}}>
+                                    ${parseInt(this.props.item.priceXSize[this.state.priceXSizeIndex].price * (1 - (this.props.item.off || 100) / 100)) * this.state.cant}
+                                </span>
+
+                                <span style={{color: "rgba(0, 0, 0, 0.5)", fontSize: "1.7rem", margin: "0 0 0.5rem 1.5rem", textDecoration: "line-through"}}>
+                                    ${this.props.item.priceXSize[this.state.priceXSizeIndex].price * this.state.cant}
+                                </span>
                             </h1>
                             :
-                            <h1 className='producto-precio-final-h1'
-                                style={this.state.animatePrice ? 
-                                    {animation: "producto-precio-final-h1-change-anim 0.2s ease-in-out 0s forwards"}
-                                    :
-                                    {}
-                                }
-                            >$
-                                {this.props.item.priceXSize[this.state.priceXSizeIndex].price * this.state.cant}
+                            <h1 className='producto-precio-final-h1' style={this.state.animatePrice ? {animation: "producto-precio-final-h1-change-anim 0.15s ease-in-out 0s forwards"} : {}}>
+                                ${this.props.item.priceXSize[this.state.priceXSizeIndex].price * this.state.cant}
                             </h1>
                     }
 
                     <p>{this.props.item.info}</p>
 
                 {/* COLORES */}
-                    <div 
-                        // style={{display: "flex", justifyContent: "", alignItems: "center", height: "3rem", width: "100%", background: "linear-gradient(to right, var(--amarillo) 0%, transparent 100%)"}}
-                        style={{marginBottom: "-0.5rem", backgroundColor: "", display: "flex", gap: "0.5rem", justifyContent: "start", alignItems: "center", height: "3rem", width: "90%"}}
-                    >
+                    <div style={{marginBottom: "-0.5rem", backgroundColor: "", display: "flex", gap: "0.5rem", justifyContent: "start", alignItems: "center", height: "3rem", width: "90%"}}>
                         <h3 style={{backgroundColor: "transparent", width: "fit-content"}}>Color:</h3>
                         <select className='product-color-select' name="color-select" id="" value={this.state.selectedColorId}
-                            style={{backgroundColor: this.state.selectedColorId === "default" ? "var(--amarillo)" : "var(--violeta)"}}
+                            style={this.state.selectedColorId === ""?
+                                {backgroundColor: "var(--amarillo)", boxShadow: "0.2rem 0.2rem black"}
+                                :
+                                {backgroundColor: "var(--violeta)", transform: "translate(0.2rem, 0.2rem)"}
+                            }
                             onChange={(e) => this.setState({ selectedColorId: e.target.value })}
                         >
                             {
-                                this.props.item.colors.length !== 1?
-                                    <option value="default">Colores</option>
+                                this.props.item.colors.length > 1?
+                                    <option value="">Colores</option>
                                     :
                                     null
                             }
@@ -249,7 +253,7 @@ class ProductoRender extends React.Component {
                         }
                     </div>
                     
-                {/* TAMAÑOS */}
+                {/* SIZES */}
                     <div className='span-precios'>
                         <h3 style={{marginBottom: "-0.5rem"}}>Tamaño:</h3>
                         {
@@ -267,7 +271,7 @@ class ProductoRender extends React.Component {
                         }
                     </div>
 
-                {/* CANTIDAD */}
+                {/* CANT */}
                     <div style={{marginBottom: "1rem", backgroundColor: "", width: "90%", display: "flex", flexWrap: "wrap"}}>
                         <h3 style={{width: "100%", backgroundColor: "", marginBottom: "0.5rem" }}>Cantidad:</h3>
                         <button className='producto-cant-btn' onClick={(e) => {
@@ -304,10 +308,12 @@ class ProductoRender extends React.Component {
                             }>+</button>
                     </div>
 
+                {/* ADD TO CAR */}
                     <div className="encargar-btns-div">
                         {
-                            this.state.priceXSizeIndex === -1 || this.state.selectedColorId === "default" || this.state.cant <= 0?
-                                <button onClick={() => { window.alert("SELECCIONE EL TAMAÑO DEL PRODUCTO"); }} className="encargar-btn btn">
+                            this.state.priceXSizeIndex === -1 || this.state.selectedColorId === "" || this.state.cant <= 0?
+                                <button onClick={() => { window.alert("Por favor seleccione el color, tamaño y cantidad de unidades que quiere agregar al carro de compra."); }} 
+                                className="encargar-btn btn">
                                     AGREGAR AL CARRO
                                 </button>
                                 :
