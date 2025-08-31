@@ -16,7 +16,7 @@ root.render(
     <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin/>
     <link href="https://fonts.googleapis.com/css2?family=Bowlby+One&family=Caprasimo&display=swap" rel="stylesheet"/>
    
-    <BrowserRouter>
+    <BrowserRouter basename='/ArteYSoluciones_eCommerce_React'>
       <App />
     </BrowserRouter>
   </React.StrictMode>
