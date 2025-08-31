@@ -1,63 +1,40 @@
-/* #navbar-div {
-    width: 100svw;
-    height: 3rem;
-    background-color: blue;
-
-    display: flex;
-    justify-content: space-evenly;
-
-    position: fixed;
-    top: 0;
-}
-
-.navbar-btn {
-    background-color: red;
-    border: none;
-} */
-
 #navbar-div {
     width: 100svw;
     height: 3.5rem;
     background-color: var(--verde);
     border-bottom: 2px solid black;
+    
     position: fixed;
-
+    z-index: 10;
     display: flex;
     justify-content: space-evenly;
-    z-index: 10;
 }
 
-#minilogo {
-    height: 2rem;
-    margin: auto 0;
-}
-
-.navbar-btn {
+.navbar-link {
     background-color: transparent;
     border: none;
-    font-size: 0.8rem;
     
+    font-size: 0.8rem;
     font-family: var(--ffamily01);
     font-weight: 900;
-
     color: black;
     text-align: center;
     text-decoration: none;
 }
 
-.navbar-btn:hover{
+.navbar-link:hover{
     scale: 1.2;
 }
 
-.navbar-btn p{
+.navbar-link p{
     position: relative;
     top: -2.5rem;
 }
 
-.estrella {
-    background-color: rgba(0, 0, 0, 0.15);
+.navbar-star {
     width: 3rem;
     height: 3rem;
+
     position: relative;
     bottom: -0.3rem;
     left: calc(50% - 1.5rem);
@@ -66,40 +43,24 @@
     clip-path: polygon(100% 50%,78.98% 57.76%,93.3% 75%,71.21% 71.21%,75% 93.3%,57.76% 78.98%,50% 100%,42.24% 78.98%,25% 93.3%,28.79% 71.21%,6.7% 75%,21.02% 57.76%,0% 50%,21.02% 42.24%,6.7% 25%,28.79% 28.79%,25% 6.7%,42.24% 21.02%,50% 0%,57.76% 21.02%,75% 6.7%,71.21% 28.79%,93.3% 25%,78.98% 42.24%);
 }
 
-.estrella-focus{
-    background-color: var(--amarillo);
-}
-
-.shopping-car-btn {
-    position: absolute;
-
-    /* float: right; */
-    right: 0.5rem;
-    top: 2rem;
-    /* margin-right: 0.5rem;
-    margin-top: 0.5rem; */
-
+.navbar-car-btn {
     background-color: var(--violeta);
     border: 2px solid black;
-    /* padding: 0.5rem; */
     border-radius: 2rem;
     width: 2.8rem;
     height: 2.8rem;
     box-shadow: 0.2rem 0.2rem black;
-    /* font-family: var(--ffamily01); */
 
+    position: absolute;
+    right: 1.5rem;
+    top: 2rem;
     /* animation: shopping-car-btn-anim 0.5s ease; */
 }
 
 @keyframes shopping-car-btn-click-anim {
-    /* 50%{
-        box-shadow: 0 0 transparent;
-        transform: translate(0.2rem, 0.2rem);
-    } */
     0%{
         box-shadow: 0 0 transparent;
         transform: translate(0.2rem, 0.2rem);
-        /* border-color: white; */
     }
     60%{
         transform: translate(0.2rem, 0.2rem);
@@ -108,21 +69,19 @@
     }
 }
 
-.shopping-car-btn:hover {
-    /* animation: catalogo-completo-btn-click-anim 0.2s forwards; */
-    background-color:rgb(205, 182, 253);
+.navbar-car-btn:hover {
+    filter: brightness(1.2);
 }
 
-.shopping-car-img{
+.navbar-car-img{
     height: 1.5rem;
     transform: translate(0.6rem, 0.6rem);
 }
 
-.shopping-car-point{
+.navbar-car-point{
     background-color: transparent;
     width: 0.9rem;
     height: 0.9rem;
-    /* border: 3px solid red; */
     border-radius: 50%;
 
     position: absolute;
@@ -151,12 +110,14 @@
 
 
 
-@media only screen and (max-width: 50rem) {
+@media only screen and (max-width: 600px) {
     .navbar-btn,
-    .navbar-btn:hover
-    .shopping-car-btn,
-    .shopping-car-btn:hover,
-    .shopping-car-img{
+    .navbar-btn:hover{
+        filter: brightness(1);
         cursor: none;
+        scale: 1;
+    }
+    .navbar-car-btn {
+        right: 0.5rem;
     }
 }

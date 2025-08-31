@@ -5,7 +5,7 @@ import './App.css';
 import Navbar from './Navbar';
 import Inicio from './pages/inicio/Inicio';
 import Catalogo from './pages/catalogo/Catalogo';
-import Producto from './pages/Producto';
+import Producto from './pages/producto/Producto';
 import CarroDeCompra from './pages/carroDeCompra/CarroDeCompra';
 import Administracion from './pages/administracion/Administracion';
 
@@ -22,7 +22,6 @@ function App() {
               headers: { "Content-Type": "application/json" }
           });
           const data = await response.json();
-          // setAllItemsList(data.slice().reverse());
           setAllItemsList(data);
       } catch (error) {
           console.error("Error fetching items:", error);
@@ -36,8 +35,8 @@ function App() {
         <Navbar />
 
         <Routes>
-          <Route path="/" element={<Inicio originalList={allItemsList}/>}/>
-          <Route path="/catalogo" element={<Catalogo originalList={allItemsList}/>}/>
+          <Route path="/" element={<Inicio originalList={allItemsList || []}/>}/>
+          <Route path="/catalogo" element={<Catalogo originalList={allItemsList || []}/>}/>
           <Route path="/producto/:_id" element={<Producto />}/>
           <Route path="/carro" element={<CarroDeCompra />}/>
           <Route path='/administracion' element={<Administracion />}/>

@@ -8,7 +8,8 @@ class CarroDeCompra extends React.Component{
         super(props);
         this.state={
             // displayedList: [],
-            carList: localStorage.getItem("car") ? JSON.parse(localStorage.getItem("car")) : [],
+            localStorageCarList: localStorage.getItem("car") ? JSON.parse(localStorage.getItem("car")) : [],
+            carList: [],
             isLoading: true
         }
 
@@ -25,7 +26,7 @@ class CarroDeCompra extends React.Component{
     async componentDidMount(){
 
         // Si no hay nada en el carro de compra no hay informacion que tratar.
-        if (!Array.isArray(this.state.carList) || !(this.state.carList.length > 0)) {
+        if (!Array.isArray(this.state.localStorageCarList) || !(this.state.localStorageCarList.length > 0)) {
             this.setState({
                 isLoading: false
             })
@@ -39,7 +40,7 @@ class CarroDeCompra extends React.Component{
             const response = await fetch(`https://ays-api.onrender.com/items/getSomeItems`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(this.state.carList)
+                body: JSON.stringify(this.state.localStorageCarList)
             });
             const data = await response.json();
             vanillaItemsList = [...data];
@@ -53,7 +54,7 @@ class CarroDeCompra extends React.Component{
 
         let readyToRenderItemsList = [];
 
-        for (const d of this.state.carList) {
+        for (const d of this.state.localStorageCarList) {
             const articulo = vanillaItemsList.find(a => a._id === d._id);
 
                             // Si selecciono el ultimo priceXSize disponible y luego lo borro en admin
@@ -68,8 +69,6 @@ class CarroDeCompra extends React.Component{
                 });
             }
         }
-
-        console.log("item: ", readyToRenderItemsList);
 
         this.setState({
             carList: readyToRenderItemsList,
@@ -178,7 +177,9 @@ class CarroDeCompra extends React.Component{
 
                                         {/* <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.priceXSize[elem.priceXSizeIndex].size} <br/>${parseInt(elem.priceXSize[elem.priceXSizeIndex].price) * elem.cant}</h4>    */}
                                         <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">
-                                            ({elem.colors.find(c => c.colorId === elem.selectedColorId).colorName})
+                                            <span style={{backgroundColor: "var(--amarillo)", padding: "0.5rem", filter: "brightness(1.3)", borderRadius: "0.3rem"}}>
+                                                {elem.colors.find(c => c.colorId === elem.selectedColorId).colorName}
+                                            </span>
                                             <br/>
                                             <br/>
                                             {elem.priceXSize[elem.priceXSizeIndex].size} 

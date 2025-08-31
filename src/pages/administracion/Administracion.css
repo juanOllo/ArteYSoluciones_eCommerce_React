@@ -11,14 +11,6 @@
     scrollbar-width: none;
 }
 
-.admin-text{
-    background-color: white;
-    width: fit-content;
-    padding: 2rem;
-    margin: 5rem auto 1rem;
-    border: 0.1rem solid black;
-}
-
 .admin-form-div{
     position: absolute;
     width: 100svw;
@@ -33,7 +25,8 @@
 
 .admin-form{
     background-color: var(--verde);
-    width: 20rem;
+    border-radius: 1rem;
+    width: 18rem;
     height: 10rem;
 
     display: flex;
@@ -44,6 +37,10 @@
 
 .admin-form input{
     padding: 0.5rem;
+}
+
+.admin-form-div button{
+    padding: 0.3rem;
 }
 
 
@@ -81,8 +78,6 @@ table, th, td {
 }
 
 .administracion-body table{
-    /* padding-top: 5rem; */
-    /* border-top: 3.5rem solid var(--verde); */
     width: 100%; 
     background-color: var(--amarillo);
     border: 1px solid black;
@@ -92,8 +87,6 @@ table, th, td {
 
 .administracion-body table th{
     background-color: rgba(255, 255, 255, 0.7);
-/* border: 1px solid black;
-    border-collapse: collapse; */
     position: sticky;
     z-index: 11;
     top: 3.5rem;
@@ -101,48 +94,32 @@ table, th, td {
 
 .administracion-body table td{
     margin: 0 auto;
-    /* border: 1px solid black; */
     border-bottom: none;
-    /* border-left: none; */
     border-collapse: collapse;
-    /* height: 2rem;
-    min-height: 2rem; */
-    /* width: 20svw; */
 }
 
 .administracion-body table td input{
     border: none;
     background-color: transparent;
     width: 95%;
-    /* height: 99%; */
-    /* height: fit-content; */
     padding: 0.5rem;
-    /* height: ; */
 }
 
 .administracion-body table td textarea{
     border: none;
     background-color: transparent;
-    /* width: 90%; */
-    /* height: 99%; */
-    /* height: fit-content; */
     min-height: 5rem;
-    /* min-width: 5rem; */
-    /* width: 5rem; */
     padding: 0.3rem;
     scrollbar-width: none;
 }
 
 .items-table-p-id{
     background-color: rgba(0, 0, 0, 0.2);
-    /* margin: -0.1rem -0.1rem 0.3rem; */
     margin: -1.5rem 0 1rem;
     padding: 0.3rem 0;
     font-size: 0.9rem;
     border-bottom: 1px solid black;
 
-    /* position: relative;
-    top: -1rem; */
 }
 
 .items-table-textarea-name{

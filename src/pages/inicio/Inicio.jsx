@@ -9,13 +9,10 @@ class Inicio extends React.Component{
     render(){
         return(
             <div className='home-body'>
-
-
                 <div style={{overflow: "hidden", zIndex: "1", left: "0", top: "0", position: "absolute", height: "100svh", width: "100svw", backgroundColor: ""}}>
                     <div className="blur"></div>
                     <div className="star"></div>
                 </div>
-
                 <div id="inicio-container">
                     <img id="logo" src="https://i.postimg.cc/cCh9ZN8T/ays-inicio-logo.png" alt="ArteYSoluciones Logo"/>
                     <Link to="/catalogo" className="catalogo-completo-btn btn">
@@ -60,24 +57,24 @@ const Mostrador = ({originalList}) => {
 
     return(
         isLoading?
-        <div className="mostrador">
-            <div className="inicio-article-loading-skeleton" style={{fontFamily: "var(--ffamily01)"}}></div>
-            <div className="inicio-article-loading-skeleton" style={{fontFamily: "var(--ffamily01)"}}></div>
-            <div className="inicio-article-loading-skeleton" style={{fontFamily: "var(--ffamily01)"}}></div>
-        </div>
-        :
-        <div className="mostrador">
-            {menuItemsList.slice(0, 3).map(elem => {
-                return ( elem.stock ?
-                            <Link key={elem.id} to={`/producto/${elem._id}`} className="inicio-article">
-                                <img src={elem.images[0]} alt="imagen del producto" />
-                                <h3>{elem.name}</h3>
-                            </Link>
-                            :
-                            null
-                        )
-            })}
-        </div>
+            <div className="mostrador">
+                <div className="inicio-article-loading-skeleton"></div>
+                <div className="inicio-article-loading-skeleton"></div>
+                <div className="inicio-article-loading-skeleton"></div>
+            </div>
+            :
+            <div className="mostrador">
+                {menuItemsList.slice(0, 3).map(elem => {
+                    return ( elem.stock ?
+                        <Link key={elem.id} to={`/producto/${elem._id}`} className="inicio-article">
+                            <img src={elem.images[0]} alt="imagen del producto" />
+                            <h3>{elem.name}</h3>
+                        </Link>
+                        :
+                        null
+                    )
+                })}
+            </div>
     )
 }
 

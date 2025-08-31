@@ -4,71 +4,27 @@ class Header extends React.Component {
     constructor(props) {
         super(props);
 
-        // this.inputSearch = "";
-
         this.state = {
             listKeys: this.props.listKeys || {
                 'sort': '',
                 'search': ''
             },
             inputSearch: "",
-            sortValue: "default",
+            sortValue: "",
         }
 
-        this.changeInputSearch = this.changeInputSearch.bind(this);
-        this.setKeys = this.setKeys.bind(this);
+        this.setNewKey = this.setNewKey.bind(this);
     }
 
-    changeInputSearch(e){
-
-        this.setState({
-            inputSearch: e.target.value
-        });
-
-        // if (!e.target.value) {
-        //     this.setKeys('search', '');
-        // }
-    }
-
-    setKeys(keyName, newKeyValue) {
-        
-        switch (keyName) {
-            case 'search':
-                        // tengo que hacer esto porq no se si el usuario va a usar mayusculas y/o tildes
-                // const cleanInputSearch = this.inputSearch.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u");
-                // const cleanInputSearch = newKeyValue.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u");
-                
-                const updatedListKeys = {
-                    ...this.state.listKeys,
-                    // 'search': cleanInputSearch
-                    'search': newKeyValue
-                };
-
-                this.props.setUpdatedKeys(updatedListKeys);
-
-                this.setState({
-                    listKeys: updatedListKeys,
-                    // Vacia el input en el UI
-                    // inputSearch: ""
-                });
-                break;
-
-            case 'sort':
-                const updatedListKeys2 = {
-                    ...this.state.listKeys,
-                    'sort': newKeyValue
-                };
-
-                this.props.setUpdatedKeys(updatedListKeys2);
-
-                this.setState({
-                    listKeys: updatedListKeys2
-                });
-                break;
-        
-            default:
-                break;
+    setNewKey(keyName, newKeyValue) {
+        const updatedListKeys = {
+            ...this.state.listKeys,
+            [keyName]: newKeyValue
         }
+
+        this.props.setNewKeys(updatedListKeys);
+
+        this.setState({ listKeys: updatedListKeys })
     }
 
     getSortLabel(sortKey) {
@@ -92,14 +48,16 @@ class Header extends React.Component {
                 <h1>Catálogo.</h1>
 
                 <div id="catalogo-buscador">
-                    <input onKeyDown={e => e.key === 'Enter' ? this.setKeys('search', this.state.inputSearch) : null} onChange={this.changeInputSearch} type="text" placeholder="Buscar" value={this.state.inputSearch}/>
-                    <button onClick={() => this.setKeys('search', this.state.inputSearch)}>
+                    <input value={this.state.inputSearch} onKeyDown={e => e.key === 'Enter' ? this.setNewKey('search', this.state.inputSearch) : null} type="text" placeholder="Buscar" 
+                    onChange={e => this.setState({ inputSearch: e.target.value })} 
+                    />
+                    <button onClick={() => this.setNewKey('search', this.state.inputSearch)}>
                         <img alt="lupa" className="search-img" src="https://i.postimg.cc/4dcKcFvN/free-search-icon-2907-thumb.png"/>
                     </button>
                 </div>
 
-                <select value={this.state.sortValue} name="ordenar" className='select-ordenar' onChange={(e) => {this.setState({ sortValue: e.target.value }); this.setKeys('sort', e.target.value)}}>
-                    <option value="default">Ordenar por</option>
+                <select value={this.state.sortValue} name="ordenar" className='select-ordenar' onChange={(e) => {this.setState({ sortValue: e.target.value }); this.setNewKey('sort', e.target.value)}}>
+                    <option value="">Ordenar por</option>
                     <option value="name-asc">Nombre A-Z</option>
                     <option value="name-desc">Nombre Z-A</option>
                     <option value="price-asc">Mas Barato Primero</option>
@@ -108,28 +66,31 @@ class Header extends React.Component {
 
                 <p style={{marginLeft: "auto", fontFamily: "var(--ffamily01)", fontWeight: "600", color: "rgba(0, 0, 0, 0.7)"}}>{this.props.cantItems} {this.props.cantItems>1 ? "artículos.":"artículo."}</p>
 
-                <div className='aplicated-filters-div'>
+                <div className='aplicated-filters-div'
+                style={(this.state.listKeys.search || this.state.listKeys.sort)? {} : {display: "none"}}
+                >
                     {
-                        this.state.listKeys.search?
-                            <div className='aplicated-filter'>
-                                <p>
-                                    Buscando: "{this.state.listKeys.search}"
-                                </p>
-                                <button onClick={() => {this.setState({inputSearch: ""}); this.setKeys('search', '')}}>X</button>
-                            </div>
-                            :
-                            null
+                    this.state.listKeys.search?
+                        <div className='aplicated-filter'>
+                            <p>
+                                Buscando: "{this.state.listKeys.search}"
+                            </p>
+                            <button onClick={() => {this.setState({inputSearch: ""}); this.setNewKey('search', '')}}>X</button>
+                        </div>
+                        :
+                        null
                     }
+
                     {
-                        this.state.listKeys.sort && this.state.listKeys.sort !== "default"?
-                            <div className='aplicated-filter'>
-                                <p>
-                                    Ordenando por: "{this.getSortLabel(this.state.listKeys.sort)}"
-                                </p>
-                                <button onClick={() => {this.setState({ sortValue: "default" }); this.setKeys('sort', 'default')}}>X</button>
-                            </div>
-                            :
-                            null
+                    this.state.listKeys.sort?
+                        <div className='aplicated-filter'>
+                            <p>
+                                Ordenando por: "{this.getSortLabel(this.state.listKeys.sort)}"
+                            </p>
+                            <button onClick={() => {this.setState({ sortValue: "" }); this.setNewKey('sort', '')}}>X</button>
+                        </div>
+                        :
+                        null
                     }
                 </div>
 

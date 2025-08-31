@@ -1,7 +1,7 @@
 // import ReactDOM from 'react-dom';
 import React from 'react';
 import './Administracion.css';
-import RequestTable from './RequestTable';
+// import RequestTable from './RequestTable';
 import ItemsTable from './ItemsTable';
 import ColorsTable from './ColorsTable';
 
@@ -16,7 +16,6 @@ class Administracion extends React.Component{
             username: "",
             password: "",
             token: localStorage.getItem("token") ? JSON.parse(localStorage.getItem("token")) : "",
-            // token: "",
 
             isDemoStarted: false,
         }
@@ -27,7 +26,7 @@ class Administracion extends React.Component{
     async componentDidMount(){
         if (this.state.token === "") return;
 
-        // Consulta si el token guardado en el localStorage sigue siendo util
+        // Si hay un token guardado en el localStorage entonces consulto si sigue disponible(?
         try {
             // const response = await fetch("http://localhost:2000/admin/tokenStillAvailable", {
             const response = await fetch("https://ays-api.onrender.com/admin/tokenStillAvailable", {
@@ -38,7 +37,6 @@ class Administracion extends React.Component{
                 }
             });
             const data = await response.json();
-            // console.log("data; ", data);
 
             if (data.tokenStillAvailable) {
                 this.setState({ isLogged: true });
@@ -47,13 +45,13 @@ class Administracion extends React.Component{
                 localStorage.removeItem("token");
             }
         } catch (error) {
-            console.error("Token no available:", error);
-            this.setState({
-                token: "",
-            })
+            // console.error("Token no available:", error);
+            this.setState({ token: "" })
+            localStorage.removeItem("token");
         }
     }
 
+    // Intento de logueo
     async tryLogin(e){
         e.preventDefault();
 
@@ -91,6 +89,7 @@ class Administracion extends React.Component{
         }
     }
 
+    // Selecciona que tabla mostrar
     whitchTableRender() {
         switch (this.state.setKeyToRender) {
             case 'items':
@@ -103,30 +102,9 @@ class Administracion extends React.Component{
     }
 
     render(){
-
-        console.log("token: ", this.state.token);
-
         return(
             <div className='administracion-body'>
-
-                {/* <div className='admin-text'>
-                    <h3>SECCIÓN ADMINISTRATIVA</h3>
-                    <h5 style={{width: "30rem", margin: "0 auto 2rem"}}>
-                        Esta seccion te da control sobre los productos de la pagina.
-                        <br />
-                        En este caso se creara una version demo cada vez que presiones el boton "GUARDAR" 
-                        luego de editar la informacion de los productos, 
-                        dando asi ejemplo de como responderia la pagina a estos cambios. 
-                        <br />
-                        Editá y explorá a tu gusto y cuando quieras volver a la versión original 
-                        de la pagina solo da click en el boton "TERMINAR DEMO".
-
-                        <br />
-                        <br />
-                        ACLARACION: Esta seccion estaria oculta en una version final del producto.
-                    </h5>
-                </div> */}
-
+            {/* LOGIN FORM */}
                 {
                     !this.state.isLogged && !this.state.isDemoStarted?
                         <div className='admin-form-div'>
@@ -141,6 +119,7 @@ class Administracion extends React.Component{
                         null
                 }
 
+            {/* SELECT TABLE */}
                 <div style={{display: "flex", alignItems: "center", gap: "1rem", flexWrap: "wrap", width: "calc(100% - 1rem)", padding: "0 0.5rem", marginTop: "4.5rem"}}>
                     <select name="admin-table-select" id="admin-table-select" value={this.state.setKeyToRender}
                         onChange={e => this.setState({ setKeyToRender: e.target.value })}
@@ -152,9 +131,8 @@ class Administracion extends React.Component{
                     </select>
                 </div>
 
+            {/* TABLES */}
                 {this.whitchTableRender()}
-
-                {/* <RequestTable /> */}
 
             </div>
         )

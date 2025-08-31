@@ -1,6 +1,5 @@
 .catalogo-body {
     box-sizing: border-box;
-    /* margin-top: -1.35rem;  */
     padding-top: 3.5rem;
 
     background-color: var(--verde);
@@ -17,33 +16,18 @@
 
 /* //////////////////////////////////////////CATALOGO////////////////////////////////////////// */
 #catalogo-lista {
-    /* background-color: red; */
-    
     height: fit-content;
     max-height: calc(100svh - 8rem);
-    /* padding-top: 4.5rem; */
-    padding-top: 1.15rem;
-    padding-bottom: 1rem;
-    /* padding-right: 0.5rem; */
-    padding-left: 0.5rem;
-
-    /* overflow-y: scroll;
-    scrollbar-width: none; */
-    /* scrollbar-color: black transparent; */
+    width: 79rem;
+    max-width: 95svw;
+    max-width: 100svw;
+    padding: 1.15rem 0 1rem 0.5rem;
+    margin: 0 auto;
     
     display: flex;
     flex-wrap: wrap;
-    /* justify-content: center; */
     align-items: center;
-    /* justify-content: start;
-    align-items: start; */
     gap: 1.5rem;
-
-    width: 79rem;
-    /* max-width: 96rem; */
-    max-width: 95svw;
-    max-width: 100svw;
-    margin: 0 auto;
 }
 
 .catalogo-article {
@@ -53,6 +37,7 @@
     max-width: 95svw;
     border-radius: 0.3rem;
     border: 2px solid transparent;
+    opacity: 0%;
 
     display: flex;
     flex-wrap: wrap;
@@ -61,8 +46,6 @@
 
     text-decoration: none;
     color: black;
-    opacity: 0%;
-    /* animation: catalogo-article-show 0.3s ease 0s forwards; */
 }
 
 @keyframes catalogo-article-show {
@@ -87,13 +70,13 @@
 .article-off-star{
     clip-path: polygon(100% 50%,78.98% 57.76%,93.3% 75%,71.21% 71.21%,75% 93.3%,57.76% 78.98%,50% 100%,42.24% 78.98%,25% 93.3%,28.79% 71.21%,6.7% 75%,21.02% 57.76%,0% 50%,21.02% 42.24%,6.7% 25%,28.79% 28.79%,25% 6.7%,42.24% 21.02%,50% 0%,57.76% 21.02%,75% 6.7%,71.21% 28.79%,93.3% 25%,78.98% 42.24%);
     background-color: var(--violeta);
+    margin-bottom: -3rem;
+
     position: relative;
     top: -1rem;
     left: -1rem;
     width: 3rem;
     height: 3rem;
-    /* z-index: 11; */
-    margin-bottom: -3rem;
 
     font-family: var(--ffamily01);
     font-weight: 700;
@@ -108,23 +91,16 @@
 
 .catalogo-article h2, .catalogo-article h4 {
     height: fit-content;
-    /* max-width: 50%; */
     max-width: calc(100% - 11rem);
     max-height: 20%;
     width: fit-content;
-    font-family: var(--ffamily01);
-    /* color: black; */
-    /* background-color: red; */
     margin-left: 0.5rem;
+    font-family: var(--ffamily01);
 }
 
 .catalogo-img-focus {
     height: 100%;
     margin: 0 0 0 auto;
-    /* border-radius: 0.3rem; */
-
-    /* background-color: rgba(0, 0, 0, 0.1); */
-    /* transform: translate(0.5rem, 0.5rem); */
 }
 
 .catalogo-img {
@@ -137,16 +113,14 @@
     width: fit-content;
     margin-top: auto;
     height: 0;
-    opacity: 0%;
     overflow: hidden;
-
-    /* overflow: visible; */
-    /* width: 50%; */
+    opacity: 0%;
 
     display: flex;
     gap: 0.5rem;
     justify-content: start;
     align-items: start;
+
     animation: catalog-img-span-spawn-delay 0.13s ease-out 0.5s forwards;
 }
 
@@ -155,7 +129,6 @@
         padding: 0.5rem;
     }
     100%{
-        /* background-color: rebeccapurple; */
         height: 3rem;
         padding: 0.5rem;
         opacity: 100%;
@@ -166,14 +139,7 @@
     width: 1.1rem;
     max-height: 1.1rem;
     margin-top: 0.2rem;
-    /* animation: article-catalog-anim 1s ease 0s forwards; */
-    /* animation: name duration timing-function delay iteration-count direction fill-mode; */
 }
-
-
-/* #catalogo-lista *:last-child {
-    margin: 0 auto 0 0;
-} */
 
 
 
@@ -192,9 +158,7 @@
 
 .catalogo-header {
     background-color: var(--verde);
-    /* background-color: rgba(255, 255, 255, 0.5); */
     width: 77rem;
-    /* max-width: 96rem; */
     max-width: 96svw;
     height: fit-content;
     padding: 0 2svw;
@@ -202,19 +166,19 @@
     
     z-index: 2;
     position: sticky;
-    top: -6rem;
+    top: -6.5rem;
     
     display: flex;
     flex-wrap: wrap;
     column-gap: 1.5rem;
-    row-gap: 1rem;
+    row-gap: 0.5rem;
 }
 
 .catalogo-header h1{
-    font-family: var(--ffamily01);
-    font-size: 3rem;
     width: 100%;
     margin-bottom: 1rem;
+    font-family: var(--ffamily01);
+    font-size: 3rem;
 }
 
 #catalogo-buscador{
@@ -233,11 +197,11 @@
 
 #catalogo-buscador input {
     height: 100%;
-    border: none;
-    background-color: transparent;
-    /* background-color: red; */
     width: 85%;
     margin-left: 3%;
+    border: none;
+    background-color: transparent;
+
     font-weight: 600;
     font-family: var(--ffamily01);
 }
@@ -248,31 +212,30 @@
 
 #catalogo-buscador button {
     background-color: var(--azul);
-    position: relative;
     width: 1.9rem;
     height: 1.9rem;
     border-radius: 50%;
     border: none;
     cursor: pointer;
+
+    position: relative;
 }
 
 .select-ordenar{
     background-color: white;
     background-color: var(--azul);
-    /* width: 20rem; */
-    /* max-width: 60svw; */
     height: 2.5rem;
     padding: 0.3rem 0.5rem;
     border-radius: 1.5rem;
     border: none;
     border-right: 0.5rem solid var(--azul);
     cursor: pointer;
+
     font-weight: 600;
     font-family: var(--ffamily01);
 }
 
 .select-ordenar:focus {
-    /* border-radius: 1.3rem 1.3rem 0 0; */
     outline: none;
 }
 
@@ -282,9 +245,8 @@
 }
 
 .aplicated-filters-div{
-    /* background-color: red; */
     width: 100%;
-    /* height: 1rem; */
+
     position: relative;
     top: -0.5rem;
 
@@ -294,42 +256,33 @@
 }
 
 .aplicated-filter{
-    /* background-color: var(--amarillo); */
     background-color: rgba(255, 255, 255, 0.4);
-    /* background: linear-gradient(90deg, rgba(255, 255, 255, 0.8) 0%, rgba(255, 255, 255, 0) 90%); */
-    /* border: 1px solid black; */
-    /* border-radius: 1rem 0 0 1rem; */
     border-radius: 1rem;
     padding: 0.2rem 0.2rem 0.2rem 0.5rem;
     
-    /* width: fit-content; */
     display: inline-flex;
     align-items: center;
     gap: 0.3rem;
 }
 
 .aplicated-filter p{
-    /* background-color: tomato; */
+    margin: 0;
     font-size: 0.9rem;
     font-family: var(--ffamily01);
     font-weight: 600;
-    /* height: fit-content; */
-    margin: 0;
 }
 
 .aplicated-filter button{
-    background-color: transparent;
-    background-color: rgba(255, 255, 255, 1);
+    height: 1.3rem;
+    width: 1.3rem;
     background-color: var(--rojo2);
     border: none;
     border-radius: 50%;
+    cursor: pointer;
+
     font-size: 0.9rem;
     font-weight: 600;
     text-align: center;
-    cursor: pointer;
-
-    height: 1.3rem;
-    width: 1.3rem;
 }
 
 
@@ -347,15 +300,8 @@
 
 @media only screen and (max-width: 50rem) {
     .catalogo-article{
-        /* transform: translate(-0.3rem, -0.3rem); */
-        /* transform: translateX(0.3rem); */
-        /* margin: 0 auto; */
         cursor: none;
     }
-    /* .catalogo-img-focus{
-        background-color: rgba(0, 0, 0, 0.05);
-        border-radius: 0.7rem;
-    } */
     .catalogo-article-hover{
         animation: none;
     }
@@ -376,8 +322,6 @@
 @media only screen and (max-width: 55rem) {
     #catalogo-lista {
         width: 26rem;
-
-        /* temporal para resolver scroll horizontal */
         max-width: 97svw;
     }
 }

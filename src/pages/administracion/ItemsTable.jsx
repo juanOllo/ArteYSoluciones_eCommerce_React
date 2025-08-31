@@ -346,7 +346,7 @@ class ItemsTable extends React.Component{
                             <th style={{width: "11rem"}}>Tamaño/Precio</th>
                             <th>Imagenes (max:6)</th>
                             <th style={{width: "6rem"}}>Colores</th>
-                            <th style={{width: "5rem"}}>Descuento</th>
+                            <th style={{width: "5rem"}}>%off/stock</th>
                             <th style={{width: "3rem"}}>CONTROL</th>
                         </tr>
                     </thead>
@@ -357,9 +357,6 @@ class ItemsTable extends React.Component{
                             this.state.displayedList.map((elem, index) => {
                                 return(
                                     <tr>
-                                    {/* ID */}
-                                        {/* <td>{elem.id}</td> */}
-
                                     {/* ID/NAME */}
                                         <td style={{height: "10rem"}}>
                                             <p className='items-table-p-id'>{elem._id}</p>
@@ -370,7 +367,6 @@ class ItemsTable extends React.Component{
                                                 onChange={(e) => this.handleInputChange(index, 'name', e.target.value)}
                                             />
                                         </td>
-
                                     {/* INFO */}
                                         <td>
                                             <textarea
@@ -379,7 +375,6 @@ class ItemsTable extends React.Component{
                                             onChange={(e) => this.handleInputChange(index, 'info', e.target.value)}
                                             />
                                         </td>
-
                                     {/* PRICES */}
                                         <td style={{position: "relative", overflowY: "scroll", scrollbarWidth: "none"}}>
                                             <div style={{display: "flex", flexDirection: "column", justifyContent: "space-between", position: "absolute", top: "0"}}>
@@ -414,8 +409,6 @@ class ItemsTable extends React.Component{
                                                 </span>
                                             </div>
                                         </td>
-
-
                                     {/* IMAGES */}
                                         <td style={{position: "relative", overflowY: "scroll", scrollbarWidth: "none"}}>
                                             <div style={{display: "flex", flexDirection: "column", position: "absolute", top: "0",  width: "100%"}}>
@@ -475,41 +468,20 @@ class ItemsTable extends React.Component{
                                             </div>
 
                                         </td>
-                                    {/* OFF */}
+                                    {/* OFF & STOCK */}
                                         <td>
-                                            - <input onChange={(e) => this.handleInputChange(index, 'off', e.target.value)} value={elem.off} style={{width: "1rem"}}></input> %
-                                        </td>
-                                    {/* GUARDAR, BORRAR & VISTA_PREV */}
-                                        <td>
-                                            <button style={{margin: "0 0 0.8rem", borderRadius: "0.3rem", backgroundColor: "lightgreen", border: "none", height: "2rem"}} onClick={() => this.handleUpdateItem(elem._id, index)}>GUARDAR</button>
-                                            {/* <Link to={`/producto/${elem._id}`} style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</Link> */}
-                                            {/* <a href={`http://192.168.1.16:3000/producto/${elem._id}`} target="_blank" style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</a> */}
-                                            <a href={`http://localhost:3000/producto/${elem._id}`} target="_blank" style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</a>
-                                            <button style={{borderRadius: "0.3rem", backgroundColor: "var(--rojo)", color: "white", border: "none", margin: "0.8rem 0 0", height: "2rem"}} onClick={() => this.handleRemoveItem(elem._id, index)}>ELIMINAR</button>
+                                            <div style={{backgroundColor: "rgba(0,0,0,0.1)", marginBottom: "0.5rem"}}>
+                                                <p style={{margin: "0"}}>Oferta?</p>
+                                                - <input onChange={(e) => this.handleInputChange(index, 'off', e.target.value)} value={elem.off} style={{width: "1rem"}}></input> %
+                                            </div>
                                             <div>
                                                 Stock? 
-
                                                 {/* Hay que solucionar el problema del re-render con el select */}
                                                 <select 
-                                                    style={{backgroundColor: "rgba(0, 0, 0, 0.2)", color: "", padding: "0.3rem 0", margin: "0.3rem 0 0 0.3rem"}}
+                                                    style={{backgroundColor: "rgba(0, 0, 0, 0.2)", color: "", padding: "0.3rem 0"}}
                                                     defaultValue={elem.stock} 
                                                     onChange={e => {
                                                         if(e.target.value === "true"){
-
-                                                            // // Checkeo que ningun campo de elem esté vaco
-                                                            // if (!elem.name || !elem.info) {
-                                                            //     window.alert("EL CAMPO NOMBRE O DESCRIPCION ESTA VACÍO")
-                                                            //     return;
-                                                            // }
-                                                            // if (elem.images.some(img => !img)) {
-                                                            //     window.alert("UN CAMPO IMAGENES ESTÁ VACÍO");
-                                                            //     return;
-                                                            // }
-                                                            // if (elem.priceXSize.some(p => !p.price || !p.size)) {
-                                                            //     window.alert("UN CAMPO PRECIO O TAMAÑO ESTÁ VACÍO");
-                                                            //     return;
-                                                            // }
-
                                                             this.handleInputChange(index, 'stock', true)
                                                         } else {
                                                             this.handleInputChange(index, 'stock', false);
@@ -521,6 +493,14 @@ class ItemsTable extends React.Component{
                                                     <option value="false">NO</option>
                                                 </select>
                                             </div>
+                                        </td>
+                                    {/* GUARDAR, BORRAR & VISTA_PREV */}
+                                        <td>
+                                            <button style={{margin: "0 0 0.8rem", borderRadius: "0.3rem", backgroundColor: "lightgreen", border: "none", height: "2rem"}} onClick={() => this.handleUpdateItem(elem._id, index)}>GUARDAR</button>
+                                            {/* <Link to={`/producto/${elem._id}`} style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</Link> */}
+                                            {/* <a href={`http://192.168.1.16:3000/producto/${elem._id}`} target="_blank" style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</a> */}
+                                            <a href={`http://localhost:3000/producto/${elem._id}`} target="_blank" style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</a>
+                                            <button style={{borderRadius: "0.3rem", backgroundColor: "var(--rojo)", color: "white", border: "none", margin: "0.8rem 0 0", height: "2rem"}} onClick={() => this.handleRemoveItem(elem._id, index)}>ELIMINAR</button>
                                         </td>
                                     </tr>
                                 )
