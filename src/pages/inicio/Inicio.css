@@ -162,6 +162,27 @@
     text-align: center;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+.home-background-holder{
+    overflow: hidden;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    position: absolute;
+    height: 100svh;
+    width: 95svw;
+}
+
 .blur {
     position: relative;
     transform: translate(-50%, -50%);
@@ -229,5 +250,8 @@
     }
     .catalogo-completo-btn{
         cursor: none;
+    }
+    .home-background-holder{
+        width: 100svw;
     }
 }

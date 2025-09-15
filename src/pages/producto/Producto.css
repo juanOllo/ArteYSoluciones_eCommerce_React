@@ -1,9 +1,13 @@
+*{
+    font-family: var(--ffamily01);
+}
+
 .producto-page{
     box-sizing: border-box;
-    /* overflow-y: scroll;
-    scrollbar-width: none; */
-    z-index: -2;
     height: fit-content;
+
+    /* no m acuerdo el porq d esto */
+    /* z-index: -2; */
 }
 
 
@@ -105,7 +109,6 @@
     position: sticky;
     top: 3.3rem;
 
-    font-family: var(--ffamily01);
     font-size: 4.5rem;
 
     display: flex;
@@ -145,7 +148,6 @@
 #producto h3 {
     text-align: start;
     width: 100%;
-    font-family: var(--ffamily01);
 }
 
 #producto p {
@@ -176,7 +178,6 @@
     border: 0.15rem solid black;
     cursor: pointer;
 
-    font-family: var(--ffamily01);
     font-weight: 600;
 }
 
@@ -205,7 +206,6 @@
     padding: 0.7rem;
     width: fit-content;
     box-shadow: 0.2rem 0.2rem black;
-    font-family: var(--ffamily01);
 
     font-weight: bold;
 }
@@ -236,7 +236,6 @@
     border-radius: 50%;
     box-shadow: 0.2rem 0.2rem black;
 
-    font-family: var(--ffamily01);
     font-weight: 500;
     font-size: 1.3rem;
 }
@@ -257,7 +256,6 @@
     width: 2rem;
     text-align: center;
     font-size: 1.3rem;
-    font-family: var(--ffamily01);
     font-weight: 500;
     border: none;
     background-color: transparent;
@@ -321,7 +319,6 @@
     min-height: 7rem;
     margin-bottom: -7rem;
 
-    font-family: var(--ffamily01);
     font-weight: 700;
     text-align: end;
 
@@ -356,7 +353,6 @@
     padding: 1rem;
     border-radius: 2rem;
     width: fit-content;
-    font-family: var(--ffamily01);
 
     box-shadow: 0 0 transparent;
     transform: translate(0.3rem, 0.3rem);
@@ -449,7 +445,6 @@
         width: 88svw;
         height: fit-content;
         text-align: center;
-        font-family: var(--ffamily01);
 
         padding: 1rem;
         transform: translate(-3svw);

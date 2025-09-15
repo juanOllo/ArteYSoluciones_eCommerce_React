@@ -83,10 +83,10 @@ class ProductoRender extends React.Component {
             // );
 
             // anim punto rojo en el boton del carrito
-            document.getElementById("navbar-div").lastElementChild.childNodes[0].style.animation = "ponit-car-img-anim 0.25s ease-in-out forwards";
+            document.getElementById("navbar-div").children[0].childNodes[0].style.animation = "ponit-car-img-anim 0.25s ease-in-out forwards";
             setTimeout(() => {
-                document.getElementById("navbar-div").lastElementChild.childNodes[0].style.backgroundColor = "red";
-                document.getElementById("navbar-div").lastElementChild.childNodes[0].style.animation = "none";
+                document.getElementById("navbar-div").children[0].childNodes[0].style.backgroundColor = "red";
+                document.getElementById("navbar-div").children[0].childNodes[0].style.animation = "none";
             }, 400);
         }
     }

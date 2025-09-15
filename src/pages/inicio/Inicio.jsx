@@ -9,7 +9,7 @@ class Inicio extends React.Component{
     render(){
         return(
             <div className='home-body'>
-                <div style={{overflow: "hidden", zIndex: "1", left: "0", top: "0", position: "absolute", height: "100svh", width: "100svw", backgroundColor: ""}}>
+                <div className='home-background-holder'>
                     <div className="blur"></div>
                     <div className="star"></div>
                 </div>

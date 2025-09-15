@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import './Producto.css';
 import ProductoRender from './ProductoRender';
 import Article from '../catalogo/Article';
+import LoadingScreen from '../../LoadingScreen';
 
 // "useParams" solo funciona en funciones de react.
 const Producto = () =>{
@@ -62,10 +63,10 @@ const Producto = () =>{
             itemToRender? 
                 <ProductoRender item={itemToRender}/> 
                 : 
-                null
+                <LoadingScreen />
             }
 
-            {/* {
+            {
                 itemToRender && randomRecomendedItems.length > 0? 
                     <div className='producto-extend-content'>
                         <h3 style={{marginLeft: "23svw"}}>Más productos:</h3>
@@ -81,7 +82,7 @@ const Producto = () =>{
                     </div>
                     :
                     null
-            } */}
+            }
 
         </div>
     )

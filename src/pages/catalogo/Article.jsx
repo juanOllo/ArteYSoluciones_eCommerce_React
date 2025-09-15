@@ -9,7 +9,7 @@ const Article = ({item, index}) => {
     return (
             <Link to={`/producto/${item._id}`} 
             onAnimationEnd={() => setAnimationEnded(true)}
-            style={ animationEnded? {opacity: "100%"} : {animation: `catalogo-article-show 0.3s ease ${0.1 * (index + 1)}s forwards`} }
+            style={ animationEnded? {opacity: "100%"} : {animation: `catalogo-article-show 0.9s ease ${0.15 * (index + 1)}s forwards`} }
             className={"catalogo-article"}
         
             // onMouseEnter={() => setIsHovered(true)}

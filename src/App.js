@@ -8,6 +8,7 @@ import Catalogo from './pages/catalogo/Catalogo';
 import Producto from './pages/producto/Producto';
 import CarroDeCompra from './pages/carroDeCompra/CarroDeCompra';
 import Administracion from './pages/administracion/Administracion';
+import Footer from './Footer';
 
 
 function App() {
@@ -41,6 +42,8 @@ function App() {
           <Route path="/carro" element={<CarroDeCompra />}/>
           <Route path='/administracion' element={<Administracion />}/>
         </Routes>
+
+        <Footer />
     </div>
   );
 }

@@ -1,8 +1,13 @@
-/* .App {
-  text-align: center;
+#App {
+  /* text-align: center; */
+  /* background-color: red; */
+  min-height: 100svh;
+  display: flex;
+  flex-direction: column;
+  /* display: block; */
 }
 
-.App-logo {
+/* .App-logo {
   height: 40vmin;
   pointer-events: none;
 }

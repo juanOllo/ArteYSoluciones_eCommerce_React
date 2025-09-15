@@ -3,6 +3,7 @@ import './Catalogo.css';
 // import { render } from '@testing-library/react';
 import Header from './Header.jsx';
 import Article from './Article.jsx';
+import LoadingScreen from '../../LoadingScreen.jsx';
 
 class Catalogo extends React.Component{
     constructor(props){
@@ -125,13 +126,12 @@ class Catalogo extends React.Component{
                 {!this.state.isLoading?
                     <Header listKeys={this.state.listKeys} setNewKeys={this.setNewKeys} cantItems={this.state.displayedList.length}/>
                     :
-                    null
+                    <LoadingScreen />
+                    // null
                 }
                 
                 <div id="catalogo-lista">
-                    {this.state.isLoading ? 
-                        <div style={{margin: "30svh auto 0", fontFamily: "var(--ffamily01)", fontSize: "1.5rem"}}>CARGANDO ITEMS!!!</div>
-                        :
+                    {!this.state.isLoading ?                         
                         this.state.displayedList.map((elem, index) => {
                             return( elem.stock ?
                                         <Article key={elem._id} item={elem} index={index}/>
@@ -139,6 +139,8 @@ class Catalogo extends React.Component{
                                         null
                             )
                         })
+                        :
+                        null
                     }
                 </div>
             </div>

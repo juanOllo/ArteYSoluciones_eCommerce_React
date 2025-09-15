@@ -16,26 +16,7 @@ class NavbarTile extends React.Component{
     render(){
         return(
             <div id="navbar-div">
-
-                {/* <Link className="navbar-link navbar-btn" >CONTACTO</Link> */}
-                {/* <Link to="/" className="navbar-link navbar-btn">
-                    {this.props.location.pathname === "/" ? <div className="navbar-star navbar-star-focus"></div> : <div className="navbar-star"></div>}
-                    <p>INGENIERIA</p>
-                </Link> */}
                 
-                <Link to="/administracion" className="navbar-link navbar-btn">
-                    <div className={'navbar-star'} style={this.props.location.pathname === "/administracion"? {backgroundColor: "var(--amarillo)"} : {backgroundColor: "rgba(0, 0, 0, 0.15)"}}></div>
-                    <p>ADMIN</p>
-                </Link>
-                <Link to="/" className="navbar-link navbar-btn">
-                    <div className={'navbar-star'} style={this.props.location.pathname === "/"? {backgroundColor: "var(--amarillo)"} : {backgroundColor: "rgba(0, 0, 0, 0.15)"}}></div>
-                    <p>INICIO</p>
-                </Link>
-                <Link to="/catalogo" className="navbar-link navbar-btn">
-                    <div className={'navbar-star'} style={this.props.location.pathname === "/catalogo"? {backgroundColor: "var(--amarillo)"} : {backgroundColor: "rgba(0, 0, 0, 0.15)"}}></div>
-                    <p>CATÁLOGO</p>
-                </Link>
-
                 {
                 // CarBtn no aparece en la pagina de administracion.
                 this.props.location.pathname !== "/administracion" && this.props.location.pathname !== "/carro" ?
@@ -56,6 +37,27 @@ class NavbarTile extends React.Component{
                     :
                     null
                 }
+
+                {/* <Link className="navbar-link navbar-btn" >CONTACTO</Link> */}
+                {/* <Link to="/" className="navbar-link navbar-btn">
+                    {this.props.location.pathname === "/" ? <div className="navbar-star navbar-star-focus"></div> : <div className="navbar-star"></div>}
+                    <p>INGENIERIA</p>
+                </Link> */}
+                
+                <Link to="/administracion" className="navbar-link navbar-btn">
+                    {/* <div className={'navbar-star'} style={this.props.location.pathname === "/administracion"? {backgroundColor: "var(--amarillo)"} : {backgroundColor: "rgba(0, 0, 0, 0.15)"}}></div> */}
+                    <p>ADMIN</p>
+                </Link>
+                <Link to="/" className="navbar-link navbar-btn">
+                    {/* <div className={'navbar-star'} style={this.props.location.pathname === "/"? {backgroundColor: "var(--amarillo)"} : {backgroundColor: "rgba(0, 0, 0, 0.15)"}}></div> */}
+                    <p>INICIO</p>
+                </Link>
+                <Link to="/catalogo" className="navbar-link navbar-btn">
+                    {/* <div className={'navbar-star'} style={this.props.location.pathname === "/catalogo"? {backgroundColor: "var(--amarillo)"} : {backgroundColor: "rgba(0, 0, 0, 0.15)"}}></div> */}
+                    <p>CATÁLOGO</p>
+                </Link>
+
+                
 
             </div>
         )
