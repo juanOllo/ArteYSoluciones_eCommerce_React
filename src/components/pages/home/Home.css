@@ -59,6 +59,7 @@
 
 .inicio-article:hover{
     animation: inicio-article-click-anim 0.1s forwards;
+    /* animation: inicio-article-click-anim 0.5s forwards; */
     background-color: antiquewhite;
 }
 
@@ -67,6 +68,21 @@
         box-shadow: 0 0 transparent;
         transform: translate(0.45rem, 0.45rem);
     }
+
+    /* 10%{
+        scale: 0.95;
+        box-shadow: 0.5rem 0.5rem 0.5rem 0 rgba(0, 0, 0, 0.9);
+    }  
+    33%{
+        transform: rotate(-3deg);
+    }  
+    66%{
+        transform: rotate(3deg);
+    }  
+    100%{
+        scale: 0.95;
+        box-shadow: 0.5rem 0.5rem 0.5rem 0 rgba(0, 0, 0, 0.9);
+    }    */
 }
  
 .inicio-article-loading-skeleton{

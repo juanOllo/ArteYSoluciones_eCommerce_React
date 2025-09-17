@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import {Link} from 'react-router-dom';
+import './ArticleCard.css';
 
-const Article = ({item, index}) => {
+const ArticleCard = ({item, index, onClick}) => {
     const [isHovered, setIsHovered] = useState(false);
     const [indexImageHovered, setIndexImageHovered] = useState(0);
     const [animationEnded,setAnimationEnded] = useState(false);
@@ -9,8 +10,9 @@ const Article = ({item, index}) => {
     return (
             <Link to={`/producto/${item._id}`} 
             onAnimationEnd={() => setAnimationEnded(true)}
-            style={ animationEnded? {opacity: "100%"} : {animation: `catalogo-article-show 0.9s ease ${0.15 * (index + 1)}s forwards`} }
+            style={ animationEnded? {opacity: "100%"} : {animation: `catalogo-article-show 0.7s ease ${0.1 * (index + 1)}s forwards`} }
             className={"catalogo-article"}
+            onClick={onClick}
         
             // onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => {setIsHovered(false); setIndexImageHovered(0)}}
@@ -45,4 +47,4 @@ const Article = ({item, index}) => {
         )
 }
 
-export default Article;
+export default ArticleCard;

@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import './Catalogo.css';
+import './Catalog.css';
 // import { render } from '@testing-library/react';
 import Header from './Header.jsx';
-import Article from './Article.jsx';
+import ArticleCard from '../../ArticleCard.jsx';
 import LoadingScreen from '../../LoadingScreen.jsx';
 
 class Catalogo extends React.Component{
@@ -134,7 +134,7 @@ class Catalogo extends React.Component{
                     {!this.state.isLoading ?                         
                         this.state.displayedList.map((elem, index) => {
                             return( elem.stock ?
-                                        <Article key={elem._id} item={elem} index={index}/>
+                                        <ArticleCard key={elem._id} item={elem} index={index}/>
                                         :
                                         null
                             )

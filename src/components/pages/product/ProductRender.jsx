@@ -1,5 +1,5 @@
 import React from 'react';
-import './Producto.css';
+// import './Product.css';
 import { Toaster, toast } from 'sonner';
 
 class ProductoRender extends React.Component {

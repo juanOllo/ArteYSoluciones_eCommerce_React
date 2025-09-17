@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import './Producto.css';
-import ProductoRender from './ProductoRender';
-import Article from '../catalogo/Article';
+import './Product.css';
+import ProductRender from './ProductRender';
+import ArticleCard from '../../ArticleCard';
 import LoadingScreen from '../../LoadingScreen';
 
 // "useParams" solo funciona en funciones de react.
@@ -61,7 +61,7 @@ const Producto = () =>{
         <div className='producto-page'>
             { 
             itemToRender? 
-                <ProductoRender item={itemToRender}/> 
+                <ProductRender item={itemToRender}/> 
                 : 
                 <LoadingScreen />
             }
@@ -74,7 +74,7 @@ const Producto = () =>{
                             {
                                 randomRecomendedItems.map((elem, index) => {
                                     return(
-                                        <Article item={elem} index={index}/>
+                                        <ArticleCard item={elem} index={index} onClick={() => {setItemToRender(null); console.log("entro")}}/>
                                     )
                                 })
                             }

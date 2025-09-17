@@ -2,13 +2,13 @@
 import React, { useEffect } from 'react';
 import {Routes, Route} from 'react-router-dom';
 import './App.css';
-import Navbar from './Navbar';
-import Inicio from './pages/inicio/Inicio';
-import Catalogo from './pages/catalogo/Catalogo';
-import Producto from './pages/producto/Producto';
-import CarroDeCompra from './pages/carroDeCompra/CarroDeCompra';
-import Administracion from './pages/administracion/Administracion';
-import Footer from './Footer';
+import Navbar from './components/Navbar';
+import Inicio from './components/pages/home/Home';
+import Catalogo from './components/pages/catalog/Catalog';
+import Product from './components/pages/product/Product';
+import CarroDeCompra from './components/pages/shoppingCar/ShoppingCar';
+import Administracion from './components/pages/administration/Administration';
+import Footer from './components/Footer';
 
 
 function App() {
@@ -38,7 +38,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Inicio originalList={allItemsList || []}/>}/>
           <Route path="/catalogo" element={<Catalogo originalList={allItemsList || []}/>}/>
-          <Route path="/producto/:_id" element={<Producto />}/>
+          <Route path="/producto/:_id" element={<Product />}/>
           <Route path="/carro" element={<CarroDeCompra />}/>
           <Route path='/administracion' element={<Administracion />}/>
         </Routes>

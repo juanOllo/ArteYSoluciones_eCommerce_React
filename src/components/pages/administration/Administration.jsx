@@ -1,6 +1,6 @@
 // import ReactDOM from 'react-dom';
 import React from 'react';
-import './Administracion.css';
+import './Administration.css';
 // import RequestTable from './RequestTable';
 import ItemsTable from './ItemsTable';
 import ColorsTable from './ColorsTable';

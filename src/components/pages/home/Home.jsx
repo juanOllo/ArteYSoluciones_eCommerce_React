@@ -1,6 +1,6 @@
 // import ReactDOM from 'react-dom';
 import React, { useEffect, useState } from 'react';
-import './Inicio.css';
+import './Home.css';
 import { Link } from 'react-router-dom'
 
 

@@ -1,0 +1,107 @@
+.catalogo-article {
+    background-color: rgba(0, 0, 0, 0.05);
+    height: 10rem;
+    width: 25rem;
+    max-width: 95svw;
+    border-radius: 0.3rem;
+    border: 2px solid transparent;
+    opacity: 0%;
+
+    display: flex;
+    flex-wrap: wrap;
+    flex-direction: column;
+    align-items: start;
+
+    text-decoration: none;
+    color: black;
+}
+
+@keyframes catalogo-article-show {
+    0%{
+        transform: translateX(0.5rem);
+    }
+    100%{
+        opacity: 100%;
+    }
+}
+
+.catalogo-article:hover{
+    animation: catalogo-article-hover-anim 0.2s forwards;
+}
+
+@keyframes catalogo-article-hover-anim {
+    100%{
+        box-shadow: 0.3rem 0.3rem rgba(0, 0, 0, 0.6);
+        transform: translate(-0.3rem, -0.3rem);
+        border: 2px solid black;
+        background-color: var(--amarillo);
+    }
+}
+
+.article-off-star{
+    clip-path: polygon(100% 50%,78.98% 57.76%,93.3% 75%,71.21% 71.21%,75% 93.3%,57.76% 78.98%,50% 100%,42.24% 78.98%,25% 93.3%,28.79% 71.21%,6.7% 75%,21.02% 57.76%,0% 50%,21.02% 42.24%,6.7% 25%,28.79% 28.79%,25% 6.7%,42.24% 21.02%,50% 0%,57.76% 21.02%,75% 6.7%,71.21% 28.79%,93.3% 25%,78.98% 42.24%);
+    background-color: var(--violeta);
+    margin-bottom: -3rem;
+
+    position: relative;
+    top: -1rem;
+    left: -1rem;
+    width: 3rem;
+    height: 3rem;
+
+    font-family: var(--ffamily01);
+    font-weight: 700;
+    text-align: end;
+
+    display: flex;
+    align-items: center;
+    justify-items: end;
+
+    transform: rotate(-10deg);
+}
+
+.catalogo-article h2, .catalogo-article h4 {
+    height: fit-content;
+    max-width: calc(100% - 11rem);
+    max-height: 20%;
+    width: fit-content;
+    margin-left: 0.5rem;
+    font-family: var(--ffamily01);
+}
+
+.catalogo-img-focus {
+    height: 100%;
+    margin: 0 0 0 auto;
+}
+
+.catalogo-img {
+    height: 3rem;
+    max-width: 3rem;
+}
+
+.catalog-img-span{
+    background-color: transparent;
+    width: fit-content;
+    margin-top: auto;
+    height: 0;
+    overflow: hidden;
+    opacity: 0%;
+
+    display: flex;
+    gap: 0.5rem;
+    justify-content: start;
+    align-items: start;
+
+    animation: catalog-img-span-spawn-delay 0.13s ease-out 0.5s forwards;
+}
+
+@keyframes catalog-img-span-spawn-delay {
+    0%{
+        padding: 0.5rem;
+    }
+    100%{
+        height: 3rem;
+        padding: 0.5rem;
+        opacity: 100%;
+    }
+}
