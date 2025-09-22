@@ -5,7 +5,7 @@
     background-color: var(--verde);
 
     width: 100%;
-    /* height: 100svh; */
+    min-height: 100svh;
 
     display: flex;
     flex-direction: column;
@@ -192,6 +192,21 @@
 
 
 
+@media only screen and (max-width: 81rem) {
+    #catalogo-lista,
+    .catalogo-header {
+        width: 52rem;
+    }
+}
+
+@media only screen and (max-width: 55rem) {
+    #catalogo-lista,
+    .catalogo-header {
+        width: 26rem;
+        max-width: 97svw;
+        /* max-width: 90svw; */
+    }
+}
 
 @media only screen and (max-width: 50rem) {
     .catalogo-article{
@@ -205,18 +220,10 @@
         display: none;
         width: 0;
     }
-}
-
-@media only screen and (max-width: 81rem) {
     #catalogo-lista,
     .catalogo-header {
-        width: 52rem;
-    }
-}
-
-@media only screen and (max-width: 55rem) {
-    #catalogo-lista {
-        width: 26rem;
-        max-width: 97svw;
+        /* background-color: red; */
+        max-width: 90svw;
+        /* overflow: hidden; */
     }
 }

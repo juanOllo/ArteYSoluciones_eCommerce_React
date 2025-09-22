@@ -22,9 +22,9 @@
 
 .mostrador {
     width: 100%;
+    max-width: fit-content;
     height: 50%;
     margin: 0 auto;
-    max-width: fit-content;
 
     z-index: 5;
     overflow-x: scroll;
@@ -60,7 +60,8 @@
 .inicio-article:hover{
     animation: inicio-article-click-anim 0.1s forwards;
     /* animation: inicio-article-click-anim 0.5s forwards; */
-    background-color: antiquewhite;
+    /* background-color: antiquewhite; */
+    /* background-color: rgb(255, 229, 190); */
 }
 
 @keyframes inicio-article-click-anim {
@@ -190,13 +191,15 @@
 
 
 .home-background-holder{
-    overflow: hidden;
-    z-index: 1;
-    left: 0;
-    top: 0;
-    position: absolute;
+    /* background-color: red; */
     height: 100svh;
-    width: 95svw;
+    width: 100svw;
+    overflow: hidden;
+    
+    position: absolute;
+    /* left: 0;
+    top: 0; */
+    z-index: 1;
 }
 
 .blur {
@@ -267,7 +270,7 @@
     .catalogo-completo-btn{
         cursor: none;
     }
-    .home-background-holder{
+    /* .home-background-holder{
         width: 100svw;
-    }
+    } */
 }

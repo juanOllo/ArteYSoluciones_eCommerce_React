@@ -123,20 +123,30 @@ class Catalogo extends React.Component{
     render(){
         return(
             <div className='catalogo-body'>
-                {!this.state.isLoading?
-                    <Header listKeys={this.state.listKeys} setNewKeys={this.setNewKeys} cantItems={this.state.displayedList.length}/>
+                {
+                    !this.state.isLoading?
+                    <Header 
+                     listKeys={this.state.listKeys} 
+                     setNewKeys={this.setNewKeys} 
+                     cantItems={this.state.displayedList.length}
+                    />
                     :
                     <LoadingScreen />
-                    // null
                 }
                 
                 <div id="catalogo-lista">
-                    {!this.state.isLoading ?                         
+                    {
+                        !this.state.isLoading ?                         
                         this.state.displayedList.map((elem, index) => {
-                            return( elem.stock ?
-                                        <ArticleCard key={elem._id} item={elem} index={index}/>
-                                        :
-                                        null
+                            return( 
+                                elem.stock ?
+                                <ArticleCard 
+                                 key={elem._id} 
+                                 item={elem} 
+                                 index={index}
+                                />
+                                :
+                                null
                             )
                         })
                         :

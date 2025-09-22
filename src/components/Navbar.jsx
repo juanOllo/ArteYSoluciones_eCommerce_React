@@ -16,19 +16,24 @@ class NavbarTile extends React.Component{
     render(){
         return(
             <div id="navbar-div">
+
+                {/* <h2
+                 style={{color: this.props.location.pathname === "/"? "var(--verde)" : "black", margin: "0 auto 0 1rem"}}
+                >Arte y Soluciones</h2> */}
                 
                 {
                 // CarBtn no aparece en la pagina de administracion.
-                this.props.location.pathname !== "/administracion" && this.props.location.pathname !== "/carro" ?
+                this.props.location.pathname !== "/administracion"?
                     <Link to="/carro" onClick={e => {
                         // Evita que el anim se aplique a la imagen q está dentro del botón.
                         const btn = e.target.classList.contains("navbar-btn") ? e.target : e.target.parentElement;
                         btn.style.animation = "shopping-car-btn-click-anim 0.1s forwards";
                         setTimeout(() => { btn.style.animation = "none"; }, 300);
 
+                        // Esto tiene que cambiar metodologicamente.
                         // Borra el punto rojo del carBtn.
-                        // btn.childNodes[0].style.backgroundColor = "transparent";
-                        // btn.childNodes[0].style.animation = "none";
+                        btn.childNodes[0].style.backgroundColor = "transparent";
+                        btn.childNodes[0].style.animation = "none";
                     }} 
                     className="navbar-car-btn navbar-btn">
                         <div className='navbar-car-point'></div>
@@ -44,10 +49,6 @@ class NavbarTile extends React.Component{
                     <p>INGENIERIA</p>
                 </Link> */}
                 
-                <Link to="/administracion" className="navbar-link navbar-btn">
-                    {/* <div className={'navbar-star'} style={this.props.location.pathname === "/administracion"? {backgroundColor: "var(--amarillo)"} : {backgroundColor: "rgba(0, 0, 0, 0.15)"}}></div> */}
-                    <p>ADMIN</p>
-                </Link>
                 <Link to="/" className="navbar-link navbar-btn">
                     {/* <div className={'navbar-star'} style={this.props.location.pathname === "/"? {backgroundColor: "var(--amarillo)"} : {backgroundColor: "rgba(0, 0, 0, 0.15)"}}></div> */}
                     <p>INICIO</p>
@@ -56,8 +57,10 @@ class NavbarTile extends React.Component{
                     {/* <div className={'navbar-star'} style={this.props.location.pathname === "/catalogo"? {backgroundColor: "var(--amarillo)"} : {backgroundColor: "rgba(0, 0, 0, 0.15)"}}></div> */}
                     <p>CATÁLOGO</p>
                 </Link>
-
-                
+                <Link to="/administracion" className="navbar-link navbar-btn">
+                    {/* <div className={'navbar-star'} style={this.props.location.pathname === "/administracion"? {backgroundColor: "var(--amarillo)"} : {backgroundColor: "rgba(0, 0, 0, 0.15)"}}></div> */}
+                    <p>ADMIN</p>
+                </Link>
 
             </div>
         )

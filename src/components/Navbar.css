@@ -9,7 +9,7 @@
     display: flex;
     /* justify-content: space-evenly; */
     justify-content: end;
-    gap: 2rem;
+    gap: 1rem;
     align-items: center;
 }
 
@@ -83,7 +83,7 @@
 }
 
 .navbar-car-btn:hover {
-    filter: brightness(1.2);
+    filter: brightness(1.05);
 }
 
 .navbar-car-img{
