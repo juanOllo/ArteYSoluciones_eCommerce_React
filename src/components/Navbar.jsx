@@ -1,6 +1,5 @@
 import React from 'react';
 import { useLocation, Link } from 'react-router-dom';
-import './Navbar.css'
 
 // Uso el location para pintar el Link del navbar
 const Navbar = () => {

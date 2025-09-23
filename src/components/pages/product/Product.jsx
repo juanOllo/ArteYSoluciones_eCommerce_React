@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
 import { useParams } from 'react-router-dom';
-import './Product.css';
 import ProductRender from './ProductRender';
 import ArticleCard from '../../ArticleCard';
 import LoadingScreen from '../../LoadingScreen';
@@ -94,11 +93,11 @@ function RecomendedItems({_id, setItemToRender, visible, visibleRef}){
     useEffect(() => {
         const getRecomendedItems = async () => {
             try {
-                // const response = await fetch(`http://192.168.1.16:2000/items/getSomeItems`, {
-                const response = await fetch(`https://ays-api.onrender.com/items/getSomeItems`, {
+                // const response = await fetch(`http://192.168.1.16:2000/items/getRecomendedItems`, {
+                const response = await fetch(`https://ays-api.onrender.com/items/getRecomendedItems`, {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify([{"_id": _id}])
+                    body: JSON.stringify({"_id": _id, "cant": 3})
                 });
                 const data = await response.json();
                 setRecomendedItems(data); 

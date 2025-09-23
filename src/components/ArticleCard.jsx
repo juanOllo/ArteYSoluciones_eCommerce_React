@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import {Link} from 'react-router-dom';
-import './ArticleCard.css';
 
 const ArticleCard = ({item, index, onClick}) => {
     const [isHovered, setIsHovered] = useState(false);

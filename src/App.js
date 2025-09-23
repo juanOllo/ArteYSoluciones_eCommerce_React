@@ -1,14 +1,15 @@
 // import logo from './logo.svg';
 import React, { useEffect } from 'react';
 import {Routes, Route} from 'react-router-dom';
-import './App.css';
+
 import Navbar from './components/Navbar';
+import Footer from './components/Footer';
+
 import Inicio from './components/pages/home/Home';
 import Catalogo from './components/pages/catalog/Catalog';
 import Product from './components/pages/product/Product';
 import CarroDeCompra from './components/pages/shoppingCar/ShoppingCar';
 import Administracion from './components/pages/administration/Administration';
-import Footer from './components/Footer';
 
 
 function App() {

@@ -1,3 +1,18 @@
+@import "./App.css";
+
+/* PAGES */
+@import "./Administration.css";
+@import "./Catalog.css";
+@import "./Home.css";
+@import "./Product.css";
+@import "./ShoppingCar.css";
+
+/*  */
+@import "./ArticleCard.css";
+@import "./Footer.css";
+@import "./LoadingScreen.css";
+@import "./Navbar.css";
+
 :root {
     /* --verde: #b1debc;
     --amarillo: #FFE0B8;

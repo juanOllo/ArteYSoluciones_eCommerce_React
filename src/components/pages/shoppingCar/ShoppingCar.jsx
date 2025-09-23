@@ -1,5 +1,4 @@
 import React from "react";
-import './ShoppingCar.css'
 import { Link } from "react-router-dom";
 import CarForm from './CarForm';
 

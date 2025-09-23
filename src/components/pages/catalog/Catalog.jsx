@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import './Catalog.css';
 // import { render } from '@testing-library/react';
 import Header from './Header.jsx';
 import ArticleCard from '../../ArticleCard.jsx';
