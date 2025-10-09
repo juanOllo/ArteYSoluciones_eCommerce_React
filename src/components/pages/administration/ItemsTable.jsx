@@ -241,7 +241,7 @@ class ItemsTable extends React.Component{
                 "Link de imagen"
             ],
             'colors': [],
-            'stock': false,
+            'isAvailable': false,
             'off': 0,
         }
 
@@ -346,7 +346,7 @@ class ItemsTable extends React.Component{
                             <th style={{width: "11rem"}}>Tamaño/Precio</th>
                             <th>Imagenes (max:6)</th>
                             <th style={{width: "6rem"}}>Colores</th>
-                            <th style={{width: "5rem"}}>%off/stock</th>
+                            <th style={{width: "5rem"}}>%off/disp</th>
                             <th style={{width: "3rem"}}>CONTROL</th>
                         </tr>
                     </thead>
@@ -383,7 +383,7 @@ class ItemsTable extends React.Component{
                                                     elem.priceXSize.map((pElem, pIndex) => 
 
                                                         <div style={{width: "100%"}}>
-                                                            <input onChange={(e) => this.handleInputChange(index, 'priceXSize', parseInt(e.target.value), pIndex, 'size')} style={{width: "4rem"}} value={pElem.size} type="text" placeholder={pElem.size}/>
+                                                            <input onChange={(e) => this.handleInputChange(index, 'priceXSize', e.target.value, pIndex, 'size')} style={{width: "4rem"}} value={pElem.size} type="text" placeholder={pElem.size}/>
                                                             $
                                                             <input onChange={(e) => this.handleInputChange(index, 'priceXSize', parseInt(e.target.value), pIndex, 'price')} style={{width: "4rem"}} value={pElem.price} type="text" placeholder={pElem.price}/>
                                                         </div>
@@ -468,23 +468,23 @@ class ItemsTable extends React.Component{
                                             </div>
 
                                         </td>
-                                    {/* OFF & STOCK */}
+                                    {/* OFF & DISP */}
                                         <td>
                                             <div style={{backgroundColor: "rgba(0,0,0,0.1)", marginBottom: "0.5rem"}}>
                                                 <p style={{margin: "0"}}>Oferta?</p>
                                                 - <input onChange={(e) => this.handleInputChange(index, 'off', e.target.value)} value={elem.off} style={{width: "1rem"}}></input> %
                                             </div>
                                             <div>
-                                                Stock? 
+                                                Disp? 
                                                 {/* Hay que solucionar el problema del re-render con el select */}
                                                 <select 
                                                     style={{backgroundColor: "rgba(0, 0, 0, 0.2)", color: "", padding: "0.3rem 0"}}
-                                                    defaultValue={elem.stock} 
+                                                    defaultValue={elem.isAvailable} 
                                                     onChange={e => {
                                                         if(e.target.value === "true"){
-                                                            this.handleInputChange(index, 'stock', true)
+                                                            this.handleInputChange(index, 'isAvailable', true)
                                                         } else {
-                                                            this.handleInputChange(index, 'stock', false);
+                                                            this.handleInputChange(index, 'isAvailable', false);
                                                         }
                                                         }
                                                     }

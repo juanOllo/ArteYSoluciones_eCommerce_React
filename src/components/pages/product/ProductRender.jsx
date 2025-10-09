@@ -13,6 +13,7 @@ class ProductoRender extends React.Component {
 
             selectedPriceXSizeIndex : 0,
             selectedColorId: this.props.item.colors.length > 1 ? "" : this.props.item.colors[0].colorId,
+            // selectedColorId: "",
             selectedCant: 1,
         }
 
@@ -20,9 +21,21 @@ class ProductoRender extends React.Component {
     }
 
     componentDidUpdate(prevProps, prevState) {
+        // Animacion del price-h1 cuando cambia la cantidad o el tamaño seleccionado.
         if ((prevState.selectedCant !== this.state.selectedCant) || (prevState.selectedPriceXSizeIndex !== this.state.selectedPriceXSizeIndex)) {
             this.setState({ animatePrice: true }, () => {
                 setTimeout(() => this.setState({ animatePrice: false }), 150); // Duración de la animación.
+            });
+        }
+
+        // Reinicio los estados si cambia el item (si se navega a otro producto).
+        if (prevProps.item._id !== this.props.item._id) {
+            this.setState({
+                focusImageIndex: 0,
+                selectedPriceXSizeIndex : 0,
+                selectedColorId: this.props.item.colors.length > 1 ? "" : this.props.item.colors[0].colorId,
+                // selectedColorId: "",
+                selectedCant: 1,
             });
         }
     }
@@ -120,9 +133,10 @@ class ProductoRender extends React.Component {
                             return index !== this.state.focusImageIndex ?
                                 <img id={index} className='img-producto' src={elem} alt='imagen del producto'
                                 onClick={e => this.setState({ focusImageIndex: parseInt(e.target.id) })} 
+                                key={index}
                                 /> 
                                 : 
-                                <img id={index} className='img-producto' src={elem} alt='imagen del producto' style={{opacity: "0.3"}}/> 
+                                <img key={index} id={index} className='img-producto' src={elem} alt='imagen del producto' style={{opacity: "0.3"}}/> 
                                 // <img className="img-producto" alt=""/>;
                             })
                         }
@@ -139,9 +153,10 @@ class ProductoRender extends React.Component {
                     </div>
 
                         {/* FONDO */}
-                    <div className='producto-title-bar'
-                    style={{zIndex: "1", position: "sticky", top: "3.5rem", left: "0", minHeight: "4rem", marginTop: "-6.3rem"}}>
-                        {/* <h1 className='producto-h1-compu' style={{color: "transparent", height: "100%"}}>{this.props.item.name}</h1> */}
+                    <div className='producto-title-bar producto-title-bar-backgorund'
+                     style={{zIndex: "1", position: "sticky", top: "3.5rem", left: "0", minHeight: "4rem", marginTop: "-6.3rem", 
+                        // marginBottom: "6rem"
+                    }}>
                     </div>
 
                 {/* PRICE H1 */}
@@ -149,16 +164,16 @@ class ProductoRender extends React.Component {
                     this.props.item.off?
                         <h1 className='producto-precio-final-h1'>
                             <span style={this.state.animatePrice ? {animation: "producto-precio-final-h1-change-anim 0.15s ease-in-out 0s forwards"} : {}}>
-                                ${parseInt(this.props.item.priceXSize[this.state.selectedPriceXSizeIndex].price * (1 - (this.props.item.off || 100) / 100)) * this.state.selectedCant}
+                                ${parseInt(this.props.item.priceXSize[this.state.selectedPriceXSizeIndex]?.price * (1 - (this.props.item.off || 100) / 100)) * this.state.selectedCant}
                             </span>
 
                             <span style={{color: "rgba(0, 0, 0, 0.5)", fontSize: "1.7rem", margin: "0 0 0.5rem 1.5rem", textDecoration: "line-through"}}>
-                                ${this.props.item.priceXSize[this.state.selectedPriceXSizeIndex].price * this.state.selectedCant}
+                                ${this.props.item.priceXSize[this.state.selectedPriceXSizeIndex]?.price * this.state.selectedCant}
                             </span>
                         </h1>
                         :
                         <h1 className='producto-precio-final-h1' style={this.state.animatePrice ? {animation: "producto-precio-final-h1-change-anim 0.15s ease-in-out 0s forwards"} : {}}>
-                            ${this.props.item.priceXSize[this.state.selectedPriceXSizeIndex].price * this.state.selectedCant}
+                            ${this.props.item.priceXSize[this.state.selectedPriceXSizeIndex]?.price * this.state.selectedCant}
                         </h1>
                     }
 
@@ -206,7 +221,7 @@ class ProductoRender extends React.Component {
                         <h3 style={{marginBottom: "-0.5rem"}}>Tamaño:</h3>
                         { 
                         this.props.item.priceXSize.map((elem, index) => 
-                                <button value={index} className={"precios" + (index === this.state.selectedPriceXSizeIndex || this.props.item.priceXSize.length === 0? " precios-selected" : "")}
+                                <button key={index} value={index} className={"precios" + (index === this.state.selectedPriceXSizeIndex || this.props.item.priceXSize.length === 0? " precios-selected" : "")}
                                 onClick={e => this.setState({ selectedPriceXSizeIndex : parseInt(e.target.value) })}
                                 >
                                     {elem.size}

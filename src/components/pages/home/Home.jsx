@@ -64,7 +64,7 @@ const Mostrador = ({originalList}) => {
             :
             <div className="mostrador">
                 {menuItemsList.slice(0, 3).map(elem => {
-                    return ( elem.stock ?
+                    return ( elem.isAvailable ?
                         <Link key={elem.id} to={`/producto/${elem._id}`} className="inicio-article">
                             <img src={elem.images[0]} alt="imagen del producto" />
                             <h3>{elem.name}</h3>

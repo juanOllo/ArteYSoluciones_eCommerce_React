@@ -9,11 +9,17 @@ class NotFoundPage extends React.Component{
 
     render(){
         return(
-            <div>
-                <h1 style={{marginTop: "5rem"}}>404 Not Found</h1>
+            <div style={{textAlign: "center"}}>
+                {/* <h1 style={{marginTop: "5rem"}}>404 Not Found...</h1> */}
+                <h2 style={{marginTop: "10rem"}}>Error. Pagina no encontrada.</h2>
 
-                <Link to="/">VOLVER</Link>
-
+                <Link to="/"
+                 style={{textDecoration: "none", color: "black", backgroundColor: "var(--amarillo)", padding: "1rem", borderRadius: "2rem", marginTop: "1rem", display: "inline-block",
+                    fontWeight: "bold", border: "0.15rem solid black", 
+                 }}
+                >
+                    VOLVER AL INICIO
+                </Link>
             </div>
         )
     }

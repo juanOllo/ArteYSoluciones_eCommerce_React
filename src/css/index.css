@@ -7,7 +7,7 @@
 @import "./Product.css";
 @import "./ShoppingCar.css";
 
-/*  */
+/* COMPONENTS */
 @import "./ArticleCard.css";
 @import "./Footer.css";
 @import "./LoadingScreen.css";
@@ -23,14 +23,14 @@
     --rojo2: #ff6f61;
     --azul2: #3245D1; */
 
-    --verde: #a6d4b2;      /* Verde fresco, menos brillante */
-    --amarillo: #f9dca5;   /* Amarillo cálido, más mantecoso */
-    --violeta: #a88ae0;    /* Violeta lavanda con menos saturación */
-    --rosa: #d3b0c9;       /* Rosa pastel con toque malva */
-    --azul: #6fa7cc;       /* Azul cielo apagado pero aún vibrante */
-    --rojo: #d85a5a;       /* Rojo coral más suave, sin perder presencia */
-    --rojo2: #f28c7b;      /* Salmón cálido y envolvente */
-    --azul2: #4a5fb8;      /* Azul profundo con menos contraste */
+    --verde: #a6d4b2;      
+    --amarillo: #f9dca5;   
+    --violeta: #a88ae0;    
+    --rosa: #d3b0c9;       
+    --azul: #6fa7cc;       
+    --rojo: #d85a5a;       
+    --rojo2: #f28c7b;      
+    --azul2: #4a5fb8;      
 
 
     --ffamily01: "Roboto Condensed", sans-serif;

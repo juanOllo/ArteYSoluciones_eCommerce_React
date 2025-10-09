@@ -7,6 +7,7 @@ import LoadingScreen from '../../LoadingScreen';
 // "useParams" solo funciona en funciones de react.
 const Producto = () =>{
     const [itemToRender, setItemToRender] = useState(null);
+    const [errorItemToRenderNotFounded, setErrorItemToRenderNotFounded] = useState(false);
     
     // Uso el _id del params para hacer el fetch.
     const {_id} = useParams();
@@ -25,6 +26,7 @@ const Producto = () =>{
                 // console.log("item con fetch");
             } catch (error) {
                 console.error("Error fetching item by id:", error);
+                setErrorItemToRenderNotFounded(true);
             }
         };
 
@@ -79,7 +81,13 @@ const Producto = () =>{
                         <RecomendedItems _id={_id} setItemToRender={setItemToRender} visible={visible} visibleRef={ref}/>
                     </span>
                     :
-                    <LoadingScreen />
+                    !errorItemToRenderNotFounded ?
+                        <LoadingScreen />
+                        :
+                        <div style={{textAlign: "center", marginTop: "10rem"}}>
+                            <h2>El producto que buscas no existe o no se encuentra disponible.</h2>
+                            <h3>Por favor, verifica la URL o regresa al catálogo.</h3>
+                        </div>
             }
         </div>
     )
@@ -87,6 +95,7 @@ const Producto = () =>{
 
 
 
+// Componente para mostrar los productos recomendados.
 function RecomendedItems({_id, setItemToRender, visible, visibleRef}){
     const [recomendedItems, setRecomendedItems] = useState([]);
 
@@ -121,7 +130,7 @@ function RecomendedItems({_id, setItemToRender, visible, visibleRef}){
                 {
                     visible?
                         recomendedItems.map((elem, index) => {
-                            return(
+                            return(                                     //No me acuerdo para q uso este onclick, deberia borrarlo
                                 <ArticleCard item={elem} index={index} onClick={() => setItemToRender(null)}/>
                             )
                         })

@@ -4,6 +4,7 @@ import {Routes, Route} from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
+import NotFoundPage from './components/NotFoundPage';
 
 import Inicio from './components/pages/home/Home';
 import Catalogo from './components/pages/catalog/Catalog';
@@ -42,6 +43,7 @@ function App() {
           <Route path="/producto/:_id" element={<Product />}/>
           <Route path="/carro" element={<CarroDeCompra />}/>
           <Route path='/administracion' element={<Administracion />}/>
+          <Route path="*" element={<NotFoundPage />} />
         </Routes>
 
         <Footer />

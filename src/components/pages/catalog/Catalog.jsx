@@ -138,7 +138,7 @@ class Catalogo extends React.Component{
                         !this.state.isLoading ?                         
                         this.state.displayedList.map((elem, index) => {
                             return( 
-                                elem.stock ?
+                                elem.isAvailable ?
                                 <ArticleCard 
                                  key={elem._id} 
                                  item={elem} 
