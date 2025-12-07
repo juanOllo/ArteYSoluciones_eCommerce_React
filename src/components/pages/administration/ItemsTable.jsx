@@ -1,5 +1,6 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
+import ImagesCol from './itemsTable/ImagesCol';
 
 class ItemsTable extends React.Component{
     constructor(props){
@@ -11,6 +12,7 @@ class ItemsTable extends React.Component{
             displayedList: [],
             originalList: [],
             allColorsList: [],
+            files: [[]],
         }
 
         this.handleInputSearchChange = this.handleInputSearchChange.bind(this);
@@ -26,6 +28,28 @@ class ItemsTable extends React.Component{
         this.handleUpdateItem = this.handleUpdateItem.bind(this);
         this.handleNewItem = this.handleNewItem.bind(this);
         this.handleRemoveItem = this.handleRemoveItem.bind(this);
+        
+        this.uploadFile = this.uploadFile.bind(this);
+
+        this.updateDisplayedElem = this.updateDisplayedElem.bind(this);
+        this.updateFilesList = this.updateFilesList.bind(this);
+    }
+
+    updateDisplayedElem(elem, index){
+        const updatedList = [...this.state.displayedList];
+
+        updatedList[index] = elem;
+
+        this.setState({ displayedList: updatedList });
+        // this.props.updateDisplayedList(updatedList);
+    }
+
+    updateFilesList(newFile, index){
+        const updatedFiles = [...this.state.files];
+
+        updatedFiles[index].push(newFile);
+
+        this.setState({ files: updatedFiles});
     }
 
     async componentDidMount(){
@@ -175,6 +199,17 @@ class ItemsTable extends React.Component{
             window.alert("No se encontró el item para actualizar.");
             return;
         }
+        console.log("updatedItem: ", updatedItem);
+
+        // Si hay imagenes pendientes entonces las sube a Cloudinary y pusheo la url q m devuelve el fetch
+        if(this.state.files[index].length > 0){
+            for (let f of this.state.files[index]) {
+                updatedItem.images.push(await this.uploadFile(f, index));
+            }
+            const updatedFiles = [...this.state.files];
+            updatedFiles[index] = [];
+            this.setState({ files: updatedFiles});
+        }
 
         // // Checkeo que ningun campo de updatedItem esté vaco
         // if (!updatedItem.name || !updatedItem.info) {
@@ -237,9 +272,7 @@ class ItemsTable extends React.Component{
                 }
             ],
             'info': 'Info del nuevo producto',
-            'images': [
-                "Link de imagen"
-            ],
+            'images': [],
             'colors': [],
             'isAvailable': false,
             'off': 0,
@@ -314,6 +347,23 @@ class ItemsTable extends React.Component{
             }
         }
     }
+
+    // handleFileChange = async (e, i) => {
+    uploadFile = async (file, i) => {
+        // console.log("files: ", updatedFilesList);
+
+        const formData = new FormData();
+        formData.append("image", file);
+
+        const response = await fetch("http://localhost:2000/imagesUpload/upload-new-image", {
+            method: "POST",
+            body: formData,
+        });
+
+        const newImageUrl = await response.json();
+
+        return newImageUrl;
+    };
 
     render(){
 
@@ -409,37 +459,15 @@ class ItemsTable extends React.Component{
                                                 </span>
                                             </div>
                                         </td>
+
                                     {/* IMAGES */}
                                         <td style={{position: "relative", overflowY: "scroll", scrollbarWidth: "none"}}>
-                                            <div style={{display: "flex", flexDirection: "column", position: "absolute", top: "0",  width: "100%"}}>
-                                                {
-                                                    elem.images.map((iElem, iIndex) => <input 
-                                                        onChange={(e) => this.handleInputChange(index, 'images', e.target.value, iIndex)}
-                                                        value={iElem} type="text" placeholder={iElem}
-                                                        />)
-                                                }
-
-                                                <span style={{display: "flex", gap: "0.5rem", width: "fit-content", margin: "0 auto"}}>
-                                                    {
-                                                        elem.images.length < 6 && (elem.images[elem.images.length-1] || elem.images.length === 0)? 
-                                                        // (elem.images[elem.images.length-1] || elem.images.length === 0)? 
-                                                            <button style={{ color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)", border : "none", padding: "0.3rem", borderRadius: "0.3rem"}} onClick={(e) => this.handleNewInput(index, 'images', "")}>
-                                                                AGREGAR</button>
-                                                            : 
-                                                            null
-                                                    }
-
-                                                    {
-                                                        elem.images.length > 1 ?
-                                                            <button style={{ color: "white", backgroundColor: "rgba(0, 0, 0, 0.3)", border : "none", padding: "0.3rem", borderRadius: "0.3rem"}} onClick={(e) => this.handleRemoveInput(index, 'images')}>
-                                                                BORRAR</button>
-                                                            : 
-                                                            null
-                                                    }
-
-                                                </span>
-                                            </div>
+                                            <ImagesCol 
+                                                elem={elem} index={index} files={this.state.files}
+                                                updateFilesList={this.updateFilesList} updateDisplayedElem={this.updateDisplayedElem}
+                                            />
                                         </td>
+
                                     {/* COLORS */}
                                         <td style={{position: "relative", overflowY: "scroll", scrollbarWidth: "none"}}>
                                             <div style={{display: "flex", flexDirection: "column", position: "absolute", top: "0",  width: "100%"}}>

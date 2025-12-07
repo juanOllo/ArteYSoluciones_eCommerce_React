@@ -12,6 +12,11 @@ import Product from './components/pages/product/Product';
 import CarroDeCompra from './components/pages/shoppingCar/ShoppingCar';
 import Administracion from './components/pages/administration/Administration';
 
+// Capáz no es necesario hacerlo acá sino cuando vayas a pagar o cuando entres al carrito.
+import { loadMercadoPago } from '@mercadopago/sdk-js';
+loadMercadoPago('TEST-c6fa5ae2-9252-4a75-9094-b7b1ff74215d', {
+  locale: 'es-AR'
+});
 
 function App() {
   const [allItemsList, setAllItemsList] = React.useState([]);

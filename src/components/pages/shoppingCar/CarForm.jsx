@@ -1,27 +1,66 @@
 import React from "react";
 // import CarroDeCompra from "./CarroDeCompra";
+import Checkout from "./Checkout";
 
 class CarForm extends React.Component{
     constructor(props){
         super(props)
 
         this.state={
-            customerInfo: {}
+            customerInfo: {},
+            email: "",
+            code : "",
+            verified: null,
         }
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
-    }
 
-    handleInputChange(e, key){
+        this.sendCode = this.sendCode.bind(this);
+        this.verifyCode = this.verifyCode.bind(this);
+    }
+    // const [email, setEmail] = useState("");
+    // const [code, setCode] = useState("");
+    // const [verified, setVerified] = useState(null);
+
+    sendCode = async () => {
+
+        await fetch("http://localhost:2000/emailVerify/send-code", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: this.state.email })
+        });
+        alert("Código enviado a tu correo");
+    };
+
+    verifyCode = async () => {
+
+        const res = await fetch("http://localhost:2000/emailVerify/verify-code", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ email: this.state.email, code: this.state.code })
+        });
+        const data = await res.json();
+
+        this.setState({
+            verified: data.verified
+        })
+
+        if(data.verified)
+            this.handleInputChange(this.state.email, 'email');
+    };
+
+    handleInputChange(newInfo, key){
         const updatedCustomerInfo = {
             ...this.state.customerInfo,
-            [key]: e.target.value
+            [key]: newInfo
         }
 
         this.setState({
             customerInfo: updatedCustomerInfo,
         })
+
+        console.log("customerInfo: ", updatedCustomerInfo);
     }
 
     handleSubmit(e){
@@ -34,25 +73,25 @@ class CarForm extends React.Component{
             return;
         }
 
-        // animacion de boton ENVIAR listo
-        e.target.lastChild.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
-        setTimeout(() => {
-            e.target.lastChild.style.animation = "none";
-        }, 100);
+        // // animacion de boton ENVIAR listo
+        // e.target.lastChild.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
+        // setTimeout(() => {
+        //     e.target.lastChild.style.animation = "none";
+        // }, 100);
 
-        // desaparece todos los elementos del form
-        setTimeout(() => {
-            for (let i = e.target.childNodes.length-1; i >= 0; i--) {
-                setTimeout(() => {
+        // // desaparece todos los elementos del form
+        // setTimeout(() => {
+        //     for (let i = e.target.childNodes.length-1; i >= 0; i--) {
+        //         setTimeout(() => {
                     
-                    e.target.childNodes[i].style.display = "none";
-                }, (100*(e.target.childNodes.length-i)));
-            }
-        }, 1000);
+        //             e.target.childNodes[i].style.display = "none";
+        //         }, (100*(e.target.childNodes.length-i)));
+        //     }
+        // }, 1000);
 
-        setTimeout(() => {
-            e.target.style.animation = "none";
-        }, 100);
+        // setTimeout(() => {
+        //     e.target.style.animation = "none";
+        // }, 100);
 
         const data = localStorage.getItem("requests") ? JSON.parse(localStorage.getItem("requests")) : [];
 
@@ -98,14 +137,47 @@ class CarForm extends React.Component{
         return(
             <div  id="carform" style={{width: "100%"}}>
                 <form className="car-form" onSubmit={this.handleSubmit}>
-                    <h1>Completar PEDIDO!</h1>
-                    <label htmlFor="input-name">Nombre y Apellido:</label>
-                    <input id="input-name" type="text" onChange={(e) => this.handleInputChange(e, 'name')} required/>
+                    <h1>Completá con tu información.</h1>
 
-                    <label htmlFor="input-contact">Contacto:</label>
+                    <label style={{width: "45%"}} htmlFor="input-name">Nombre:</label>
+                    <label style={{width: "45%"}} htmlFor="input-lastname">Apellido:</label>
+                    <input id="input-name" type="text" onChange={(e) => this.handleInputChange(e.target.value, 'name')} required/>
+                    {/* <input id="input-name" type="text" onChange={(e) => this.setState({customerInfo : {name : e.target.value}})} required/> */}
+
+                    <input id="input-lastname" type="text" onChange={(e) => this.handleInputChange(e.target.value, 'lastname')} required/>
+
+                    {/* <hr />
+                    <p>Si preferis recibir la información de tu compra via Whatsapp entonces ingresá tu número, 
+                        preciona VERIFICAR NUMERO y deberias recibir un codigo 
+                        para verificar que el numero es correcto.
+                    </p>
+                    <label htmlFor="input-contact">Numero de telefono:</label>
                     <input id="input-contact" type="text" onChange={(e) => this.handleInputChange(e, 'contact')} required/>
+                    <button>VERIFICAR NUMERO</button> */}
 
-                    <h3>Tu encargo:</h3>
+                    <hr style={{width: "100%"}} />
+
+                    <label style={{width: "95%"}} htmlFor="input-email">Email:</label>
+                    <input id="input-email" type="email" onChange={(e) => this.setState({email : e.target.value})} required/>
+                    <button onClick={this.sendCode}>Enviar código</button>
+
+                    <input
+                        type="text"
+                        placeholder="Ingresa el código"
+                        value={this.state.code}
+                        onChange={(e) => this.setState({code : e.target.value})}
+                    />
+                    <button onClick={this.verifyCode}>Verificar</button>
+
+                    {this.state.verified !== null && (
+                        <p>{this.state.verified ? "✅ Email verificado" : "❌ Código incorrecto"}</p>
+                    )}
+
+                    <hr style={{width: "100%"}} />
+
+                    <Checkout />
+
+                    {/* <h3>Tu encargo:</h3>
                     {
                         this.props.itemsList.map(elem => {
                             return elem.cant > 0 ?
@@ -115,9 +187,9 @@ class CarForm extends React.Component{
                             :
                             null
                         })
-                    }
+                    } */}
 
-                    <h1>Precio Final: ${this.props.finalPrice}</h1>
+                    <h1 style={{width: "99%", textAlign: "center"}}>Precio Final: ${this.props.finalPrice}</h1>
 
                     {/* {
                         this.state.customerInfo.name && this.state.customerInfo.contact && this.props.finalPrice>0 ?
