@@ -122,6 +122,9 @@ class Catalogo extends React.Component{
     render(){
         return(
             <div className='catalogo-body'>
+                {/* <div className={'catalog-yellow-star catalog-yellow-star-01'}/>
+                <div className={'catalog-yellow-star catalog-yellow-star-02'}/>
+                <div className={'catalog-yellow-star catalog-yellow-star-03'}/> */}
                 {
                     !this.state.isLoading?
                     <Header 

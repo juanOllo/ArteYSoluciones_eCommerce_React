@@ -13,10 +13,10 @@ import CarroDeCompra from './components/pages/shoppingCar/ShoppingCar';
 import Administracion from './components/pages/administration/Administration';
 
 // Capáz no es necesario hacerlo acá sino cuando vayas a pagar o cuando entres al carrito.
-import { loadMercadoPago } from '@mercadopago/sdk-js';
-loadMercadoPago('TEST-c6fa5ae2-9252-4a75-9094-b7b1ff74215d', {
-  locale: 'es-AR'
-});
+// import { loadMercadoPago } from '@mercadopago/sdk-js';
+// loadMercadoPago('TEST-c6fa5ae2-9252-4a75-9094-b7b1ff74215d', {
+//   locale: 'es-AR'
+// });
 
 function App() {
   const [allItemsList, setAllItemsList] = React.useState([]);
@@ -45,7 +45,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Inicio originalList={allItemsList || []}/>}/>
           <Route path="/catalogo" element={<Catalogo originalList={allItemsList || []}/>}/>
-          <Route path="/producto/:_id" element={<Product />}/>
+          <Route path="/producto/:_id" element={<Product originalList={allItemsList || []}/>}/>
           <Route path="/carro" element={<CarroDeCompra />}/>
           <Route path='/administracion' element={<Administracion />}/>
           <Route path="*" element={<NotFoundPage />} />

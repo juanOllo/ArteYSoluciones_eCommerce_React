@@ -5,7 +5,7 @@ import ArticleCard from '../../ArticleCard';
 import LoadingScreen from '../../LoadingScreen';
 
 // "useParams" solo funciona en funciones de react.
-const Producto = () =>{
+const Producto = ({originalList}) =>{
     const [itemToRender, setItemToRender] = useState(null);
     const [errorItemToRenderNotFounded, setErrorItemToRenderNotFounded] = useState(false);
     
@@ -14,20 +14,27 @@ const Producto = () =>{
     
     useEffect(() => {
         const getItemById = async () => {
-            try {
-                // const response = await fetch(`http://192.168.1.16:2000/items/getItem/${_id}`, {
-                const response = await fetch(`https://ays-api.onrender.com/items/getItem/${_id}`, {
-                    method: "GET",
-                    headers: { "Content-Type": "application/json" }
-                });
-                const data = await response.json();
-                setItemToRender(data); // Guarda el item en el estado.
-                // console.log("item fetched: ", data);
-                // console.log("item con fetch");
-            } catch (error) {
-                console.error("Error fetching item by id:", error);
-                setErrorItemToRenderNotFounded(true);
+            if (Array.isArray(originalList) && originalList.length > 0 && originalList.some(e => e._id == _id)) {
+                setItemToRender(originalList.find(e => e._id == _id));
+
+            } else {
+                // console.log("item fetched");
+                try {
+                    // const response = await fetch(`http://192.168.1.16:2000/items/getItem/${_id}`, {
+                    const response = await fetch(`https://ays-api.onrender.com/items/getItem/${_id}`, {
+                        method: "GET",
+                        headers: { "Content-Type": "application/json" }
+                    });
+                    const data = await response.json();
+                    setItemToRender(data); // Guarda el item en el estado.
+                    // console.log("item fetched: ", data);
+                    // console.log("item con fetch");
+                } catch (error) {
+                    console.error("Error fetching item by id:", error);
+                    setErrorItemToRenderNotFounded(true);
+                }
             }
+
         };
 
         getItemById();
@@ -48,21 +55,21 @@ const Producto = () =>{
         // ([entry]) => {
         //     setVisible(entry.isIntersecting);
         // },
-        ([entry]) => {
-            if (entry.isIntersecting) {
-                setVisible(true); // Solo lo activa, no lo desactiva
-                observer.disconnect(); // Detiene la observación
-            }
-        },
-        { threshold: 0.5 } // 50% del componente debe estar visible
+            ([entry]) => {
+                if (entry.isIntersecting) {
+                    setVisible(true); // Solo lo activa, no lo desactiva
+                    observer.disconnect(); // Detiene la observación
+                }
+            },
+            { threshold: 0.5 } // 50% del componente debe estar visible
         );
 
         if (ref.current) {
-        observer.observe(ref.current);
+            observer.observe(ref.current);
         }
 
         return () => {
-        if (ref.current) observer.unobserve(ref.current);
+            if (ref.current) observer.unobserve(ref.current);
         };
     }, [itemToRender]);
 
@@ -125,7 +132,8 @@ function RecomendedItems({_id, setItemToRender, visible, visibleRef}){
         style={{opacity: visible ? 1 : 0, transition: 'opacity 0.7s ease-in-out'}}
         ref={visibleRef}
         >
-            <h3 style={{marginLeft: "23svw"}}>Productos relacionados:</h3>
+            <h3 style={{marginLeft: "20svw", backgroundColor: "rgba(255, 255, 255, 0.7)", padding: "0.7rem"}}
+            >Productos relacionados:</h3>
             <div className='product-recomended-items-tile'>
                 {
                     visible?

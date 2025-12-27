@@ -44,11 +44,7 @@ class ItemsTable extends React.Component{
         // this.props.updateDisplayedList(updatedList);
     }
 
-    updateFilesList(newFile, index){
-        const updatedFiles = [...this.state.files];
-
-        updatedFiles[index].push(newFile);
-
+    updateFilesList(updatedFiles){
         this.setState({ files: updatedFiles});
     }
 
@@ -106,6 +102,7 @@ class ItemsTable extends React.Component{
 
         if (data) {
             this.inputSearch = data;
+            this.searchItems();
         } else {
             this.inputSearch = "";
             this.setState({
@@ -194,7 +191,7 @@ class ItemsTable extends React.Component{
         //  por eso aqui para actualizarlo solo subo el item sin tocarlo mas.
 
         const updatedItem = this.state.displayedList.find(item => item._id === _id);
-        // console.log("updatedItem: ", updatedItem);
+        console.log("updatedItem: ", updatedItem);
         if (!updatedItem) {
             window.alert("No se encontró el item para actualizar.");
             return;
@@ -202,7 +199,7 @@ class ItemsTable extends React.Component{
         console.log("updatedItem: ", updatedItem);
 
         // Si hay imagenes pendientes entonces las sube a Cloudinary y pusheo la url q m devuelve el fetch
-        if(this.state.files[index].length > 0){
+        if(this.state.files[index]?.length > 0){
             for (let f of this.state.files[index]) {
                 updatedItem.images.push(await this.uploadFile(f, index));
             }
@@ -355,7 +352,8 @@ class ItemsTable extends React.Component{
         const formData = new FormData();
         formData.append("image", file);
 
-        const response = await fetch("http://localhost:2000/imagesUpload/upload-new-image", {
+        // const response = await fetch("http://localhost:2000/imagesUpload/upload-new-image", {
+        const response = await fetch("https://ays-api.onrender.com/imagesUpload/upload-new-image", {
             method: "POST",
             body: formData,
         });
@@ -377,11 +375,12 @@ class ItemsTable extends React.Component{
                 } */}
 
                 <div style={{display: "flex", margin: "2.5rem 0 -1rem", width: "100%", backgroundColor: ""}}>
-                    <input onChange={(e) => this.handleInputSearchChange(e.target.value)} type="text" placeholder='buscar' style={{margin: "0", padding: "0.5rem", width: "14rem", height: "1.5rem"}} />
-                    <button style={{margin: "0 auto 0 0", height: "2.7rem"}} onClick={this.searchItems}>BUSCAR</button>
+
+                    <input onChange={(e) => this.handleInputSearchChange(e.target.value)} type="text" placeholder='buscar por nombre/id' style={{margin: "0", padding: "0.5rem", width: "14rem", height: "1.5rem"}} />
+                    {/* <button style={{margin: "0 auto 0 0", height: "2.7rem"}} onClick={this.searchItems}>BUSCAR</button> */}
                     {
                         !this.inputSearch ?
-                            <button onClick={this.handleNewItem} style={{margin: "0 1rem 0 5rem"}}>AÑADIR PRODUCTO</button>
+                            <button onClick={this.handleNewItem} style={{margin: "0 1rem 0 auto"}}>AÑADIR PRODUCTO</button>
                             :
                             null
                     }

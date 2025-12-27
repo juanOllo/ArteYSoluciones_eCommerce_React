@@ -57,8 +57,14 @@ class ImagesCol extends React.Component{
                         this.props.files[this.props.index]?.map((file) => {
                             return(
                                 <div>
-                                    <img src={URL.createObjectURL(file)} alt="" style={{height: "5rem"}}/>
-                                    <h5 style={{margin: "0"}}>pendiente.</h5>
+                                    <img src={URL.createObjectURL(file)} alt="" style={{height: "5rem", cursor: "pointer"}}
+                                        onClick={(index) => {
+                                            this.props.files[this.props.index].splice(index, 1);
+                                            this.props.updateFilesList(this.props.files);
+                                        }}
+                                        title="Click para eliminar imagen."
+                                    />
+                                    <h5 style={{margin: "0"}}>pendiente..</h5>
                                 </div>
                             )
                         })
@@ -67,7 +73,13 @@ class ImagesCol extends React.Component{
                 </div>
                     {   (this.props.elem.images.length + (this.props.files[this.props.index]?.length || 0)) < 6 ?
                             // <input style={{cursor: "pointer"}} accept="image/*" type="file" onChange={(e) => this.handleFileChange(e, this.props.index)}/>
-                            <input style={{cursor: "pointer"}} accept="image/*" type="file" onChange={(e) => this.props.updateFilesList(e.target.files[0], this.props.index)}/>
+                            <input style={{cursor: "pointer"}} accept="image/*" type="file" 
+                                // onChange={(e) => this.props.updateFilesList(e.target.files[0], this.props.index)}
+                                onChange={(e) => {
+                                    this.props.files[this.props.index].push(e.target.files[0]);
+                                    this.props.updateFilesList(this.props.files);
+                                }}
+                            />
                             :
                             null
                     }

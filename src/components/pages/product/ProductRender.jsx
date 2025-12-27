@@ -77,7 +77,7 @@ class ProductoRender extends React.Component {
             data.unshift(newItemToCart);
             localStorage.setItem("car", JSON.stringify(data));
 
-            toast.success("Producto añadido al carro.", {
+            toast.success("Producto añadido al carro. 👆", {
                 style: {
                     backgroundColor: "var(--azul)",
                     border: "0.1rem solid black"
@@ -180,6 +180,8 @@ class ProductoRender extends React.Component {
                     <p>{this.props.item.info}
                         {/* <div className='producto-p-blur'></div> */}
                     </p>
+
+                    <hr style={{width: "100%", margin: "2rem 0"}}/>
 
                 {/* COLORES */}
                     <div style={{marginBottom: "-0.5rem", backgroundColor: "", display: "flex", gap: "0.5rem", justifyContent: "start", alignItems: "center", height: "3rem", width: "90%"}}>

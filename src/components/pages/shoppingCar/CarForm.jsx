@@ -7,21 +7,25 @@ class CarForm extends React.Component{
         super(props)
 
         this.state={
-            customerInfo: {},
+            // customerInfo: {},
+            customerInfo: localStorage.getItem("customer-info") ? JSON.parse(localStorage.getItem("customer-info")) : {},
+            
             email: "",
             code : "",
-            verified: null,
+            // verified: null,
+            verified: localStorage.getItem("customer-info") ? true : null,
+            isCodeSended: false
         }
 
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleSubmit = this.handleSubmit.bind(this);
+        this.createPurchaseData = this.createPurchaseData.bind(this);
 
         this.sendCode = this.sendCode.bind(this);
         this.verifyCode = this.verifyCode.bind(this);
+        
+        this.isFormComplete = this.isFormComplete.bind(this);
+
     }
-    // const [email, setEmail] = useState("");
-    // const [code, setCode] = useState("");
-    // const [verified, setVerified] = useState(null);
 
     sendCode = async () => {
 
@@ -31,6 +35,7 @@ class CarForm extends React.Component{
             body: JSON.stringify({ email: this.state.email })
         });
         alert("Código enviado a tu correo");
+        this.setState({ isCodeSended: true  })
     };
 
     verifyCode = async () => {
@@ -46,8 +51,15 @@ class CarForm extends React.Component{
             verified: data.verified
         })
 
-        if(data.verified)
+        if(data.verified){
             this.handleInputChange(this.state.email, 'email');
+
+            const data = localStorage.getItem("verified-emails") ? JSON.parse(localStorage.getItem("verified-emails")) : [];
+            if (!data.includes(this.state.email)) {
+                data.push(this.state.email);
+                localStorage.setItem("verified-emails", JSON.stringify(data));
+            }
+        }
     };
 
     handleInputChange(newInfo, key){
@@ -63,88 +75,58 @@ class CarForm extends React.Component{
         console.log("customerInfo: ", updatedCustomerInfo);
     }
 
-    handleSubmit(e){
-        e.preventDefault();
-
-        // console.log("target: ", e.target.lastChild);
+    // handleSubmit(e){
+    createPurchaseData(){
+        // e.preventDefault();
 
         // no te permite enviar pedido vacio
         if(this.props.finalPrice<=0){
             return;
         }
 
-        // // animacion de boton ENVIAR listo
-        // e.target.lastChild.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
-        // setTimeout(() => {
-        //     e.target.lastChild.style.animation = "none";
-        // }, 100);
-
-        // // desaparece todos los elementos del form
-        // setTimeout(() => {
-        //     for (let i = e.target.childNodes.length-1; i >= 0; i--) {
-        //         setTimeout(() => {
-                    
-        //             e.target.childNodes[i].style.display = "none";
-        //         }, (100*(e.target.childNodes.length-i)));
-        //     }
-        // }, 1000);
-
-        // setTimeout(() => {
-        //     e.target.style.animation = "none";
-        // }, 100);
-
-        const data = localStorage.getItem("requests") ? JSON.parse(localStorage.getItem("requests")) : [];
-
-        // console.log("itemsList: ", this.props.itemsList);
+        // const data = localStorage.getItem("requests") ? JSON.parse(localStorage.getItem("requests")) : [];
 
         // crea la lista de items del pedido
         const itemsList = this.props.itemsList.map(elem => {
             return {
-                'id': elem.id,
+                'id': elem._id,
                 'name': elem.name,
-                'priceXSizeRequest': elem.priceXSize[elem.priceXSizeIndex],
+                'price_size_request': elem.priceXSize[elem.priceXSizeIndex],
                 'cant': elem.cant
             }
         })
 
-        // crea y forma la fecha del pedido
-        const date = new Date();
-        const formerDate = date.getDate() + '/' + (date.getMonth()+1) + '/' + date.getFullYear() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
-
         // crea finalmente el pedido
         const newRequest = {
             ...this.state.customerInfo,
-            'date': formerDate,
             'items': itemsList,
             'finalPrice': this.props.finalPrice
         }
-        
-        // console.log("customerInfo: ", newRequest);
-        
-        data.push(newRequest);
-        // console.log("data: ", data);
-        localStorage.setItem("requests", JSON.stringify(data));
 
-        // setTimeout(() => {
-            
-            localStorage.removeItem("car");
-        // }, 1000);
+        return newRequest;
+        
+        // data.push(newRequest);
+        // localStorage.setItem("requests", JSON.stringify(data));
 
+        // localStorage.removeItem("car");
     }
 
+    isFormComplete(){
+        // Validación: todos los campos requeridos completos
+        return (this.state.customerInfo.name && this.state.customerInfo.lastname && this.state.verified === true && this.props.finalPrice > 0)
+    }
 
     render(){
         return(
             <div  id="carform" style={{width: "100%"}}>
-                <form className="car-form" onSubmit={this.handleSubmit}>
+                <form className="car-form" onSubmit={(e) => {e.preventDefault()}}>
                     <h1>Completá con tu información.</h1>
 
                     <label style={{width: "45%"}} htmlFor="input-name">Nombre:</label>
                     <label style={{width: "45%"}} htmlFor="input-lastname">Apellido:</label>
-                    <input id="input-name" type="text" onChange={(e) => this.handleInputChange(e.target.value, 'name')} required/>
-                    {/* <input id="input-name" type="text" onChange={(e) => this.setState({customerInfo : {name : e.target.value}})} required/> */}
-
-                    <input id="input-lastname" type="text" onChange={(e) => this.handleInputChange(e.target.value, 'lastname')} required/>
+                    
+                    <input value={this.state.customerInfo.name || ""} id="input-name" type="text" onChange={(e) => this.handleInputChange(e.target.value, 'name')} required/>
+                    <input value={this.state.customerInfo.lastname || ""} id="input-lastname" type="text" onChange={(e) => this.handleInputChange(e.target.value, 'lastname')} required/>
 
                     {/* <hr />
                     <p>Si preferis recibir la información de tu compra via Whatsapp entonces ingresá tu número, 
@@ -158,16 +140,25 @@ class CarForm extends React.Component{
                     <hr style={{width: "100%"}} />
 
                     <label style={{width: "95%"}} htmlFor="input-email">Email:</label>
-                    <input id="input-email" type="email" onChange={(e) => this.setState({email : e.target.value})} required/>
-                    <button onClick={this.sendCode}>Enviar código</button>
+                    <p style={{opacity: "0.8", backgroundColor: "", margin: "0 auto 1rem 4%"}}>
+                        (Enviaremos un código a tu dirección de email para verificarlo.)</p>
+                    <input  value={this.state.customerInfo.email || this.state.email || ""} style={{width: "50%", margin: "0 0 0 3%"}} id="input-email" type="email" onChange={(e) => this.setState({email : e.target.value})} required/>
+                    <button style={{marginRight: "auto"}} onClick={this.sendCode}>Enviar código</button>
 
-                    <input
-                        type="text"
-                        placeholder="Ingresa el código"
-                        value={this.state.code}
-                        onChange={(e) => this.setState({code : e.target.value})}
-                    />
-                    <button onClick={this.verifyCode}>Verificar</button>
+                    {
+                        this.state.isCodeSended ?
+                            <div style={{width: "100%"}}>
+                                <input style={{width: "30%", margin: "0.5rem 5% 0 3%"}}
+                                    type="text"
+                                    placeholder="Ingresa el código"
+                                    value={this.state.code}
+                                    onChange={(e) => this.setState({code : e.target.value})}
+                                />
+                                <button style={{margin: "0 auto 0 0", padding: "0.6rem"}} onClick={this.verifyCode}>Verificar</button>
+                            </div>
+                            :
+                            null
+                    }
 
                     {this.state.verified !== null && (
                         <p>{this.state.verified ? "✅ Email verificado" : "❌ Código incorrecto"}</p>
@@ -175,7 +166,10 @@ class CarForm extends React.Component{
 
                     <hr style={{width: "100%"}} />
 
-                    <Checkout />
+                    {this.isFormComplete() && (
+                        <Checkout finalPrice={this.props.finalPrice} createPurchaseData={this.createPurchaseData} />
+                    )}
+
 
                     {/* <h3>Tu encargo:</h3>
                     {
@@ -197,9 +191,6 @@ class CarForm extends React.Component{
                         :
                         <button className="send-request-btn" style={{backgroundColor: "transparent"}}>ENVIAR</button>
                     } */}
-
-                    <p>Proximamente...</p>
-
                 </form>
             </div>
         )

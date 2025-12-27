@@ -3,6 +3,7 @@ import React from 'react';
 // import RequestTable from './RequestTable';
 import ItemsTable from './ItemsTable';
 import ColorsTable from './ColorsTable';
+import RequestTable from './RequestTable';
 
 class Administracion extends React.Component{
     constructor(props){
@@ -95,6 +96,8 @@ class Administracion extends React.Component{
                 return <ItemsTable token={this.state.token}/>;
             case 'colors':
                 return <ColorsTable token={this.state.token}/>;
+            case 'requests':
+                return <RequestTable token={this.state.token}/>;
             default:
                 return null;
         }
@@ -127,6 +130,7 @@ class Administracion extends React.Component{
                         <option value="">---DESPLEGAR TABLAS---</option>
                         <option value="items">TABLA DE ITEMS</option>
                         <option value="colors">TABLA DE COLORES</option>
+                        <option value="requests">TABLA DE PEDIDOS</option>
                     </select>
                 </div>
 
