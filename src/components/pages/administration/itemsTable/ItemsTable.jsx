@@ -1,6 +1,6 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
-import ImagesCol from './itemsTable/ImagesCol';
+import ImagesCol from './ImagesCol';
 
 class ItemsTable extends React.Component{
     constructor(props){

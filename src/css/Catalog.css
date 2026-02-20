@@ -82,6 +82,7 @@
 
 .catalogo-header {
     /* background-color: var(--verde); */
+    background: linear-gradient(var(--verde) 0%, var(--verde) 70%, transparent 100%);
     width: 77rem;
     max-width: 96svw;
     height: fit-content;
@@ -232,6 +233,7 @@
     #catalogo-lista,
     .catalogo-header {
         width: 26rem;
+        /* max-width: 99svw; */
         max-width: 97svw;
         /* max-width: 90svw; */
     }
@@ -249,10 +251,13 @@
         display: none;
         width: 0;
     }
-    #catalogo-lista,
+    #catalogo-lista{
+        max-width: 90svw;
+    }
+
     .catalogo-header {
         /* background-color: red; */
-        max-width: 90svw;
+        max-width: 95svw;
         /* overflow: hidden; */
     }
 }

@@ -2,7 +2,7 @@
     width: 100svw;
     height: 3.5rem;
     background-color: var(--verde);
-    border-bottom: 2px solid black;
+    border-bottom: 1px solid black;
     
     position: fixed;
     z-index: 10;

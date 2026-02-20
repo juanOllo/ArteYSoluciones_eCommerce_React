@@ -126,6 +126,31 @@
 
 }
 
+.producto-precio-final-secundario{
+    margin: 0 0 0 auto;
+
+    font-size: 2.5rem;
+
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: end;
+    flex-wrap: wrap;
+    column-gap: 1rem;
+    /* height: 0; */
+    display: none;
+
+    /* animation: spawn-anim 0.5s ease-in-out 0s forwards; */
+}
+
+@keyframes spawn-anim {
+    0%{
+        opacity: 0;
+    }
+    100%{
+        opacity: 1;
+    }
+}
+
 @keyframes producto-precio-final-h1-change-anim {
     0%{
         transform: scale(1.1);
@@ -503,6 +528,11 @@
     .product-recomended-items{
         max-width: 90svw;
         margin: 0 auto;
+    }
+    .producto-precio-final-secundario{
+        margin-top: 1rem;
+        /* height: 2rem; */
+        display: flex;
     }
 }
 

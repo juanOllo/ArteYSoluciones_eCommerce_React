@@ -8,15 +8,6 @@ class RequestTable extends React.Component{
         this.state = {
             requestsList : [],
         }
-
-        this.handleClearRequestList = this.handleClearRequestList.bind(this);
-    }
-
-    handleClearRequestList(){
-        localStorage.removeItem("requests");
-        this.setState({
-            requestsList : []
-        })
     }
 
     async componentDidMount(){
@@ -52,7 +43,8 @@ class RequestTable extends React.Component{
                                 <th style={{width: "8rem"}}>Contacto</th>
                                 <th style={{width: "45rem"}}>Lista de compra</th>
                                 <th style={{width: "4rem"}}>Precio Final</th>
-                                <th style={{width: "4rem"}}>Estado del pago</th>
+                                {/* <th style={{width: "4rem"}}>Estado del pago</th> */}
+                                <th style={{width: "4rem"}}>Estado</th>
                                 <th style={{width: "8rem"}}>Fecha</th>
                             </tr>
                         </thead>
@@ -67,14 +59,14 @@ class RequestTable extends React.Component{
 
                                         <td>
                                             {
-                                                elem.items.map(item => {
+                                                elem.items.map((item, index) => {
                                                     return(
                                                         <div style={{display: "flex"}}>
-
-                                                            <h5 style={{marginRight: "1rem"}}>[{item.id}]</h5>
-                                                            <h5>{item.name}</h5>
+                                                            <h5 >[{item.id}]</h5>
+                                                            <h5 style={{marginLeft: "0.5rem"}}>{item.name}</h5>
                                                             <h5 style={{marginLeft: "auto"}}>{item.price_size_request.size}, ${item.price_size_request.price}</h5>
-                                                            <h5 style={{marginLeft: "1rem"}}>(X{item.cant})</h5>
+                                                            <h5 style={{marginLeft: "1rem"}} title={item.color.color_id}>({item.color.color_name})</h5>
+                                                            <h5 style={{marginLeft: "1rem", marginRight: "0.5rem"}}>(X{item.cant})</h5>
                                                         </div>
                                                     )
                                                 })
@@ -83,7 +75,9 @@ class RequestTable extends React.Component{
 
                                         <td>${elem.finalPrice}</td>
 
-                                        <td>{elem.payment_info.payment_status}</td>
+                                        {/* <td>{elem.payment_info.payment_status}</td> */}
+
+                                        <td>{elem.state}</td>
 
                                         <td>{elem.date}</td>
                                     </tr>
@@ -92,8 +86,6 @@ class RequestTable extends React.Component{
                         </tbody>
                     </table>
                 }
-
-                <button style={{margin: "3rem 0"}} onClick={this.handleClearRequestList}>BORRAR PEDIDOS</button>
             </div>
         )
     }

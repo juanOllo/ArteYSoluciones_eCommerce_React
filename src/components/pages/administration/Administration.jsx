@@ -1,7 +1,7 @@
 // import ReactDOM from 'react-dom';
 import React from 'react';
 // import RequestTable from './RequestTable';
-import ItemsTable from './ItemsTable';
+import ItemsTable from './itemsTable/ItemsTable';
 import ColorsTable from './ColorsTable';
 import RequestTable from './RequestTable';
 

@@ -120,6 +120,13 @@ class Catalogo extends React.Component{
     }
 
     render(){
+
+        if (this.state.isLoading) {
+            return(
+                <LoadingScreen />
+            )
+        }
+
         return(
             <div className='catalogo-body'>
                 {/* <div className={'catalog-yellow-star catalog-yellow-star-01'}/>
@@ -133,13 +140,12 @@ class Catalogo extends React.Component{
                      cantItems={this.state.displayedList.length}
                     />
                     :
-                    <LoadingScreen />
+                    null
                 }
                 
                 <div id="catalogo-lista">
-                    {
-                        !this.state.isLoading ?                         
-                        this.state.displayedList.map((elem, index) => {
+                    
+                    {   this.state.displayedList.map((elem, index) => {
                             return( 
                                 elem.isAvailable ?
                                 <ArticleCard 
@@ -151,8 +157,6 @@ class Catalogo extends React.Component{
                                 null
                             )
                         })
-                        :
-                        null
                     }
                 </div>
             </div>

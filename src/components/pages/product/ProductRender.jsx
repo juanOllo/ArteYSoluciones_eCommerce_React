@@ -12,13 +12,29 @@ class ProductoRender extends React.Component {
             animatePrice: false,
 
             selectedPriceXSizeIndex : 0,
-            selectedColorId: this.props.item.colors.length > 1 ? "" : this.props.item.colors[0].colorId,
+            // selectedColorId: this.props.item.colors.length > 1 ? "" : this.props.item.colors[0].colorId,
+            selectedColorId: this.props.item.colors[0].colorId,
             // selectedColorId: "",
             selectedCant: 1,
+
+            h1Visible: true,
         }
 
         this.addToCar = this.addToCar.bind(this);
     }
+
+    componentDidMount() {
+
+    // Cuando el nombre del producto desaparece entonces aparece el h5 final price
+        const observer = new IntersectionObserver(([entry]) => {
+            this.setState({ h1Visible: entry.isIntersecting });
+        });
+
+        const h1Element = document.querySelector('.producto-precio-final-h1');
+        // const h1Element = document.querySelector('.producto-h1-compu');
+        if (h1Element) observer.observe(h1Element);
+    }
+
 
     componentDidUpdate(prevProps, prevState) {
         // Animacion del price-h1 cuando cambia la cantidad o el tamaño seleccionado.
@@ -63,8 +79,12 @@ class ProductoRender extends React.Component {
             // En todo caso el cliente veria el producto con un tamaño que no seleccionó.
 
             selectedColorId: this.state.selectedColorId,
+            // selectedColorName: this.props.item.colors.find(i => i.colorId == this.state.selectedColorId)?.colorName,
             cant: this.state.selectedCant,
         };
+
+        // console.log("newItemToCart: ", newItemToCart);
+        // console.log("this.props.item.colors: ", this.props.item.colors);
 
         const data = localStorage.getItem("car") ? JSON.parse(localStorage.getItem("car")) : [];
 
@@ -195,12 +215,12 @@ class ProductoRender extends React.Component {
                         }
                         onChange={(e) => this.setState({ selectedColorId: e.target.value })}
                         >
-                            { 
+                            {/* { 
                             this.props.item.colors.length > 1?
                                 <option value="">Colores</option>
                                 :
                                 null
-                            }
+                            } */}
 
                             { 
                             this.props.item.colors.map((cElem, cIndex) => 
@@ -271,6 +291,24 @@ class ProductoRender extends React.Component {
                             this.setState({ selectedCant: this.state.selectedCant + 1});
                         }}> + </button>
                     </div>
+
+                {/* PRICE H5 */}
+                    { !this.state.h1Visible && ( this.props.item.off?
+                        <h2 className='producto-precio-final-secundario'>
+                            <span style={this.state.animatePrice ? {animation: "producto-precio-final-h1-change-anim 0.15s ease-in-out 0s forwards"} : {}}>
+                                ${parseInt(this.props.item.priceXSize[this.state.selectedPriceXSizeIndex]?.price * (1 - (this.props.item.off || 100) / 100)) * this.state.selectedCant}
+                            </span>
+
+                            <span style={{color: "rgba(0, 0, 0, 0.5)", fontSize: "1.7rem", margin: "0 0 0.5rem 1.5rem", textDecoration: "line-through"}}>
+                                ${this.props.item.priceXSize[this.state.selectedPriceXSizeIndex]?.price * this.state.selectedCant}
+                            </span>
+                        </h2>
+                        :
+                        <h2 className='producto-precio-final-secundario' 
+                            style={{...(this.state.animatePrice ? {animation: "producto-precio-final-h1-change-anim 0.15s ease-in-out 0s forwards"} : {}),}}>
+                            ${this.props.item.priceXSize[this.state.selectedPriceXSizeIndex]?.price * this.state.selectedCant}
+                        </h2>)
+                    }
 
                 {/* ADD TO CAR */}
                     <div className="encargar-btns-div">

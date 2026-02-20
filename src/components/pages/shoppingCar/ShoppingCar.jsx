@@ -1,6 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import CarForm from './CarForm';
+import LoadingScreen from '../../LoadingScreen.jsx';
 
 class CarroDeCompra extends React.Component{
     constructor(props){
@@ -74,13 +75,13 @@ class CarroDeCompra extends React.Component{
         })
     }
 
-    clearCarList(e){
+    clearCarList(){
         localStorage.removeItem("car");
 
-        e.target.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
-        setTimeout(() => {
-            e.target.style.animation = "none";
-        }, 100);
+        // e.target.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
+        // setTimeout(() => {
+        //     e.target.style.animation = "none";
+        // }, 100);
 
         this.setState({
             carList: []
@@ -144,27 +145,18 @@ class CarroDeCompra extends React.Component{
 
         // console.log("car-list: ", this.state.carList)
         // console.log("displayedList: ", this.state.displayedList);
+        if (this.state.isLoading) {
+            return(
+                <LoadingScreen />
+            )
+        }
 
         return(
             <div id="carro-de-compra">
                 <div className="car-list-tile car-tile">
-                        {/* <h2 style={{padding: "0.5rem", 
-                                    // color: "white",
-                                    backgroundColor: "var(--violeta)", 
-                                    // backgroundColor: "var(--amarillo)", 
-                                    width: "fit-content",
-                                    border: "0.1rem solid black",
-                                    // margin: "0.1rem auto 0.5rem",
-                                    // margin: "-1.1rem 0 0.5rem 0.7rem",
-                                    borderRadius:"0 0 0.5rem 0.5rem",
-                                    position: "absolute",
-                                    top: "2rem" ,
-                                    zIndex: "2",
-                                    }}>Tu carriro de compra:</h2> */}
                     <div className="list-div">
 
-                        {
-                            this.state.carList.length && !this.state.isLoading ?
+                        {this.state.carList.length ?
                             this.state.carList.map((elem, index) => {
                                 return (
                                     <article className="carrito-articulo">
@@ -200,20 +192,21 @@ class CarroDeCompra extends React.Component{
                                 )
                             })
                             :
-                            this.state.isLoading ?
-                                <h2 style={{textAlign: "center", fontFamily: "var(--ffamily01)", height: "1rem", fontSize: "3.5svh"}}>Cargando items..</h2>
-                                :
-                                <h2 style={{textAlign: "center", fontFamily: "var(--ffamily01)", height: "1rem", fontSize: "3.5svh"}}>Carro de compra vacio :(</h2>
+                            <h2 style={{textAlign: "center", fontFamily: "var(--ffamily01)", height: "1rem", fontSize: "3.5svh"}}>Carro de compra vacio :(</h2>
                         }
                     </div>
-                    <button className="clear-car-btn encargar-btn encargar-btn-ready" onClick={this.clearCarList}>VACIAR CARRO</button>
+                    <button className="clear-car-btn encargar-btn encargar-btn-ready" 
+                        onClick={(e) => {
+                            this.clearCarList();
+                            e.target.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
+                            setTimeout(() => {
+                                e.target.style.animation = "none";
+                            }, 100);
+                        }}>
+                    VACIAR CARRO</button>
                 </div>
                 <div className="car-info-tile car-tile">
-                    {
-                        this.state.carList.length && !this.state.isLoading?
-                        <CarForm finalPrice={parseInt(this.state.carList.reduce((acc, cur) => acc + (parseInt(cur.priceXSize[cur.priceXSizeIndex].price) * (1 - cur.off / 100)) * parseInt(cur.cant), 0))} itemsList={this.state.carList}/>
-                        : null
-                    }
+                    <CarForm clearCarList={this.clearCarList} finalPrice={parseInt(this.state.carList.reduce((acc, cur) => acc + (parseInt(cur.priceXSize[cur.priceXSizeIndex].price) * (1 - cur.off / 100)) * parseInt(cur.cant), 0))} itemsList={this.state.carList}/>
                 </div>
             </div>
         )

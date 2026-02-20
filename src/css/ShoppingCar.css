@@ -186,7 +186,12 @@
     .car-tile{
         width: 100%;
     }
-    .car-list-tile,
+    .car-list-tile{
+        /* background-color: red; */
+        position: inherit;
+        height: fit-content;
+        margin-bottom: -3rem;
+    }
     .car-info-tile{
         height: fit-content;
     }
@@ -234,7 +239,7 @@
     height: 1.5rem;
     border-radius: 0.3rem;
     padding: 0.5rem;
-    margin: 0.5rem 0;
+    margin: 0;
 
     width: calc(45% - 1rem);
 }
@@ -242,14 +247,29 @@
 .car-form label{
     /* width: 45%; */
     height: 2rem;
+    margin: 0;
+    
+    font-size: 0.9rem;
+    font-weight: 600;
 }
 
 .car-form h1{
+    margin: 0 auto;
+}
+
+.car-form h2{
     margin: 0 auto 1.7rem;
+    font-size: 1.8rem;
+}
+
+.car-form h3{
+    margin: 0;
 }
 
 .car-form hr{
     margin: 2rem 0;
+    border: 1px solid black;
+    opacity: 0.1;
 }
 
 .send-request-btn{

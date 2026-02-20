@@ -12,7 +12,9 @@ class ImagesCol extends React.Component{
                     {/* Enlista las imagenes del producto q ya estan cargadas en la nube */}
                     {   this.props.elem.images.map((iElem, iIndex) => 
                             <div style={{width: "fit-content", backgroundColor: "", margin: "0", display: "flex", flexDirection: "column", alignItems: "center"}}>
+                                
                                 <img style={{height: "5rem"}} src={`${iElem}`} />
+                                
                                 <span>
                                     <button 
                                         onClick={() => {
@@ -26,6 +28,7 @@ class ImagesCol extends React.Component{
                                             }
                                         }}
                                     >{"<-"}</button>
+
                                     <button
                                         onClick={() => {
                                             const updatedElem = {...this.props.elem}
@@ -36,6 +39,7 @@ class ImagesCol extends React.Component{
                                             }
                                         }}
                                     >ELIMINAR</button>
+
                                     <button 
                                         onClick={() => {
                                             const updatedElem = {...this.props.elem}
