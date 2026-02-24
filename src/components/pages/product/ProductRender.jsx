@@ -174,9 +174,10 @@ class ProductoRender extends React.Component {
 
                         {/* FONDO */}
                     <div className='producto-title-bar producto-title-bar-backgorund'
-                     style={{zIndex: "1", position: "sticky", top: "3.5rem", left: "0", minHeight: "4rem", marginTop: "-6.3rem", 
-                        // marginBottom: "6rem"
-                    }}>
+                    //  style={{zIndex: "1", position: "sticky", top: "3.5rem", left: "0", minHeight: "4rem", marginTop: "-6.3rem", 
+                    //     // marginBottom: "6rem"
+                    // }}
+                    >
                     </div>
 
                 {/* PRICE H1 */}
@@ -292,8 +293,8 @@ class ProductoRender extends React.Component {
                         }}> + </button>
                     </div>
 
-                {/* PRICE H5 */}
-                    { !this.state.h1Visible && ( this.props.item.off?
+                {/* PRICE ALTERNATIVE */}
+                    { (!this.state.h1Visible) && (window.innerWidth <= 768) && ( this.props.item.off?
                         <h2 className='producto-precio-final-secundario'>
                             <span style={this.state.animatePrice ? {animation: "producto-precio-final-h1-change-anim 0.15s ease-in-out 0s forwards"} : {}}>
                                 ${parseInt(this.props.item.priceXSize[this.state.selectedPriceXSizeIndex]?.price * (1 - (this.props.item.off || 100) / 100)) * this.state.selectedCant}
@@ -314,17 +315,22 @@ class ProductoRender extends React.Component {
                     <div className="encargar-btns-div">
                         { 
                         this.state.selectedPriceXSizeIndex === -1 || this.state.selectedColorId === "" || this.state.selectedCant <= 0?
-                            <button 
-                            onClick={() => { 
-                                toast.error("Por favor seleccione el color, tamaño y cantidad de unidades que quiere agregar al carro de compra.", {
-                                    style: { backgroundColor: "white", border: "0.1rem solid black" }
-                                }); 
-                            }} 
-                            className="encargar-btn btn">
+                            <button className="encargar-btn btn" 
+                                onClick={() => { 
+                                    toast.error("Por favor seleccione el color, tamaño y cantidad de unidades que quiere agregar al carro de compra.", {
+                                        style: { backgroundColor: "white", border: "0.1rem solid black" }
+                                    }); 
+                                }} 
+                                // este style es solo para que cuando aparezca el precioFinalSecundario el boton de agregar al carro no haga un salto visual
+                                style={(window.innerWidth <= 768 && this.state.h1Visible) ? {marginTop: "3.9rem"} : {}}
+                            >
                                 AGREGAR AL CARRO
                             </button>
                             :
-                            <button onClick={this.addToCar} className="encargar-btn encargar-btn-ready btn">
+                            <button onClick={this.addToCar} className="encargar-btn encargar-btn-ready btn"
+                                // este style es solo para que cuando aparezca el precioFinalSecundario el boton de agregar al carro no haga un salto visual
+                                style={(window.innerWidth <= 768 && this.state.h1Visible) ? {marginTop: "3.9rem"} : {}}
+                            >
                                 AGREGAR AL CARRO
                             </button>
                         }

@@ -80,6 +80,9 @@ class ImagesCol extends React.Component{
                             <input style={{cursor: "pointer"}} accept="image/*" type="file" 
                                 // onChange={(e) => this.props.updateFilesList(e.target.files[0], this.props.index)}
                                 onChange={(e) => {
+                                    if (!this.props.files[this.props.index]) {
+                                        this.props.files[this.props.index] = [];
+                                    }
                                     this.props.files[this.props.index].push(e.target.files[0]);
                                     this.props.updateFilesList(this.props.files);
                                 }}

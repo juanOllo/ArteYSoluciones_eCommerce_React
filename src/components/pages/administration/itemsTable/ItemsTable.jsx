@@ -527,7 +527,9 @@ class ItemsTable extends React.Component{
                                             {/* <Link to={`/producto/${elem._id}`} style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</Link> */}
                                             {/* <a href={`http://192.168.1.16:3000/producto/${elem._id}`} target="_blank" style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</a> */}
                                             <a href={`http://localhost:3000/producto/${elem._id}`} target="_blank" style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</a>
-                                            <button style={{borderRadius: "0.3rem", backgroundColor: "var(--rojo)", color: "white", border: "none", margin: "0.8rem 0 0", height: "2rem"}} onClick={() => this.handleRemoveItem(elem._id, index)}>ELIMINAR</button>
+                                            {/* <button style={{borderRadius: "0.3rem", backgroundColor: "var(--rojo)", color: "white", border: "none", margin: "0.8rem 0 0", height: "2rem"}} 
+                                                onClick={() => this.handleRemoveItem(elem._id, index)}
+                                            >ELIMINAR</button> */}
                                         </td>
                                     </tr>
                                 )

@@ -1,6 +1,8 @@
 // import logo from './logo.svg';
 import React, { useEffect } from 'react';
 import {Routes, Route} from 'react-router-dom';
+import SimpleBar from 'simplebar-react';
+import 'simplebar-react/dist/simplebar.min.css';
 
 import Navbar from './components/Navbar';
 import Footer from './components/Footer';
@@ -39,7 +41,8 @@ function App() {
   }, []);
 
   return (
-    <div id="App">
+    <SimpleBar style={{ maxHeight: '100vh' }} autoHide={true}>
+      <div id="App">
         <Navbar />
 
         <Routes>
@@ -51,8 +54,9 @@ function App() {
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
 
-        <Footer />
-    </div>
+        {/* <Footer /> */}
+      </div>
+    </SimpleBar>
   );
 }
 

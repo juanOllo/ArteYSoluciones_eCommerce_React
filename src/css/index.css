@@ -40,7 +40,7 @@
     /* Esto tambien soluciona el scroll horizontal generado por el 
       Home.css > .home-background-holder > width: 100svw; 
     */
-    scrollbar-width: none;
+    /* scrollbar-width: none; */
 }
 
 body {

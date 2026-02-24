@@ -229,6 +229,8 @@
 
     /* background-color: var(--amarillo); */
     /* background-color: var(--violeta); */
+    /* border: 1px solid red; */
+    animation: fadeIn 0.3s ease-in 0s forwards;
 }
 
 .car-form input{
@@ -245,6 +247,7 @@
 }
 
 .car-form label{
+    /* background-color: red; */
     /* width: 45%; */
     height: 2rem;
     margin: 0;
@@ -266,10 +269,44 @@
     margin: 0;
 }
 
+/* estilos para el padre */
+.car-form-send-tipe-btns-div {
+    /* background-color: red; */
+    width: 90%;
+
+    display: flex;
+    column-gap: 1.5rem;
+}
+
+.car-form-send-tipe-btn{
+    background-color: var(--verde);
+    /* font-family: var(--ffamily01); */
+    width: 7rem;
+    height: 8rem;
+    border: 0.5rem solid rgba(0, 0, 0, 0.3);
+    border-radius: 1rem;
+}
+
+.car-form-send-tipe-btn::before{
+    content: "";
+    display: block;
+    width: 0;
+    height: 0;
+    border: 0.5rem solid var(--border-color, rgba(0,0,0,0.3));
+    border-radius: 50%;
+
+    position: relative;
+    top: -2.1rem;
+}
+
 .car-form hr{
-    margin: 2rem 0;
+    margin: 1rem 0;
     border: 1px solid black;
     opacity: 0.1;
+}
+
+.car-form .car-form-final-price{
+    animation: producto-precio-final-h1-change-anim 0.15s ease-in-out 0s forwards;
 }
 
 .send-request-btn{
@@ -278,20 +315,80 @@
     border-radius: 0.5rem;
     border: 2px solid black;
     font-weight: 600;
-    margin: 0 auto;
+    /* margin: 0 auto; */
 
-    box-shadow: 0 0 transparent;
-    transform: translate(0.3rem, 0.3rem);
+    /* box-shadow: 0 0 transparent; */
+    /* transform: translate(0.3rem, 0.3rem); */
+
+    background-color: var(--amarillo);
+    transform: translate(0, 0);
+    box-shadow: 0.3rem 0.3rem black;
+    opacity: 0;
+}
+
+@keyframes car-form-send-request-btn-pressed-anim {
+    from{
+        opacity: 1;
+    }
+    to{
+        box-shadow: 0 0 transparent;
+        transform: translate(0.3rem, 0.3rem);
+        background-color: var(--verde);
+        opacity: 1;
+    }
 }
 
 .car-form button:hover{
     background-color: antiquewhite;
 }
 
-.send-request-btn-ready{
+.car-form-yellow-star-01 {
     background-color: var(--amarillo);
-    transform: translate(0, 0);
-    box-shadow: 0.3rem 0.3rem black;
+    width: 2.5rem;
+    height: 2.5rem;
+    /* z-index: 5; */
+    margin: -4rem;
+    /* margin-left: -4rem; */
+    margin: auto 0 auto -1rem;
+    
+    clip-path: polygon(100% 50%,78.98% 57.76%,93.3% 75%,71.21% 71.21%,75% 93.3%,57.76% 78.98%,50% 100%,42.24% 78.98%,25% 93.3%,28.79% 71.21%,6.7% 75%,21.02% 57.76%,0% 50%,21.02% 42.24%,6.7% 25%,28.79% 28.79%,25% 6.7%,42.24% 21.02%,50% 0%,57.76% 21.02%,75% 6.7%,71.21% 28.79%,93.3% 25%,78.98% 42.24%);
+    animation: car-form-star-anim 1.5s ease-in-out 0s infinite;
 }
 
-/* .car-form *{    border: 1px solid red;  } */
+@keyframes car-form-star-anim {
+    0%{
+        transform: rotate(0deg);
+        opacity: 0;
+    }
+    50%{
+        opacity: 1;
+    }
+    100%{
+        transform: rotate(360deg);
+        opacity: 0;
+    }
+}
+
+@keyframes fadeInToRight {
+    0% {
+        opacity: 0;
+        /* scale: 1.05; */
+        transform: translate(-1rem, 0);
+    }
+    50%{
+        scale: 1;
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}
+
+@keyframes fadeIn {
+    0% {
+        opacity: 0;
+    }
+    100% {
+        opacity: 1;
+    }
+}

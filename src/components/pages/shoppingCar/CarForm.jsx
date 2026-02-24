@@ -15,7 +15,11 @@ class CarForm extends React.Component{
             code : "",
             // verified: null,
             verified: localStorage.getItem("customer-info") ? true : null,
-            isCodeSended: false
+            isCodeSended: false,
+
+            sendType: null,
+
+            isTryingToSendRequest: false,
         }
 
         this.handleInputChange = this.handleInputChange.bind(this);
@@ -36,7 +40,11 @@ class CarForm extends React.Component{
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ email: this.state.email, name: this.state.customerInfo.name })
         });
-        alert("Código enviado a tu correo");
+
+        toast.success("Codigo enviado. 📨", {
+            style: { backgroundColor: "var(--azul)", border: "0.1rem solid black"}
+        });
+        // alert("Código enviado a tu correo");
         this.setState({ isCodeSended: true  })
     };
 
@@ -123,7 +131,7 @@ class CarForm extends React.Component{
     }
 
     async sendRequest(e) {
-    const purchaseData = this.createPurchaseData();
+        const purchaseData = this.createPurchaseData();
 
         try {
             const res = await fetch('http://localhost:2000/requests/send-new-request', {
@@ -146,6 +154,7 @@ class CarForm extends React.Component{
             toast.success("Solicitud enviada correctamente. 👍✅", {
                 style: { backgroundColor: "var(--azul)", border: "0.1rem solid black"}
             });
+            this.requestSendedSoClearData();
             return Promise.resolve();
 
         } catch (error) {
@@ -154,8 +163,13 @@ class CarForm extends React.Component{
         }
     }
 
+    requestSendedSoClearData(){
+        localStorage.removeItem("car");
+        this.props.clearCarList();
+        this.setState({isTryingToSendRequest: false});
+    }
+
     render(){
-        this.createPurchaseData();
         return(
             <div  id="carform" style={{width: "100%"}}>
                 <form className="car-form" onSubmit={(e) => {e.preventDefault()}}>
@@ -163,18 +177,24 @@ class CarForm extends React.Component{
 
                     <hr style={{width: "100%"}} />
                     
-                    <label style={{width: "45%"}} htmlFor="input-name">Nombre:</label>
-                    <label style={{width: "45%"}} htmlFor="input-lastname">Apellido:</label>
+                    <label style={{width: "45%"}} htmlFor="input-name">Nombre *</label>
+                    <label style={{width: "45%"}} htmlFor="input-lastname">Apellido *</label>
                     
                     <input id="input-name" type="text" 
                         value={this.state.customerInfo.name || ""} 
                         onChange={(e) => this.handleInputChange(e.target.value, 'name')} required
-                        readOnly={this.state.verified}/>
+                        // readOnly={this.state.verified}
+                        disabled={this.state.verified}
+                        style={this.state.verified ? {opacity: "0.5"} : {}}
+                    />
 
                     <input id="input-lastname" type="text" 
                         value={this.state.customerInfo.lastname || ""} 
                         onChange={(e) => this.handleInputChange(e.target.value, 'lastname')} required
-                        readOnly={this.state.verified}/>
+                        // readOnly={this.state.verified}
+                        disabled={this.state.verified}
+                        style={this.state.verified ? {opacity: "0.5"} : {}}
+                    />
 
                     {/* <hr />
                     <p>Si preferis recibir la información de tu compra via Whatsapp entonces ingresá tu número, 
@@ -185,14 +205,17 @@ class CarForm extends React.Component{
                     <input id="input-contact" type="text" onChange={(e) => this.handleInputChange(e, 'contact')} required/>
                     <button>VERIFICAR NUMERO</button> */}
 
-                    <hr style={{width: "100%"}} />
+                    {/* <hr style={{width: "100%"}} /> */}
 
-                    <label style={{width: "10%"}} htmlFor="input-email">Email:</label>
+                    <label style={{width: "20%", margin: "1.5rem auto -1.2rem 2.5%"}} htmlFor="input-email">Email *</label>
                     <p style={{...((this.state.email !== "")&&this.state.verified != true ? { opacity: "0.8" } : { opacity: "0" }), backgroundColor: "", margin: "0 0 0 auto", width:"85%", textAlign:"center" }}>
                         (Enviaremos un código a tu dirección de email para verificarlo.)</p>
-                    <input value={this.state.customerInfo.email || this.state.email || ""} style={{width: "50%", margin: "0 0 0 3%"}} id="input-email" type="email" 
+                    <input value={this.state.customerInfo.email || this.state.email || ""} id="input-email" type="email" 
                         onChange={(e) => this.setState({email : e.target.value})} required
-                        readOnly={this.state.verified}/>
+                        // readOnly={this.state.verified}
+                        disabled={this.state.verified}
+                        style={{width: "50%", margin: "0 0 0 2.5%", ...(this.state.verified ? {opacity: "0.5"} : {})}} 
+                    />
 
                     {this.state.verified ?
 
@@ -223,7 +246,7 @@ class CarForm extends React.Component{
                     {
                         this.state.isCodeSended ?
                             <div style={{width: "100%"}}>
-                                <input style={{width: "30%", margin: "0.5rem 5% 0 3%"}}
+                                <input style={{width: "30%", margin: "0.5rem 5% 0 2.5%"}}
                                     type="text"
                                     placeholder="Ingresa el código"
                                     value={this.state.code}
@@ -239,13 +262,67 @@ class CarForm extends React.Component{
                         <p>{this.state.verified ? "✅ Email verificado" : "❌ Código incorrecto"}</p>
                     )}
 
+                    {/* PARA TRATAR LA ENTREGA DEL PRODUCTO */}
+                    {/* <hr style={{width: "100%"}} />
+
+                    <div className="car-form-send-tipe-btns-div">
+                        <button className="car-form-send-tipe-btn"
+                            style={{
+                                "--border-color": this.state.sendType === "retiro" ? "var(--amarillo)" : "rgba(0,0,0,0.3)",
+                                border: this.state.sendType === "retiro" ? "0.5rem solid var(--amarillo)" : "0.5rem solid rgba(0,0,0,0.3)",
+                                // backgroundColor: this.state.sendType === "retiro" ? "rgba(255,255,255,0.3)" : "var(--verde)"
+                            }}
+                            onClick={() => this.setState({ sendType: "retiro" })}
+                        >
+                        Retiro
+                        </button>
+                        <button className="car-form-send-tipe-btn"
+                            style={{
+                                "--border-color": this.state.sendType === "envio" ? "var(--amarillo)" : "rgba(0,0,0,0.3)",
+                                border: this.state.sendType === "envio" ? "0.5rem solid var(--amarillo)" : "0.5rem solid rgba(0,0,0,0.3)",
+                                // backgroundColor: this.state.sendType === "envio" ? "rgba(255,255,255,0.3)" : "var(--verde)"
+                            }}
+                            onClick={() => this.setState({ sendType: "envio" })}
+                        >
+                        Envio
+                        </button>
+                    </div>
+
+                    {this.state.sendType ?
+                        this.state.sendType === "retiro" ?
+                            <p style={{margin: "2rem 0 0 0", maxWidth: "80%"}}>
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                                Información de retiro.
+                            </p>
+                            :
+                            <p style={{margin: "2rem 0 0 0", maxWidth: "80%"}}>
+                                Información de envio.
+                            </p>
+                        :
+                        null
+                    } */}
+
                     <hr style={{width: "100%"}} />
 
-                    <h2 style={{width: "99%", textAlign: "center"}}>Precio Final: ${this.props.finalPrice}</h2>
+                    <h2 className="car-form-final-price" key={this.props.finalPrice} style={{width: "99%", textAlign: "center"}}>Precio Final: ${this.props.finalPrice}</h2>
 
                     {this.isFormComplete() && (
                         <div>
-                            <h3>IMPORTANTE:</h3>
+                            {/* <h3>IMPORTANTE:</h3>
 
                             <p>Recibirá un mail de xxxxx con los datos de tranferencia, 
                                 todos los posibles destinatarios de la tranferencia están SI O SI a nombre de "Lucas Emanuel Ollo", 
@@ -253,11 +330,45 @@ class CarForm extends React.Component{
                                 <br /><br />
                                 Su pedido actualmente está en espera de aprobación, 
                                 será notificado via email por cualquier información.
+                            </p> */}
+
+                            <h3 style={{opacity: "0", animation: "fadeInToRight 0.8s ease-in-out 0.2s forwards"}}>
+                                Método de Pago.
+                            </h3>
+
+                            <p style={{opacity: "0", animation: "fadeInToRight 0.8s ease-in-out 0.3s forwards", backgroundColor: "rgba(255, 255, 255, 0.3)", padding: "0.5rem", borderRadius: "0.3rem"}}>
+                            {/* <p> */}
+                                Una vez confirmado el pedido, recibirás los datos bancarios por email para realizar la transferencia. El pedido se procesará cuando recibamos el comprobante.
                             </p>
 
-                            <button onClick={(e) => this.sendRequest(e)} className="send-request-btn-ready send-request-btn">
-                                ENVIAR PEDIDO
-                            </button>
+                            <h4 style={{opacity: "0", animation: "fadeInToRight 0.8s ease-in-out 0.8s forwards"}}>IMPORTANTE:</h4>
+
+                            <p style={{opacity: "0", animation: "fadeInToRight 0.8s ease-in-out 0.9s forwards", backgroundColor: "rgba(255, 255, 255, 0.3)", padding: "0.5rem", borderRadius: "0.3rem"}}>
+                                Todos los posibles destinatarios de la tranferencia están SÍ O SÍ a nombre de "Lucas Emanuel Ollo", 
+                                nunca le vamos a pedir una tranferencia a una cuenta que no esté a ese mismo nombre.
+                            </p>
+
+                            <div style={{display: "flex", justifyContent: "start", columnGap: "1.5rem"}}>
+                                <button className="send-request-btn"
+                                    onClick={(e) => {
+                                        if (!this.state.isTryingToSendRequest) {
+                                            this.setState({isTryingToSendRequest: true})
+                                            this.sendRequest(e)
+                                        }
+                                    }} 
+                                    // style={this.state.isTryingToSendRequest ? {animation: "encargar-btn-ready-click-anim 0.1s ease-in-out"} : {animation: "none"}}
+                                    // style={this.state.isTryingToSendRequest ? {boxShadow: "0 0 transparent", transform: "translate(0.3rem, 0.3rem)", backgroundColor: "var(--verde)"} : {}}
+                                    style={this.state.isTryingToSendRequest ? {animation: "car-form-send-request-btn-pressed-anim 0.05s ease-in-out 0s forwards"} : {animation: "fadeInToRight 0.8s ease-in-out 1.4s forwards"}}
+                                >
+                                    ENVIAR PEDIDO
+                                </button>
+
+                                <p style={{opacity: "0", ...(this.state.isTryingToSendRequest ? {animation: "fadeInToRight 0.4s ease-in-out 0s forwards"} : {})}}>enviando...</p>
+                                <div className="car-form-yellow-star-01"
+                                    style={this.state.isTryingToSendRequest ? {display: "block"} : {display: "none"}}
+                                ></div>
+                            </div>
+                            
                         </div>
                     )}
 

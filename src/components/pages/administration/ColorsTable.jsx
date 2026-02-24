@@ -231,11 +231,11 @@ class ColorsTable extends React.Component{
                                     >
                                         GUARDAR
                                     </button>
-                                    <button style={{borderRadius: "0.3rem", backgroundColor: "var(--rojo)", color: "white", border: "none", margin: "0 auto 0.5rem", height: "2rem"}} 
+                                    {/* <button style={{borderRadius: "0.3rem", backgroundColor: "var(--rojo)", color: "white", border: "none", margin: "0 auto 0.5rem", height: "2rem"}} 
                                         onClick={() => this.handleRemoveColor(color._id, index)}
                                     >
                                         ELIMINAR
-                                    </button>
+                                    </button> */}
                                 </td>
 
                             </tr>
