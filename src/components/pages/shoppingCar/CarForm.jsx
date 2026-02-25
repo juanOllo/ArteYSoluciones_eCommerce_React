@@ -9,7 +9,14 @@ class CarForm extends React.Component{
 
         this.state={
             // customerInfo: {},
-            customerInfo: localStorage.getItem("customer-info") ? JSON.parse(localStorage.getItem("customer-info")) : {},
+            customerInfo: localStorage.getItem("customer-info") ? 
+                JSON.parse(localStorage.getItem("customer-info")) 
+                : 
+                {
+                    name: "",
+                    lastname: "",
+                    email: ""
+                },
             
             email: localStorage.getItem("customer-info") ? JSON.parse(localStorage.getItem("customer-info")).email : "",
             code : "",
@@ -35,6 +42,13 @@ class CarForm extends React.Component{
 
     sendCode = async () => {
 
+        if (this.state.customerInfo.name === "" || this.state.customerInfo.lastname === "") {
+            toast.error("Completa la informacion anterior 👆", {
+                style: { backgroundColor: "var(--rojo)", border: "0.1rem solid black"}
+            });
+            return;
+        }
+
         await fetch("http://localhost:2000/emailVerify/send-code", {
             method: "POST",
             headers: { "Content-Type": "application/json" },
@@ -45,7 +59,7 @@ class CarForm extends React.Component{
             style: { backgroundColor: "var(--azul)", border: "0.1rem solid black"}
         });
         // alert("Código enviado a tu correo");
-        this.setState({ isCodeSended: true  })
+        this.setState({ isCodeSended: true })
     };
 
     verifyCode = async () => {
@@ -225,7 +239,7 @@ class CarForm extends React.Component{
                                 email: "",
                                 verified: null
                             })}
-                        >Usar otra direccion de email</button>   
+                        >Usar otra información</button>   
                     :
                         <button style={{...((this.state.email !== "")&&this.state.verified != true ? { opacity: "0.8" } : { opacity: "0" }), marginRight: "auto"}} 
                         onClick={() => {
@@ -244,7 +258,7 @@ class CarForm extends React.Component{
                     }
 
                     {
-                        this.state.isCodeSended ?
+                        this.state.isCodeSended && !this.state.verified?
                             <div style={{width: "100%"}}>
                                 <input style={{width: "30%", margin: "0.5rem 5% 0 2.5%"}}
                                     type="text"
