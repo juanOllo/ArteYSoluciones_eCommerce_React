@@ -11,21 +11,25 @@ class ProductoRender extends React.Component {
             focusImageIndex: 0,
             animatePrice: false,
 
-            selectedPriceXSizeIndex : 0,
+            selectedPriceXSizeId : this.props.item.priceXSize[0].id,
+
             // selectedColorId: this.props.item.colors.length > 1 ? "" : this.props.item.colors[0].colorId,
             selectedColorId: this.props.item.colors[0].colorId,
             // selectedColorId: "",
+
             selectedCant: 1,
 
             h1Visible: true,
         }
 
         this.addToCar = this.addToCar.bind(this);
+        
+        this.getActualSelectedPrice = this.getActualSelectedPrice.bind(this);
     }
 
     componentDidMount() {
 
-    // Cuando el nombre del producto desaparece entonces aparece el h5 final price
+        // Cuando el precio h1 del producto desaparece entonces aparece el h5 final price
         const observer = new IntersectionObserver(([entry]) => {
             this.setState({ h1Visible: entry.isIntersecting });
         });
@@ -38,7 +42,7 @@ class ProductoRender extends React.Component {
 
     componentDidUpdate(prevProps, prevState) {
         // Animacion del price-h1 cuando cambia la cantidad o el tamaño seleccionado.
-        if ((prevState.selectedCant !== this.state.selectedCant) || (prevState.selectedPriceXSizeIndex !== this.state.selectedPriceXSizeIndex)) {
+        if ((prevState.selectedCant !== this.state.selectedCant) || (prevState.selectedPriceXSizeId !== this.state.selectedPriceXSizeId)) {
             this.setState({ animatePrice: true }, () => {
                 setTimeout(() => this.setState({ animatePrice: false }), 150); // Duración de la animación.
             });
@@ -48,7 +52,7 @@ class ProductoRender extends React.Component {
         if (prevProps.item._id !== this.props.item._id) {
             this.setState({
                 focusImageIndex: 0,
-                selectedPriceXSizeIndex : 0,
+                selectedPriceXSizeId: this.props.item.priceXSize[0].id,
                 selectedColorId: this.props.item.colors.length > 1 ? "" : this.props.item.colors[0].colorId,
                 // selectedColorId: "",
                 selectedCant: 1,
@@ -71,7 +75,7 @@ class ProductoRender extends React.Component {
 
         const newItemToCart = {
             _id : this.props.item._id, 
-            priceXSizeIndex : this.state.selectedPriceXSizeIndex,
+            selectedPriceXSizeId: this.state.selectedPriceXSizeId,
             // Uso priceXSizeIndex en vez de usar directamente el precio (o el tamaño) seleccionado
             //  para evitar que si el precio (o el tamañano) del producto es actualizado mientras 
             //  el cliente aun tiene ese producto en el localStorage no se muestre en el carrito
@@ -89,7 +93,7 @@ class ProductoRender extends React.Component {
         const data = localStorage.getItem("car") ? JSON.parse(localStorage.getItem("car")) : [];
 
         // No permito agregar el mismo item con el mismo tamaño al carrito.
-        if (data.find(elem => (elem._id === newItemToCart._id && elem.priceXSizeIndex === newItemToCart.priceXSizeIndex && elem.selectedColorId === newItemToCart.selectedColorId))) {
+        if (data.find(elem => (elem._id === newItemToCart._id && elem.selectedPriceXSizeId === newItemToCart.selectedPriceXSizeId && elem.selectedColorId === newItemToCart.selectedColorId))) {
             toast.error("Este elemento ya está en el carro de compra.", {
                 style: { backgroundColor: "var(--rojo2)", border: "0.1rem solid black" }
             });
@@ -122,6 +126,10 @@ class ProductoRender extends React.Component {
                 document.getElementById("navbar-div").children[0].childNodes[0].style.animation = "none";
             }, 400);
         }
+    }
+
+    getActualSelectedPrice(){
+        return this.props.item.priceXSize.find(el => el.id === this.state.selectedPriceXSizeId)?.price
     }
 
     render(){
@@ -185,16 +193,16 @@ class ProductoRender extends React.Component {
                     this.props.item.off?
                         <h1 className='producto-precio-final-h1'>
                             <span style={this.state.animatePrice ? {animation: "producto-precio-final-h1-change-anim 0.15s ease-in-out 0s forwards"} : {}}>
-                                ${parseInt(this.props.item.priceXSize[this.state.selectedPriceXSizeIndex]?.price * (1 - (this.props.item.off || 100) / 100)) * this.state.selectedCant}
+                                ${parseInt(this.getActualSelectedPrice() * (1 - (this.props.item.off || 100) / 100)) * this.state.selectedCant}
                             </span>
 
                             <span style={{color: "rgba(0, 0, 0, 0.5)", fontSize: "1.7rem", margin: "0 0 0.5rem 1.5rem", textDecoration: "line-through"}}>
-                                ${this.props.item.priceXSize[this.state.selectedPriceXSizeIndex]?.price * this.state.selectedCant}
+                                ${this.getActualSelectedPrice() * this.state.selectedCant}
                             </span>
                         </h1>
                         :
                         <h1 className='producto-precio-final-h1' style={this.state.animatePrice ? {animation: "producto-precio-final-h1-change-anim 0.15s ease-in-out 0s forwards"} : {}}>
-                            ${this.props.item.priceXSize[this.state.selectedPriceXSizeIndex]?.price * this.state.selectedCant}
+                            ${this.getActualSelectedPrice() * this.state.selectedCant}
                         </h1>
                     }
 
@@ -243,13 +251,14 @@ class ProductoRender extends React.Component {
                     <div className='span-precios'>
                         <h3 style={{marginBottom: "-0.5rem"}}>Tamaño:</h3>
                         { 
-                        this.props.item.priceXSize.map((elem, index) => 
-                                <button key={index} value={index} className={"precios" + (index === this.state.selectedPriceXSizeIndex || this.props.item.priceXSize.length === 0? " precios-selected" : "")}
-                                onClick={e => this.setState({ selectedPriceXSizeIndex : parseInt(e.target.value) })}
-                                >
-                                    {elem.size}
-                                </button>
-                            )
+                            this.props.item.priceXSize.map((elem, index) => 
+                                    <button key={index} value={index} 
+                                        className={"precios" + (elem.id === this.state.selectedPriceXSizeId || this.props.item.priceXSize.length === 0? " precios-selected" : "")}
+                                        onClick={e => this.setState({ selectedPriceXSizeId : elem.id })}
+                                    >
+                                        {elem.size}
+                                    </button>
+                                )
                         }
                         
                         { 
@@ -297,42 +306,42 @@ class ProductoRender extends React.Component {
                     { (!this.state.h1Visible) && (window.innerWidth <= 768) && ( this.props.item.off?
                         <h2 className='producto-precio-final-secundario'>
                             <span style={this.state.animatePrice ? {animation: "producto-precio-final-h1-change-anim 0.15s ease-in-out 0s forwards"} : {}}>
-                                ${parseInt(this.props.item.priceXSize[this.state.selectedPriceXSizeIndex]?.price * (1 - (this.props.item.off || 100) / 100)) * this.state.selectedCant}
+                                ${parseInt(this.getActualSelectedPrice() * (1 - (this.props.item.off || 100) / 100)) * this.state.selectedCant}
                             </span>
 
                             <span style={{color: "rgba(0, 0, 0, 0.5)", fontSize: "1.7rem", margin: "0 0 0.5rem 1.5rem", textDecoration: "line-through"}}>
-                                ${this.props.item.priceXSize[this.state.selectedPriceXSizeIndex]?.price * this.state.selectedCant}
+                                ${this.getActualSelectedPrice() * this.state.selectedCant}
                             </span>
                         </h2>
                         :
                         <h2 className='producto-precio-final-secundario' 
                             style={{...(this.state.animatePrice ? {animation: "producto-precio-final-h1-change-anim 0.15s ease-in-out 0s forwards"} : {}),}}>
-                            ${this.props.item.priceXSize[this.state.selectedPriceXSizeIndex]?.price * this.state.selectedCant}
+                            ${this.getActualSelectedPrice() * this.state.selectedCant}
                         </h2>)
                     }
 
                 {/* ADD TO CAR */}
                     <div className="encargar-btns-div">
                         { 
-                        this.state.selectedPriceXSizeIndex === -1 || this.state.selectedColorId === "" || this.state.selectedCant <= 0?
-                            <button className="encargar-btn btn" 
-                                onClick={() => { 
-                                    toast.error("Por favor seleccione el color, tamaño y cantidad de unidades que quiere agregar al carro de compra.", {
-                                        style: { backgroundColor: "white", border: "0.1rem solid black" }
-                                    }); 
-                                }} 
-                                // este style es solo para que cuando aparezca el precioFinalSecundario el boton de agregar al carro no haga un salto visual
-                                style={(window.innerWidth <= 768 && this.state.h1Visible) ? {marginTop: "3.9rem"} : {}}
-                            >
-                                AGREGAR AL CARRO
-                            </button>
-                            :
-                            <button onClick={this.addToCar} className="encargar-btn encargar-btn-ready btn"
-                                // este style es solo para que cuando aparezca el precioFinalSecundario el boton de agregar al carro no haga un salto visual
-                                style={(window.innerWidth <= 768 && this.state.h1Visible) ? {marginTop: "3.9rem"} : {}}
-                            >
-                                AGREGAR AL CARRO
-                            </button>
+                            this.state.selectedColorId === "" || this.state.selectedCant <= 0?
+                                <button className="encargar-btn btn" 
+                                    onClick={() => { 
+                                        toast.error("Por favor seleccione el color, tamaño y cantidad de unidades que quiere agregar al carro de compra.", {
+                                            style: { backgroundColor: "white", border: "0.1rem solid black" }
+                                        }); 
+                                    }} 
+                                    // este style es solo para que cuando aparezca el precioFinalSecundario el boton de agregar al carro no haga un salto visual
+                                    style={(window.innerWidth <= 768 && this.state.h1Visible) ? {marginTop: "3.9rem"} : {}}
+                                >
+                                    AGREGAR AL CARRO
+                                </button>
+                                :
+                                <button onClick={this.addToCar} className="encargar-btn encargar-btn-ready btn"
+                                    // este style es solo para que cuando aparezca el precioFinalSecundario el boton de agregar al carro no haga un salto visual
+                                    style={(window.innerWidth <= 768 && this.state.h1Visible) ? {marginTop: "3.9rem"} : {}}
+                                >
+                                    AGREGAR AL CARRO
+                                </button>
                         }
                     </div>
                 </span>

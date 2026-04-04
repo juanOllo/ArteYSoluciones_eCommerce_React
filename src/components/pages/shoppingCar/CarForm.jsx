@@ -119,7 +119,7 @@ class CarForm extends React.Component{
             return {
                 'id': elem._id,
                 'name': elem.name,
-                'price_size_request': elem.priceXSize[elem.priceXSizeIndex],
+                'price_size_request': elem.priceXSize.find(el => el.id === elem.selectedPriceXSizeId),
                 'cant': elem.cant,
                 'color': {
                     'color_id': elem.selectedColorId,
@@ -132,7 +132,7 @@ class CarForm extends React.Component{
         const newRequest = {
             ...this.state.customerInfo,
             'items': itemsList,
-            'finalPrice': this.props.finalPrice,
+            'final_price': this.props.finalPrice,
             'state': 'PENDIENTE'
         }
 
@@ -153,6 +153,8 @@ class CarForm extends React.Component{
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ purchaseData }),
             });
+
+            this.setState({isTryingToSendRequest: false});
 
             if (!res.ok) {
                 // Si el servidor devolvió un error (status 4xx o 5xx)
@@ -237,7 +239,8 @@ class CarForm extends React.Component{
                             onClick={() => this.setState({
                                 customerInfo: {},
                                 email: "",
-                                verified: null
+                                verified: null,
+                                isCodeSended: false
                             })}
                         >Usar otra información</button>   
                     :
@@ -397,7 +400,7 @@ class CarForm extends React.Component{
                         this.props.itemsList.map(elem => {
                             return elem.cant > 0 ?
                             (
-                                <h5 style={{marginTop: "0.1rem"}}>(x{elem.cant}) {elem.name} <br />- [Tamaño: {elem.priceXSize[elem.priceXSizeIndex].size}] [Color: {elem.colors.find(c => c.colorId === elem.selectedColorId).colorName}]</h5>
+                                <h5 style={{marginTop: "0.1rem"}}>(x{elem.cant}) {elem.name} <br />- [Tamaño: {elem.priceXSize.find(el => el.id === elem.selectedPriceXSizeId).size}] [Color: {elem.colors.find(c => c.colorId === elem.selectedColorId).colorName}]</h5>
                             )
                             :
                             null

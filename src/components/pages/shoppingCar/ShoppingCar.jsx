@@ -2,6 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import CarForm from './CarForm';
 import LoadingScreen from '../../LoadingScreen.jsx';
+import { toast } from "sonner";
 
 class CarroDeCompra extends React.Component{
     constructor(props){
@@ -53,21 +54,37 @@ class CarroDeCompra extends React.Component{
         console.log("setState fetch");
 
         let readyToRenderItemsList = [];
+        let someItemsWasBanned = false;
 
-        for (const d of this.state.localStorageCarList) {
-            const articulo = vanillaItemsList.find(a => a._id === d._id);
+        for (const localStorageItem of this.state.localStorageCarList) {
+            const articulo = vanillaItemsList.find(a => a._id === localStorageItem._id);
 
                             // Si selecciono el ultimo priceXSize disponible y luego lo borro en admin
                             //  podria estar intentando acceder fuera de rango.
                             // El articulo no pusheado en readyToRenderItemsList por lo anteriormente explicado
                             //  sigue en el localStorage, hay q resolverlo.
-            if (articulo && (articulo.priceXSize.length > d.priceXSizeIndex) && articulo.stock) {
-                readyToRenderItemsList.push({...articulo, 
-                    priceXSizeIndex: d.priceXSizeIndex, 
-                    cant: d.cant || 1,
-                    selectedColorId : d.selectedColorId,
-                });
+            if (articulo) {
+
+                // Incluso deberia verificar si el tamaño y el color siguen disponibles
+                if (articulo.isAvailable) {
+                    readyToRenderItemsList.push({...articulo, 
+                        cant: localStorageItem.cant || 1,
+                        selectedColorId : localStorageItem.selectedColorId,
+                        selectedPriceXSizeId : localStorageItem.selectedPriceXSizeId,
+                    });
+
+                } else {
+                    someItemsWasBanned = true;
+
+                    // Ademas deberia borrar ese elemento del localStorage
+                }
             }
+        }
+
+        if (someItemsWasBanned) {
+            toast.error("Uno o más de los elementos de tu carrito ya no está disponible", {
+                style: { backgroundColor: "var(--rojo2)", border: "0.1rem solid black" }
+            });
         }
 
         this.setState({
@@ -166,16 +183,15 @@ class CarroDeCompra extends React.Component{
 
                                         <Link to={`/producto/${elem._id}`} style={{color: "black"}}>{elem.name}</Link>
 
-                                        {/* <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">{elem.priceXSize[elem.priceXSizeIndex].size} <br/>${parseInt(elem.priceXSize[elem.priceXSizeIndex].price) * elem.cant}</h4>    */}
                                         <h4 style={{textAlign: "end", marginLeft: "auto"}} className="carrito-articulo-precio">
                                             <span style={{backgroundColor: "var(--amarillo)", padding: "0.5rem", filter: "brightness(1.3)", borderRadius: "0.3rem"}}>
                                                 {elem.colors.find(c => c.colorId === elem.selectedColorId).colorName}
                                             </span>
                                             <br/>
                                             <br/>
-                                            {elem.priceXSize[elem.priceXSizeIndex].size} 
+                                            {elem.priceXSize.find(el => el.id === elem.selectedPriceXSizeId).size} 
                                             <br/>
-                                            ${parseInt((parseInt(elem.priceXSize[elem.priceXSizeIndex].price) * (1 - elem.off / 100)) * elem.cant)}
+                                            ${parseInt((parseInt(elem.priceXSize.find(el => el.id === elem.selectedPriceXSizeId).price) * (1 - elem.off / 100)) * elem.cant)}
                                         </h4>   
 
                                         <span style={{fontWeight: "900", display: "flex", flexDirection: "column", position: "relative"}}>
@@ -206,7 +222,7 @@ class CarroDeCompra extends React.Component{
                     VACIAR CARRO</button>
                 </div>
                 <div className="car-info-tile car-tile">
-                    <CarForm clearCarList={this.clearCarList} finalPrice={parseInt(this.state.carList.reduce((acc, cur) => acc + (parseInt(cur.priceXSize[cur.priceXSizeIndex].price) * (1 - cur.off / 100)) * parseInt(cur.cant), 0))} itemsList={this.state.carList}/>
+                    <CarForm clearCarList={this.clearCarList} itemsList={this.state.carList} finalPrice={parseInt(this.state.carList.reduce((acc, cur) => acc + (parseInt(cur.priceXSize.find(el => el.id === cur.selectedPriceXSizeId).price) * (1 - cur.off / 100)) * parseInt(cur.cant), 0))}/>
                 </div>
             </div>
         )

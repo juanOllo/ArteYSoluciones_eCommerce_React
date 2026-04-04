@@ -23,6 +23,15 @@ import Administracion from './components/pages/administration/Administration';
 function App() {
   const [allItemsList, setAllItemsList] = React.useState([]);
 
+  // // Para controlar el localStorage en fase de pruebas
+  // //  Si la informacion del localStorage fue guardad en una version anterior se borra toda
+  // const thisVersion = "0.2"
+  // const localVersion = localStorage.getItem("ver") ? JSON.parse(localStorage.getItem("ver")) : "";
+  // if (localVersion !== thisVersion) {
+  //   localStorage.clear();
+  //   localStorage.setItem("ver", JSON.stringify(thisVersion));
+  // }
+
   useEffect(() => {
     const fetchItems = async () => {
       try {

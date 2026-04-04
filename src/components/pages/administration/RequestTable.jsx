@@ -12,8 +12,8 @@ class RequestTable extends React.Component{
 
     async componentDidMount(){
         try {
-            const response = await fetch("http://localhost:2000/admin/all-requests", {
-            // const response = await fetch("https://ays-api.onrender.com/admin/all-requests", {
+            // const response = await fetch("http://localhost:2000/admin/all-requests", {
+            const response = await fetch("https://ays-api.onrender.com/admin/all-requests", {
                 method: "GET",
                 headers: { 
                     "Content-Type": "application/json",
@@ -64,6 +64,7 @@ class RequestTable extends React.Component{
                                                         <div style={{display: "flex"}}>
                                                             <h5 >[{item.id}]</h5>
                                                             <h5 style={{marginLeft: "0.5rem"}}>{item.name}</h5>
+                                                            {/* Faltaria lo del price_size_request.id */}
                                                             <h5 style={{marginLeft: "auto"}}>{item.price_size_request.size}, ${item.price_size_request.price}</h5>
                                                             <h5 style={{marginLeft: "1rem"}} title={item.color.color_id}>({item.color.color_name})</h5>
                                                             <h5 style={{marginLeft: "1rem", marginRight: "0.5rem"}}>(X{item.cant})</h5>
@@ -73,7 +74,7 @@ class RequestTable extends React.Component{
                                             }
                                         </td>
 
-                                        <td>${elem.finalPrice}</td>
+                                        <td>${elem.final_price}</td>
 
                                         {/* <td>{elem.payment_info.payment_status}</td> */}
 

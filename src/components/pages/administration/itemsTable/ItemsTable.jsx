@@ -19,8 +19,7 @@ class ItemsTable extends React.Component{
         this.searchItems = this.searchItems.bind(this);
 
         this.handleInputChange = this.handleInputChange.bind(this);
-        this.handleNewInput = this.handleNewInput.bind(this);
-        this.handleRemoveInput = this.handleRemoveInput.bind(this);
+        this.handleNewPriceXSize = this.handleNewPriceXSize.bind(this);
 
         // this.handleStartDemo = this.handleStartDemo.bind(this);
         // this.handleFinishDemo = this.handleFinishDemo.bind(this);
@@ -121,6 +120,7 @@ class ItemsTable extends React.Component{
             case 'name':
             case 'info':
             case 'colors':
+            case 'isAvailable':
                 updatedList[index][key] = info;
                 break;
 
@@ -150,23 +150,29 @@ class ItemsTable extends React.Component{
         })
     }
 
-    handleNewInput(index, key, data){
+    handleNewPriceXSize(index){
         // uso "data" porq el nuevo input puede ser un obj o un string
 
         const updatedList = [...this.state.displayedList];
 
-        updatedList[index][key][updatedList[index][key].length] = data;
+        let nuevoId;
+        do {
+            // Genera un número aleatorio entre 100000 y 999999
+            nuevoId = Math.floor(100000 + Math.random() * 900000);
+        } while (updatedList[index].priceXSize.some(obj => obj.id === nuevoId));
 
-        this.setState({
-            displayedList: updatedList
-        })
-    }
+        const newPXS = {
+            'price': 0,
+            'size': '10x10x10',
+            'available': true,
+            'id': nuevoId,
+        }
 
-    handleRemoveInput(index, key){
+        // updatedList[index][key][updatedList[index][key].length] = data;
 
-        const updatedList = [...this.state.displayedList]; 
+        updatedList[index].priceXSize.push(newPXS);
 
-        updatedList[index][key].splice(-1, 1);
+        console.log("updatedList", updatedList);
 
         this.setState({
             displayedList: updatedList
@@ -191,7 +197,7 @@ class ItemsTable extends React.Component{
         //  por eso aqui para actualizarlo solo subo el item sin tocarlo mas.
 
         const updatedItem = this.state.displayedList.find(item => item._id === _id);
-        console.log("updatedItem: ", updatedItem);
+        // console.log("updatedItem: ", updatedItem);
         if (!updatedItem) {
             window.alert("No se encontró el item para actualizar.");
             return;
@@ -208,19 +214,29 @@ class ItemsTable extends React.Component{
             this.setState({ files: updatedFiles});
         }
 
-        // // Checkeo que ningun campo de updatedItem esté vaco
-        // if (!updatedItem.name || !updatedItem.info) {
-        //     window.alert("EL CAMPO NOMBRE O DESCRIPCION ESTA VACÍO")
-        //     return;
-        // }
-        // if (updatedItem.images.some(img => !img)) {
-        //     window.alert("UN CAMPO IMAGENES ESTÁ VACÍO");
-        //     return;
-        // }
-        // if (updatedItem.priceXSize.some(p => !p.price || !p.size)) {
-        //     window.alert("UN CAMPO PRECIO O TAMAÑO ESTÁ VACÍO");
-        //     return;
-        // }
+        // Checkeo que ningun campo de updatedItem esté vacio
+        if (updatedItem.isAvailable) {
+            
+            if (!updatedItem.name || !updatedItem.info) {
+                window.alert("EL CAMPO NOMBRE O DESCRIPCION ESTA VACÍO");
+                return;
+            }
+            if (!Array.isArray(updatedItem.images) || updatedItem.images.length <= 0) {
+                window.alert("UN CAMPO IMAGENES ESTÁ VACÍO");
+                return;
+            }
+            if (updatedItem.priceXSize.some(p => (!p.price || !p.size) && p.available) || updatedItem.priceXSize.every(p => !p.available)) {
+                window.alert("UN CAMPO PRECIO O TAMAÑO ESTÁ VACÍO Y/O NO HAY NINGUN PRECIO DISPONIBLE");
+                return;
+            }
+            if (!Array.isArray(updatedItem.colors) || updatedItem.colors.length <= 0 || updatedItem.colors.every(p => !this.state.allColorsList.find(c => p.colorId === c._id).isAvailable)) {
+                window.alert("NINGÚN COLOR SELECCIONADO O LOS SELECCIONADOS NO ESTAN EN STOCK");
+                return;
+            }
+        }
+
+        // console.log("pasó");
+        // return;
 
         try {
             const response = await fetch(`https://ays-api.onrender.com/admin/updateItem`, {
@@ -258,14 +274,18 @@ class ItemsTable extends React.Component{
 
     async handleNewItem(){
 
+        let firstPXSId = Math.floor(100000 + Math.random() * 900000);
+
         // Creo un item "vacio" con todos los campos para postearlo en la db
         //  Probablemente haya mejores maneras de tratar la creacion de un item.
         const newItemObj = {
             'name': 'Nombre del nuevo producto',
             'priceXSize': [
                 {
-                    'price': '1000',
-                    'size' : '10x10'
+                    'price': 1000,
+                    'size' : '10x10',
+                    'available': true,
+                    'id': firstPXSId
                 }
             ],
             'info': 'Info del nuevo producto',
@@ -376,7 +396,7 @@ class ItemsTable extends React.Component{
 
                 <div style={{display: "flex", margin: "2.5rem 0 -1rem", width: "100%", backgroundColor: ""}}>
 
-                    <input onChange={(e) => this.handleInputSearchChange(e.target.value)} type="text" placeholder='buscar por nombre/id' style={{margin: "0", padding: "0.5rem", width: "14rem", height: "1.5rem"}} />
+                    <input onChange={(e) => this.handleInputSearchChange(e.target.value)} type="text" placeholder='buscar por nombre o id' style={{margin: "0", padding: "0.5rem", width: "14rem", height: "1.5rem"}} />
                     {/* <button style={{margin: "0 auto 0 0", height: "2.7rem"}} onClick={this.searchItems}>BUSCAR</button> */}
                     {
                         !this.inputSearch ?
@@ -432,9 +452,40 @@ class ItemsTable extends React.Component{
                                                     elem.priceXSize.map((pElem, pIndex) => 
 
                                                         <div style={{width: "100%"}}>
-                                                            <input onChange={(e) => this.handleInputChange(index, 'priceXSize', e.target.value, pIndex, 'size')} style={{width: "4rem"}} value={pElem.size} type="text" placeholder={pElem.size}/>
+                                                            {/* Input de tamaño */}
+                                                            <input onChange={(e) => this.handleInputChange(index, 'priceXSize', e.target.value, pIndex, 'size')} 
+                                                                style={{width: "3.5rem", ...(pElem.available ? {} : {opacity: "0.5", textDecoration: "line-through"})}} value={pElem.size} type="text" placeholder={pElem.size}
+                                                            />
                                                             $
-                                                            <input onChange={(e) => this.handleInputChange(index, 'priceXSize', parseInt(e.target.value), pIndex, 'price')} style={{width: "4rem"}} value={pElem.price} type="text" placeholder={pElem.price}/>
+                                                            {/* Input de precio */}
+                                                            <input onChange={(e) => this.handleInputChange(index, 'priceXSize', parseFloat(e.target.value) || 0, pIndex, 'price')} 
+                                                                style={{width: "3.5rem", ...(pElem.available ? {} : {opacity: "0.5", textDecoration: "line-through"})}} value={parseFloat(pElem.price)} type="text" placeholder={parseFloat(pElem.price)}
+                                                            />
+
+                                                            {
+                                                                !pElem.available ?
+                                                                    <button style={{margin: "0", border: "none", backgroundColor: "var(--rojo)", borderRadius: "50%"}}
+                                                                        title='deshabilitar opción'
+                                                                        onClick={() => {
+                                                                            const updatedList = [...this.state.displayedList]
+                                                                            updatedList[index].priceXSize[pIndex].available = !updatedList[index].priceXSize[pIndex].available
+                                                                            this.setState({
+                                                                                displayedList: updatedList,
+                                                                            })
+                                                                        }}
+                                                                    >X</button>
+                                                                    :
+                                                                    <button style={{margin: "0", border: "none", backgroundColor: "lightgreen", borderRadius: "50%"}}
+                                                                        title='habilitar opción'
+                                                                        onClick={() => {
+                                                                            const updatedList = [...this.state.displayedList]
+                                                                            updatedList[index].priceXSize[pIndex].available = !updatedList[index].priceXSize[pIndex].available
+                                                                            this.setState({
+                                                                                displayedList: updatedList,
+                                                                            })
+                                                                        }}
+                                                                    >V</button>
+                                                            }
                                                         </div>
                                                     )
                                                 }
@@ -443,17 +494,25 @@ class ItemsTable extends React.Component{
                                                     {
                                                         // elem.precios.length === 0 || (elem.precios[elem.precios.length-1][0] && elem.precios[elem.precios.length-1][1])? 
                                                         elem.priceXSize[elem.priceXSize.length-1].price && elem.priceXSize[elem.priceXSize.length-1].size? 
-                                                            <button style={{backgroundColor: "rgba(0, 0, 0, 0.3)", color: "white", border : "none", padding: "0.3rem", borderRadius: "0.3rem", margin: "0.5rem auto"}} onClick={(e) => this.handleNewInput(index, 'priceXSize', {})}>AGREGAR</button>
+                                                            <button style={{backgroundColor: "rgba(0, 0, 0, 0.3)", color: "white", border : "none", padding: "0.3rem", borderRadius: "0.3rem", margin: "0.5rem auto"}} 
+                                                                onClick={(e) => this.handleNewPriceXSize(index)}
+                                                            >
+                                                                AGREGAR
+                                                            </button>
                                                             : 
                                                             null
                                                     }
 
-                                                    {
+                                                    {/* {
                                                         elem.priceXSize.length > 1 ?
-                                                            <button style={{backgroundColor: "rgba(0, 0, 0, 0.3)", color: "white", border : "none", padding: "0.3rem", borderRadius: "0.3rem", margin: "0.5rem auto"}} onClick={(e) => this.handleRemoveInput(index, 'priceXSize')}>BORRAR</button>
+                                                            <button style={{backgroundColor: "rgba(0, 0, 0, 0.3)", color: "white", border : "none", padding: "0.3rem", borderRadius: "0.3rem", margin: "0.5rem auto"}} 
+                                                                onClick={(e) => this.handleRemoveInput(index, 'priceXSize')}
+                                                            >
+                                                                BORRAR
+                                                            </button>
                                                             : 
                                                             null
-                                                    }
+                                                    } */}
 
                                                 </span>
                                             </div>
@@ -505,6 +564,9 @@ class ItemsTable extends React.Component{
                                                 Disp? 
                                                 {/* Hay que solucionar el problema del re-render con el select */}
                                                 <select 
+                                                    // cuando uso el search el campo Disp no se vuelve a renderizar
+                                                    //  entonces lo fuerzo cuando cambia el _id
+                                                    key={elem._id}
                                                     style={{backgroundColor: "rgba(0, 0, 0, 0.2)", color: "", padding: "0.3rem 0"}}
                                                     defaultValue={elem.isAvailable} 
                                                     onChange={e => {
