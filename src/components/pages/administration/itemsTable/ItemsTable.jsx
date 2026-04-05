@@ -410,13 +410,13 @@ class ItemsTable extends React.Component{
                     <thead>
                         <tr>
                             {/* <th style={{width: "3rem"}}>ID</th> */}
-                            <th style={{width: "15rem"}}>Id/Nombre</th>
+                            <th style={{width: "12rem"}}>Id/Nombre</th>
                             <th style={{width: "5rem"}}>Descripcion</th>
                             <th style={{width: "11rem"}}>Tamaño/Precio</th>
                             <th>Imagenes (max:6)</th>
                             <th style={{width: "6rem"}}>Colores</th>
-                            <th style={{width: "5rem"}}>%off/disp</th>
-                            <th style={{width: "3rem"}}>CONTROL</th>
+                            <th style={{width: "6rem"}}>%off/disp</th>
+                            <th style={{width: "6rem"}}>CONTROL</th>
                         </tr>
                     </thead>
 
@@ -463,7 +463,7 @@ class ItemsTable extends React.Component{
                                                             />
 
                                                             {
-                                                                !pElem.available ?
+                                                                pElem.available ?
                                                                     <button style={{margin: "0", border: "none", backgroundColor: "var(--rojo)", borderRadius: "50%"}}
                                                                         title='deshabilitar opción'
                                                                         onClick={() => {

@@ -34,7 +34,7 @@ class CarroDeCompra extends React.Component{
             return;
         }
 
-        let vanillaItemsList = [];
+        let readyToRenderItemsList = [];
         
         try {
             // const response = await fetch(`http://localhost:2000/items/getSomeItems`, {
@@ -44,51 +44,38 @@ class CarroDeCompra extends React.Component{
                 body: JSON.stringify(this.state.localStorageCarList)
             });
             const data = await response.json();
-            vanillaItemsList = [...data];
+            readyToRenderItemsList = [...data];
             this.setState({
                 isLoading: false
             })
+
         } catch (error) {
             console.error("Error fetching items:", error);
         }
-        console.log("setState fetch");
-
-        let readyToRenderItemsList = [];
-        let someItemsWasBanned = false;
-
-        for (const localStorageItem of this.state.localStorageCarList) {
-            const articulo = vanillaItemsList.find(a => a._id === localStorageItem._id);
-
-                            // Si selecciono el ultimo priceXSize disponible y luego lo borro en admin
-                            //  podria estar intentando acceder fuera de rango.
-                            // El articulo no pusheado en readyToRenderItemsList por lo anteriormente explicado
-                            //  sigue en el localStorage, hay q resolverlo.
-            if (articulo) {
-
-                // Incluso deberia verificar si el tamaño y el color siguen disponibles
-                if (articulo.isAvailable) {
-                    readyToRenderItemsList.push({...articulo, 
-                        cant: localStorageItem.cant || 1,
-                        selectedColorId : localStorageItem.selectedColorId,
-                        selectedPriceXSizeId : localStorageItem.selectedPriceXSizeId,
-                    });
-
-                } else {
-                    someItemsWasBanned = true;
-
-                    // Ademas deberia borrar ese elemento del localStorage
-                }
-            }
-        }
-
-        if (someItemsWasBanned) {
-            toast.error("Uno o más de los elementos de tu carrito ya no está disponible", {
-                style: { backgroundColor: "var(--rojo2)", border: "0.1rem solid black" }
-            });
-        }
+        
 
         this.setState({
             carList: readyToRenderItemsList,
+            isLoading: false
+        }, () => {
+            // if (response.status === 200) {
+                let localStorageCarListWithoutBannedItems = this.state.localStorageCarList.filter(item =>
+                    readyToRenderItemsList.some(el => (
+                        el._id.toString() === item._id
+                        && el.selectedPriceXSizeId === item.selectedPriceXSizeId
+                        && el.selectedColorId === item.selectedColorId
+                    ))
+                );
+                console.log("who¿ithoutbanneditems: ", localStorageCarListWithoutBannedItems);
+
+                if (localStorageCarListWithoutBannedItems.length != this.state.localStorageCarList.length) {
+                    toast.error("Uno o más de los elementos de tu carrito ya no está disponible", {
+                        style: { backgroundColor: "var(--rojo2)", border: "0.1rem solid black" }
+                    });
+                }
+    
+                localStorage.setItem("car", JSON.stringify(localStorageCarListWithoutBannedItems));
+            // }
         })
     }
 

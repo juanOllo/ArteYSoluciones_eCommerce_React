@@ -218,7 +218,7 @@
 .product-color-select{
     height: 2.5rem;
     padding: 0 0.3rem;
-    border: 0.15rem solid black;
+    border: 0.1rem solid black;
     cursor: pointer;
 
     font-weight: 600;
@@ -275,7 +275,7 @@
 .producto-cant-btn{
     width: 2.5rem; 
     height: 2.5rem; 
-    border: 0.15rem solid black; 
+    border: 0.14rem solid black; 
     background-color: var(--amarillo);
     border-radius: 50%;
     box-shadow: 0.2rem 0.2rem black;

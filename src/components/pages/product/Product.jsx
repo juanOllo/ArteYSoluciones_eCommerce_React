@@ -14,13 +14,15 @@ const Producto = ({originalList}) =>{
     
     useEffect(() => {
         const getItemById = async () => {
-            if (Array.isArray(originalList) && originalList.length > 0 && originalList.some(e => e._id == _id)) {
-                setItemToRender(originalList.find(e => e._id == _id));
 
-            } else {
+            // if (Array.isArray(originalList) && originalList.length > 0 && originalList.some(e => e._id == _id)) {
+            //     setItemToRender(originalList.find(e => e._id == _id));
+            // // Le faltaria la filtracion de colores que hago en la api cuando hago el fetch getItem
+
+            // } else {
                 // console.log("item fetched");
                 try {
-                    // const response = await fetch(`http://192.168.1.16:2000/items/getItem/${_id}`, {
+                    // const response = await fetch(`http://192.168.100.22:2000/items/getItem/${_id}`, {
                     const response = await fetch(`https://ays-api.onrender.com/items/getItem/${_id}`, {
                         method: "GET",
                         headers: { "Content-Type": "application/json" }
@@ -33,7 +35,7 @@ const Producto = ({originalList}) =>{
                     console.error("Error fetching item by id:", error);
                     setErrorItemToRenderNotFounded(true);
                 }
-            }
+            // }
 
         };
 

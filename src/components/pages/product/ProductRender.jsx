@@ -232,7 +232,7 @@ class ProductoRender extends React.Component {
                             } */}
 
                             { 
-                            this.props.item.colors.map((cElem, cIndex) => 
+                                this.props.item.colors.map((cElem, cIndex) => 
                                     <option key={cIndex} value={cElem.colorId}>
                                         {cElem.colorName}
                                     </option>
@@ -240,10 +240,10 @@ class ProductoRender extends React.Component {
                             }
                         </select>
                         { 
-                        this.props.item.colors.length === 1 ?
-                            <h5 style={{color: "rgba(0, 0, 0, 0.7)"}}>(Unico color disponible)</h5>
-                            :
-                            null
+                            this.props.item.colors.length === 1 ?
+                                <h5 style={{color: "rgba(0, 0, 0, 0.7)"}}>(Unico color disponible)</h5>
+                                :
+                                null
                         }
                     </div>
                     
@@ -251,14 +251,17 @@ class ProductoRender extends React.Component {
                     <div className='span-precios'>
                         <h3 style={{marginBottom: "-0.5rem"}}>Tamaño:</h3>
                         { 
-                            this.props.item.priceXSize.map((elem, index) => 
-                                    <button key={index} value={index} 
+                            // Los precios no disponibles ya se filtran en la api pero lo dejo igual por las dudas
+                            this.props.item.priceXSize.map((elem, index) => {
+                                if (elem.available) {
+                                    return <button key={index} value={index} 
                                         className={"precios" + (elem.id === this.state.selectedPriceXSizeId || this.props.item.priceXSize.length === 0? " precios-selected" : "")}
                                         onClick={e => this.setState({ selectedPriceXSizeId : elem.id })}
                                     >
                                         {elem.size}
                                     </button>
-                                )
+                                }
+                            })
                         }
                         
                         { 
