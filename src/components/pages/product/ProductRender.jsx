@@ -85,6 +85,7 @@ class ProductoRender extends React.Component {
             selectedColorId: this.state.selectedColorId,
             // selectedColorName: this.props.item.colors.find(i => i.colorId == this.state.selectedColorId)?.colorName,
             cant: this.state.selectedCant,
+            last_update: this.props.item.last_update,
         };
 
         // console.log("newItemToCart: ", newItemToCart);

@@ -69,7 +69,7 @@ class CarroDeCompra extends React.Component{
                 console.log("who¿ithoutbanneditems: ", localStorageCarListWithoutBannedItems);
 
                 if (localStorageCarListWithoutBannedItems.length != this.state.localStorageCarList.length) {
-                    toast.error("Uno o más de los elementos de tu carrito ya no está disponible", {
+                    toast.error("Uno o más de los elementos de tu carrito ya no está disponible ó actualizó su información", {
                         style: { backgroundColor: "var(--rojo2)", border: "0.1rem solid black" }
                     });
                 }

@@ -177,7 +177,7 @@ class ColorsTable extends React.Component{
 
     render(){
         return(
-            <div className='colors-table' style={{marginTop: "2.5rem", width: "fit-content"}}>
+            <div className='colors-table' style={{marginTop: "0", width: "fit-content"}}>
                 <div style={{backgroundColor: "" ,width: "100%", display: "flex"}}>
                     <button onClick={() => this.handleNewColor()} style={{margin: "0 0 0 auto", padding: "0.5rem"}}>AÑADIR COLOR</button>
                 </div>

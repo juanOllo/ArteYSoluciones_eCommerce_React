@@ -1,6 +1,7 @@
 import React from 'react';
 // import { Link } from 'react-router-dom';
 import ImagesCol from './ImagesCol';
+import isEqual from "lodash/isEqual";
 
 class ItemsTable extends React.Component{
     constructor(props){
@@ -15,18 +16,18 @@ class ItemsTable extends React.Component{
             files: [[]],
         }
 
-        this.handleInputSearchChange = this.handleInputSearchChange.bind(this);
-        this.searchItems = this.searchItems.bind(this);
+        this.fetchLists = this.fetchLists.bind(this);
+
+        // Por el hecho de que uso el index en el handleUpdateItem para cargar las imagenes q quedaron en cola
+        //  es rpbable que de muchos errores con el search
+        // this.handleInputSearchChange = this.handleInputSearchChange.bind(this);
+        // this.searchItems = this.searchItems.bind(this);
 
         this.handleInputChange = this.handleInputChange.bind(this);
         this.handleNewPriceXSize = this.handleNewPriceXSize.bind(this);
-
-        // this.handleStartDemo = this.handleStartDemo.bind(this);
-        // this.handleFinishDemo = this.handleFinishDemo.bind(this);
         
         this.handleUpdateItem = this.handleUpdateItem.bind(this);
         this.handleNewItem = this.handleNewItem.bind(this);
-        this.handleRemoveItem = this.handleRemoveItem.bind(this);
         
         this.uploadFile = this.uploadFile.bind(this);
 
@@ -34,20 +35,11 @@ class ItemsTable extends React.Component{
         this.updateFilesList = this.updateFilesList.bind(this);
     }
 
-    updateDisplayedElem(elem, index){
-        const updatedList = [...this.state.displayedList];
-
-        updatedList[index] = elem;
-
-        this.setState({ displayedList: updatedList });
-        // this.props.updateDisplayedList(updatedList);
+    componentDidMount(){
+        this.fetchLists();
     }
 
-    updateFilesList(updatedFiles){
-        this.setState({ files: updatedFiles});
-    }
-
-    async componentDidMount(){
+    async fetchLists(){
         try {
             // const response = await fetch("http://localhost:2000/items/allItemsList", {
             const response = await fetch("https://ays-api.onrender.com/items/allItemsList", {
@@ -55,9 +47,10 @@ class ItemsTable extends React.Component{
                 headers: { "Content-Type": "application/json" }
             });
             const data = await response.json();
+            const reversed = [...data].reverse()
             this.setState({
-                displayedList: data.slice().reverse(),
-                originalList: data.slice().reverse()
+                displayedList: structuredClone(reversed),
+                originalList: structuredClone(reversed)
             });
             // console.log("Items obtenidos:", data);
         } catch (error) {
@@ -79,36 +72,38 @@ class ItemsTable extends React.Component{
         }
 
         console.log("setState fetch");
+
+        // this.searchItems();
     }
 
-    searchItems(){
+    // searchItems(){
 
-        // console.log("this.inputSearch: ", this.inputSearch);
+    //     // console.log("this.inputSearch: ", this.inputSearch);
 
-        // tengo que hacer esto porq no se si el usuario va a usar mayusculas y/o tildes
-        const cleanInputSearch = this.inputSearch.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u");
+    //     // tengo que hacer esto porq no se si el usuario va a usar mayusculas y/o tildes
+    //     const cleanInputSearch = this.inputSearch.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u");
 
-        if (cleanInputSearch) {
-            const updatedList = this.state.originalList.filter(x => x.name.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u").includes(cleanInputSearch) || x._id.includes(cleanInputSearch))
+    //     if (cleanInputSearch) {
+    //         const updatedList = this.state.originalList.filter(x => x.name.toLowerCase().replaceAll("á", "a").replaceAll("é", "e").replaceAll("í", "i").replaceAll("ó", "o").replaceAll("ú", "u").includes(cleanInputSearch) || x._id.includes(cleanInputSearch))
     
-            this.setState({
-                displayedList: updatedList
-            })
-        }
-    }
+    //         this.setState({
+    //             displayedList: updatedList
+    //         })
+    //     }
+    // }
 
-    handleInputSearchChange(data){
+    // handleInputSearchChange(data){
 
-        if (data) {
-            this.inputSearch = data;
-            this.searchItems();
-        } else {
-            this.inputSearch = "";
-            this.setState({
-                displayedList: [...this.state.originalList]
-            })
-        }
-    }
+    //     if (data) {
+    //         this.inputSearch = data;
+    //         this.searchItems();
+    //     } else {
+    //         this.inputSearch = "";
+    //         this.setState({
+    //             displayedList: structuredClone(this.state.originalList)
+    //         })
+    //     }
+    // }
 
     handleInputChange(index, key, info, index2, key2){
 
@@ -179,20 +174,7 @@ class ItemsTable extends React.Component{
         })
     }
 
-    // handleStartDemo(){
-    //     localStorage.setItem("demoList", JSON.stringify(this.state.displayedList));
-    //     window.location.reload();
-    // }
-
-    // handleFinishDemo(){
-    //     localStorage.removeItem("demoList");
-    //     window.location.reload();
-    // }
-
     async handleUpdateItem(_id, index) {
-        // console.log("_id to update: ", _id);
-        // console.log("item updated: ", JSON.stringify(this.state.displayedList[index]));
-
         // handleChange() edita la informacion del item en tiempo real dentro de this.state.displayedList
         //  por eso aqui para actualizarlo solo subo el item sin tocarlo mas.
 
@@ -202,7 +184,7 @@ class ItemsTable extends React.Component{
             window.alert("No se encontró el item para actualizar.");
             return;
         }
-        console.log("updatedItem: ", updatedItem);
+        // console.log("updatedItem: ", updatedItem);
 
         // Si hay imagenes pendientes entonces las sube a Cloudinary y pusheo la url q m devuelve el fetch
         if(this.state.files[index]?.length > 0){
@@ -258,14 +240,13 @@ class ItemsTable extends React.Component{
                 window.alert(`Informacion del item [${updatedItem.name}] actualizada exitosamente!!`);
             }
 
-            // const updatedItem = await response.json();
-            // console.log("Respuesta del servidor:", updatedItem);
+            // const updatedList = this.state.originalList.map(item => {return item._id !== _id ? item : updatedItem});
 
-            const updatedList = this.state.originalList.map(item => {return item._id !== _id ? item : updatedItem});
+            // this.setState({
+            //     originalList: updatedList
+            // })
 
-            this.setState({
-                originalList: updatedList
-            })
+            this.fetchLists();
 
         } catch (error) {
             console.error("Error fetching items:", error);
@@ -310,59 +291,12 @@ class ItemsTable extends React.Component{
                 throw new Error(`Error del servidor: ${response.status}`);
             }
 
-            // Cuando creo un item nuevo necesito recibir el _id creado en la api para darselo al item en el local
-            //  Esto es necesario porq no puedo actualizar, ni borrar, el item si no tengo su _id
-            const newItem_id = await response.json();
-            newItemObj._id = newItem_id.insertedId;
-
-            // const updatedList = [...this.state.displayedList, newItemObj];
-            const updatedList = [...this.state.originalList];
-        
-            updatedList.unshift(newItemObj);
-
-            this.setState({
-                displayedList: updatedList,
-                originalList: updatedList
-            })
+            this.fetchLists();
 
         } catch (error) {
             console.error("Error fetching items:", error);
         }
 
-    }
-    
-    async handleRemoveItem(_id, index){
-        // Dejo el index solo para mostrar el nombre del item en el window.confirm
-
-        if(window.confirm(`Borrar item "${this.state.displayedList[index].name}" ?`)) {
-            try {
-                // const response = await fetch(`http://localhost:2000/admin/deleteItem/${_id}`, {
-                const response = await fetch(`https://ays-api.onrender.com/admin/deleteItem/${_id}`, {
-                    method: "DELETE",
-                    headers: { 
-                        "Content-Type": "application/json",
-                        "Authorization": `Bearer ${this.props.token}`
-                    }
-                });
-    
-                if (!response.ok) {
-                    throw new Error(`Error del servidor: ${response.status}`);
-                }
-
-                const updatedDisplayedList = this.state.displayedList.filter(item => item._id !== _id);
-                const updatedOriginalList = this.state.originalList.filter(item => item._id !== _id);
-        
-                // updatedList.splice(index, 1);
-
-                this.setState({
-                    displayedList: updatedDisplayedList,
-                    originalList: updatedOriginalList
-                })
-    
-            } catch (error) {
-                console.error("Error fetching items:", error);
-            }
-        }
     }
 
     // handleFileChange = async (e, i) => {
@@ -381,7 +315,20 @@ class ItemsTable extends React.Component{
         const newImageUrl = await response.json();
 
         return newImageUrl;
-    };
+    }
+
+    updateDisplayedElem(elem, index){
+        const updatedList = [...this.state.displayedList];
+
+        updatedList[index] = elem;
+
+        this.setState({ displayedList: updatedList });
+        // this.props.updateDisplayedList(updatedList);
+    }
+
+    updateFilesList(updatedFiles){
+        this.setState({ files: updatedFiles});
+    }
 
     render(){
 
@@ -394,16 +341,16 @@ class ItemsTable extends React.Component{
                     : false
                 } */}
 
-                <div style={{display: "flex", margin: "2.5rem 0 -1rem", width: "100%", backgroundColor: ""}}>
+                <div style={{display: "flex", margin: "0 0 -1rem", width: "100%", backgroundColor: ""}}>
 
-                    <input onChange={(e) => this.handleInputSearchChange(e.target.value)} type="text" placeholder='buscar por nombre o id' style={{margin: "0", padding: "0.5rem", width: "14rem", height: "1.5rem"}} />
+                    {/* <input onChange={(e) => this.handleInputSearchChange(e.target.value)} type="text" placeholder='buscar por nombre o id' style={{margin: "0", padding: "0.5rem", width: "14rem", height: "1.5rem"}} /> */}
                     {/* <button style={{margin: "0 auto 0 0", height: "2.7rem"}} onClick={this.searchItems}>BUSCAR</button> */}
-                    {
-                        !this.inputSearch ?
-                            <button onClick={this.handleNewItem} style={{margin: "0 1rem 0 auto"}}>AÑADIR PRODUCTO</button>
-                            :
+                    {/* {
+                        !this.inputSearch ? */}
+                            <button onClick={this.handleNewItem} style={{margin: "0 1rem 0 auto", padding: "0.5rem"}}>AÑADIR PRODUCTO</button>
+                            {/* :
                             null
-                    }
+                    } */}
                 </div>
 
                 <table>
@@ -585,13 +532,16 @@ class ItemsTable extends React.Component{
                                         </td>
                                     {/* GUARDAR, BORRAR & VISTA_PREV */}
                                         <td>
-                                            <button style={{margin: "0 0 0.8rem", borderRadius: "0.3rem", backgroundColor: "lightgreen", border: "none", height: "2rem"}} onClick={() => this.handleUpdateItem(elem._id, index)}>GUARDAR</button>
+                                            {
+                                                !isEqual(this.state.displayedList[index], this.state.originalList[index]) ?
+                                                    <button style={{margin: "0 0 0.8rem", borderRadius: "0.3rem", backgroundColor: "lightgreen", border: "none", height: "2rem"}} onClick={() => this.handleUpdateItem(elem._id, index)}>GUARDAR</button>
+                                                    :
+                                                    null
+                                            }
                                             {/* <Link to={`/producto/${elem._id}`} style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</Link> */}
                                             {/* <a href={`http://192.168.1.16:3000/producto/${elem._id}`} target="_blank" style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</a> */}
                                             <a href={`http://localhost:3000/producto/${elem._id}`} target="_blank" style={{margin: "0 0.3rem", borderRadius: "0.3rem", backgroundColor: "var(--azul)", color: "black", width: "15rem", padding: "0.3rem"}}>VISTA_PREV.</a>
-                                            {/* <button style={{borderRadius: "0.3rem", backgroundColor: "var(--rojo)", color: "white", border: "none", margin: "0.8rem 0 0", height: "2rem"}} 
-                                                onClick={() => this.handleRemoveItem(elem._id, index)}
-                                            >ELIMINAR</button> */}
+                                            
                                         </td>
                                     </tr>
                                 )
