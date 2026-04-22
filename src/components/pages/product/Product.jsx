@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import ProductRender from './ProductRender';
 import ArticleCard from '../../ArticleCard';
 import LoadingScreen from '../../LoadingScreen';
+// import RequestTutorial from '../../RequestTutorial';
 
 // "useParams" solo funciona en funciones de react.
 const Producto = ({originalList}) =>{
@@ -87,6 +88,7 @@ const Producto = ({originalList}) =>{
                             // backgroundColor: "rgba(0,0,0,0.5)", 
                             marginBottom: "-14rem", marginTop: "4rem"}}>
                         </div>
+                        {/* <RequestTutorial/> */}
                         <RecomendedItems _id={_id} setItemToRender={setItemToRender} visible={visible} visibleRef={ref}/>
                     </span>
                     :
@@ -134,8 +136,8 @@ function RecomendedItems({_id, setItemToRender, visible, visibleRef}){
         style={{opacity: visible ? 1 : 0, transition: 'opacity 0.7s ease-in-out'}}
         ref={visibleRef}
         >
-            <h3 style={{marginLeft: "20svw", backgroundColor: "rgba(255, 255, 255, 0.7)", padding: "0.7rem"}}
-            >Productos relacionados:</h3>
+            <h3 className='product-recomended-items-h3'>
+                Productos relacionados:</h3>
             <div className='product-recomended-items-tile'>
                 {
                     visible?

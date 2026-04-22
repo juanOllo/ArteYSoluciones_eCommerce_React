@@ -138,8 +138,6 @@ class ProductoRender extends React.Component {
         return(
             <div id='producto'>
                 <div className='images-tile'>
-                    <h1 className='producto-h1-mobil'>{this.props.item.name}</h1>
-
                     { 
                     this.props.item.off && this.props.item.off > 0 ?
                         <div className='item-off-star'>

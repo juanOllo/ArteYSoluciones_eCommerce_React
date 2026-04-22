@@ -56,10 +56,10 @@ class NavbarTile extends React.Component{
                     {/* <div className={'navbar-star'} style={this.props.location.pathname === "/catalogo"? {backgroundColor: "var(--amarillo)"} : {backgroundColor: "rgba(0, 0, 0, 0.15)"}}></div> */}
                     <p>CATÁLOGO</p>
                 </Link>
-                <Link to="/administracion" className="navbar-link navbar-btn">
+                {/* <Link to="/administracion" className="navbar-link navbar-btn"> */}
                     {/* <div className={'navbar-star'} style={this.props.location.pathname === "/administracion"? {backgroundColor: "var(--amarillo)"} : {backgroundColor: "rgba(0, 0, 0, 0.15)"}}></div> */}
-                    <p>ADMIN</p>
-                </Link>
+                    {/* <p>ADMIN</p>
+                </Link> */}
 
             </div>
         )

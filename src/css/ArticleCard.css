@@ -83,7 +83,7 @@
 .catalogo-img-focus {
     height: 100%;
     margin: 0 0 0 auto;
-    border-radius: 0.3rem;
+    border-radius: 0 0.2rem 0.2rem 0;
 }
 
 .catalogo-img {

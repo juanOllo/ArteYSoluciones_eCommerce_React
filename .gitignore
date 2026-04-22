@@ -27,3 +27,7 @@ yarn-error.log*
 
 # planes e ideas
 letras.txt
+promps.txt
+
+public/assets
+src/components/RequestTutorial.jsx
