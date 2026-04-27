@@ -4,6 +4,7 @@ import ProductRender from './ProductRender';
 import ArticleCard from '../../ArticleCard';
 import LoadingScreen from '../../LoadingScreen';
 // import RequestTutorial from '../../RequestTutorial';
+import Questions from './Questions';
 
 // "useParams" solo funciona en funciones de react.
 const Producto = ({originalList}) =>{
@@ -89,6 +90,7 @@ const Producto = ({originalList}) =>{
                             marginBottom: "-14rem", marginTop: "4rem"}}>
                         </div>
                         {/* <RequestTutorial/> */}
+                        <Questions/>
                         <RecomendedItems _id={_id} setItemToRender={setItemToRender} visible={visible} visibleRef={ref}/>
                     </span>
                     :
