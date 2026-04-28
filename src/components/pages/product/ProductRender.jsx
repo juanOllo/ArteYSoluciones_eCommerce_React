@@ -204,12 +204,13 @@ class ProductoRender extends React.Component {
                             ${this.getActualSelectedPrice() * this.state.selectedCant}
                         </h1>
                     }
+                    <hr style={{width: "80%", margin: "0", border: "1px solid rgba(0, 0, 0, 0.3)"}}/>
 
                     <p>{this.props.item.info}
                         {/* <div className='producto-p-blur'></div> */}
                     </p>
 
-                    <hr style={{width: "100%", margin: "2rem 0"}}/>
+                    <hr style={{width: "80%", margin: "0 0 2rem", border: "1px solid rgba(0, 0, 0, 0.3)"}}/>
 
                 {/* COLORES */}
                     <div style={{marginBottom: "-0.5rem", backgroundColor: "", display: "flex", gap: "0.5rem", justifyContent: "start", alignItems: "center", height: "3rem", width: "90%"}}>

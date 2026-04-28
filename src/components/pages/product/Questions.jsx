@@ -1,17 +1,16 @@
 const newQuestion = (e) => {
-        // Aplica animacion de click al addToCarBtn
-        const btn = e.target.classList.contains("btn") ? e.target : e.target.parentElement;
-        // console.log("btn: ", btn);
-        // btn.style.backgroundColor = "transparent";
+    // Aplica animacion de click al addToCarBtn
+    const btn = e.target.classList.contains("btn") ? e.target : e.target.parentElement;
+    // console.log("btn: ", btn);
+    // btn.style.backgroundColor = "transparent";
+    btn.style.animation = "none";
+    btn.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
+    setTimeout(() => {
         btn.style.animation = "none";
-        btn.style.animation = "encargar-btn-ready-click-anim 0.1s ease-in-out";
-        setTimeout(() => {
-            btn.style.animation = "none";
-        }, 100);
-    }
-const Questions = () => {
+    }, 100);
+}
 
-    
+const Questions = () => {
 
     return (
         <div className="questions-section">

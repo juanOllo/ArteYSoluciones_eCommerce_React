@@ -135,11 +135,11 @@ function RecomendedItems({_id, setItemToRender, visible, visibleRef}){
 
     return(
         <div className='product-recomended-items'
-        style={{opacity: visible ? 1 : 0, transition: 'opacity 0.7s ease-in-out'}}
+        // style={{opacity: visible ? 1 : 0, transition: 'opacity 0.7s ease-in-out'}}
         ref={visibleRef}
         >
             <h3 className='product-recomended-items-h3'>
-                Productos relacionados:</h3>
+                Conocé otros productos:</h3>
             <div className='product-recomended-items-tile'>
                 {
                     visible?
@@ -149,7 +149,7 @@ function RecomendedItems({_id, setItemToRender, visible, visibleRef}){
                             )
                         })
                         :
-                        <div style={{height: "10rem"}}></div>
+                        <div style={{height: "8.5rem"}}></div>
                 }
             </div>
         </div>

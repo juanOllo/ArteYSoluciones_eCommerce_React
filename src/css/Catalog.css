@@ -17,8 +17,8 @@
 /* //////////////////////////////////////////CATALOGO////////////////////////////////////////// */
 #catalogo-lista {
     height: fit-content;
-    /* max-height: calc(100svh - 8rem); */
-    width: 79rem;
+    /* width: 79rem; */
+    width: 69rem;
     max-width: 95svw;
     max-width: 100svw;
     padding: 1.15rem 0 1rem 0.5rem;
@@ -27,7 +27,7 @@
     display: flex;
     flex-wrap: wrap;
     align-items: center;
-    gap: 1.5rem;
+    gap: 1rem;
 }
 
 .search-img {
@@ -80,10 +80,12 @@
 
 
 
+/* //////////////////////////////////////////HEADER////////////////////////////////////////// */
 .catalogo-header {
     /* background-color: var(--verde); */
     background: linear-gradient(var(--verde) 0%, var(--verde) 70%, transparent 100%);
-    width: 77rem;
+    /* width: 77rem; */
+    width: 69rem;
     max-width: 96svw;
     height: fit-content;
     padding: 0 2svw;
