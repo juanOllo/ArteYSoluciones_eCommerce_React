@@ -191,10 +191,10 @@ class CarForm extends React.Component{
                 <form className="car-form" onSubmit={(e) => {e.preventDefault()}}>
                     <h1>Completá con tu información.</h1>
 
-                    <hr style={{width: "100%"}} />
+                    {/* <hr style={{width: "100%"}} /> */}
                     
-                    <label style={{width: "45%"}} htmlFor="input-name">Nombre *</label>
-                    <label style={{width: "45%"}} htmlFor="input-lastname">Apellido *</label>
+                    <label htmlFor="input-name">Nombre *</label>
+                    <label htmlFor="input-lastname">Apellido *</label>
                     
                     <input id="input-name" type="text" 
                         value={this.state.customerInfo.name || ""} 
@@ -223,14 +223,14 @@ class CarForm extends React.Component{
 
                     {/* <hr style={{width: "100%"}} /> */}
 
-                    <label style={{width: "20%", margin: "1.5rem auto -1.2rem 2.5%"}} htmlFor="input-email">Email *</label>
-                    <p style={{...((this.state.email !== "")&&this.state.verified != true ? { opacity: "0.8" } : { opacity: "0" }), backgroundColor: "", margin: "0 0 0 auto", width:"85%", textAlign:"center" }}>
+                    <label style={{margin: "1.5rem auto -0.5rem 2.5%"}} htmlFor="input-email">Email *</label>
+                    <p style={{...((this.state.email !== "")&&this.state.verified != true ? { display: "block" } : { display: "none" }), backgroundColor: "", margin: "0 0 0 auto", width:"85%", textAlign:"center" }}>
                         (Enviaremos un código a tu dirección de email para verificarlo.)</p>
                     <input value={this.state.customerInfo.email || this.state.email || ""} id="input-email" type="email" 
                         onChange={(e) => this.setState({email : e.target.value})} required
                         // readOnly={this.state.verified}
                         disabled={this.state.verified}
-                        style={{width: "50%", margin: "0 0 0 2.5%", ...(this.state.verified ? {opacity: "0.5"} : {})}} 
+                        style={{width: "50%", margin: "0 auto 0 2.5%", ...(this.state.verified ? {opacity: "0.5"} : {})}} 
                     />
 
                     {this.state.verified ?
@@ -244,7 +244,7 @@ class CarForm extends React.Component{
                             })}
                         >Usar otra información</button>   
                     :
-                        <button style={{...((this.state.email !== "")&&this.state.verified != true ? { opacity: "0.8" } : { opacity: "0" }), marginRight: "auto"}} 
+                        <button style={{...((this.state.email !== "")&&this.state.verified != true ? { display: "block" } : { display: "none" }), marginRight: "auto"}} 
                         onClick={() => {
                             const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
                             if (regexEmail.test(this.state.email)) {
